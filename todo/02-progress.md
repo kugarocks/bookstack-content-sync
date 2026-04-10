@@ -14,7 +14,7 @@
 | 外部包骨架搭建 | 已完成 | 最小 Composer 骨架、provider 与命令占位已建立 |
 | 同步核心代码迁移 | 进行中 | Shared 与 Pull 已迁移，Push 尚未迁移 |
 | Provider 与命令接入 | 进行中 | Pull 命令已接入真实实现，Push 仍为占位 |
-| 宿主安装验证 | 未开始 | 计划使用 path repository |
+| 宿主安装验证 | 进行中 | 已完成 path repository 安装与 pull 命令注册验证 |
 | 文档与发布准备 | 未开始 | 放在最后阶段 |
 
 ## 已完成
