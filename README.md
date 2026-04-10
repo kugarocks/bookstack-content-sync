@@ -29,9 +29,23 @@ Verified in a local BookStack host environment:
 
 ## Installation
 
-### Local path repository
+### Packagist installation
 
-Add the local repository to the BookStack host `composer.json`:
+Once the package is available on Packagist, install it in the BookStack host with:
+
+```bash
+composer require kugarocks/bookstack-content-sync:^0.1
+```
+
+If you want to pin exactly the first public release instead:
+
+```bash
+composer require kugarocks/bookstack-content-sync:0.1.0
+```
+
+### Local development installation
+
+For local development against an unpublished working tree, add the local repository to the BookStack host `composer.json`:
 
 ```json
 {
@@ -47,13 +61,13 @@ Add the local repository to the BookStack host `composer.json`:
 }
 ```
 
-Require the package from the BookStack host:
+Then require the package from the BookStack host:
 
 ```bash
 composer require kugarocks/bookstack-content-sync:*@dev
 ```
 
-The `@dev` suffix is needed for local path installation while the package is still resolved as `dev-main`.
+The `@dev` suffix is only needed for local path installation while the package is resolved as `dev-main`.
 
 ## Commands
 

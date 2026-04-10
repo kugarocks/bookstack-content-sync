@@ -2,9 +2,23 @@
 
 ## Installation modes
 
-### Recommended for local development
+### Recommended for Packagist installs
 
-Use a Composer path repository from the BookStack host project:
+Install from Packagist in the BookStack host with:
+
+```bash
+composer require kugarocks/bookstack-content-sync:^0.1
+```
+
+If you want to pin exactly the first public release instead:
+
+```bash
+composer require kugarocks/bookstack-content-sync:0.1.0
+```
+
+### Local development via path repository
+
+For local development against an unpublished working tree, use a Composer path repository from the BookStack host project:
 
 ```json
 {
@@ -29,10 +43,10 @@ Then run:
 composer update kugarocks/bookstack-content-sync --no-interaction
 ```
 
-## Why `*@dev` is required
+## Why `*@dev` is required for path installs
 
 The host BookStack application uses `minimum-stability: stable`.
-While this package is still consumed as a local development package resolved to `dev-main`, the host requirement must allow that development version.
+While this package is consumed as a local development package resolved to `dev-main`, the host requirement must allow that development version.
 
 ## What has been verified
 
