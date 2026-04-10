@@ -33,15 +33,15 @@ If the release changes push behavior, repeat a controlled host-side `bookstack:p
 Use the release helper script from the repository root:
 
 ```bash
-scripts/release.sh check v0.1.0
-scripts/release.sh tag v0.1.0
-scripts/release.sh push v0.1.0
+release.sh check v0.1.0
+release.sh tag v0.1.0
+release.sh push v0.1.0
 ```
 
 Or run the full flow in one command:
 
 ```bash
-scripts/release.sh all v0.1.0
+release.sh all v0.1.0
 ```
 
 What each subcommand does:
@@ -76,7 +76,7 @@ Use `docs/release/notes-v0.1.0.md` as the base text for the first public release
 If the repository has already been pushed and tagged, you can register and refresh the package on Packagist with:
 
 ```bash
-scripts/packagist.sh publish
+packagist.sh publish
 ```
 
 The helper is pinned to:

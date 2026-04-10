@@ -62,17 +62,17 @@ usage() {
   print_blank
 
   printf '%b\n' "${COLOR_BLUE}Usage${COLOR_RESET}"
-  printf '  %s %s %s\n' "$(fmt_cmd 'scripts/release.sh')" "$(fmt_cmd 'check')" "$(fmt_arg '[tag]')"
-  printf '  %s %s %s\n' "$(fmt_cmd 'scripts/release.sh')" "$(fmt_cmd 'tag')" "$(fmt_arg '<tag>')"
-  printf '  %s %s %s\n' "$(fmt_cmd 'scripts/release.sh')" "$(fmt_cmd 'push')" "$(fmt_arg '<tag>')"
-  printf '  %s %s %s\n' "$(fmt_cmd 'scripts/release.sh')" "$(fmt_cmd 'all')" "$(fmt_arg '<tag>')"
+  printf '  %s %s %s\n' "$(fmt_cmd 'release.sh')" "$(fmt_cmd 'check')" "$(fmt_arg '[tag]')"
+  printf '  %s %s %s\n' "$(fmt_cmd 'release.sh')" "$(fmt_cmd 'tag')" "$(fmt_arg '<tag>')"
+  printf '  %s %s %s\n' "$(fmt_cmd 'release.sh')" "$(fmt_cmd 'push')" "$(fmt_arg '<tag>')"
+  printf '  %s %s %s\n' "$(fmt_cmd 'release.sh')" "$(fmt_cmd 'all')" "$(fmt_arg '<tag>')"
   print_blank
 
   printf '%b\n' "${COLOR_BLUE}Examples${COLOR_RESET}"
-  printf '  %s %s %s\n' "$(fmt_cmd 'scripts/release.sh')" "$(fmt_cmd 'check')" "$(fmt_meta 'v0.1.0')"
-  printf '  %s %s %s\n' "$(fmt_cmd 'scripts/release.sh')" "$(fmt_cmd 'tag')" "$(fmt_meta 'v0.1.0')"
-  printf '  %s %s %s\n' "$(fmt_cmd 'scripts/release.sh')" "$(fmt_cmd 'push')" "$(fmt_meta 'v0.1.0')"
-  printf '  %s %s %s\n' "$(fmt_cmd 'scripts/release.sh')" "$(fmt_cmd 'all')" "$(fmt_meta 'v0.1.0')"
+  printf '  %s %s %s\n' "$(fmt_cmd 'release.sh')" "$(fmt_cmd 'check')" "$(fmt_meta 'v0.1.0')"
+  printf '  %s %s %s\n' "$(fmt_cmd 'release.sh')" "$(fmt_cmd 'tag')" "$(fmt_meta 'v0.1.0')"
+  printf '  %s %s %s\n' "$(fmt_cmd 'release.sh')" "$(fmt_cmd 'push')" "$(fmt_meta 'v0.1.0')"
+  printf '  %s %s %s\n' "$(fmt_cmd 'release.sh')" "$(fmt_cmd 'all')" "$(fmt_meta 'v0.1.0')"
   print_blank
 }
 

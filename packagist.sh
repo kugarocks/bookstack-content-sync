@@ -72,24 +72,24 @@ usage() {
 
   printf '%b\n' "${COLOR_BLUE}Usage${COLOR_RESET}"
   printf '  %s %s %s %s\n' \
-    "$(fmt_cmd 'scripts/packagist.sh')" \
+    "$(fmt_cmd 'packagist.sh')" \
     "$(fmt_cmd 'publish')" \
     "$(fmt_arg '[--username USERNAME]')" \
     "$(fmt_arg '[--token TOKEN]')"
   printf '  %s %s %s %s\n' \
-    "$(fmt_cmd 'scripts/packagist.sh')" \
+    "$(fmt_cmd 'packagist.sh')" \
     "$(fmt_cmd 'create')" \
     "$(fmt_arg '[--username USERNAME]')" \
     "$(fmt_arg '[--token TOKEN]')"
   printf '  %s %s %s %s\n' \
-    "$(fmt_cmd 'scripts/packagist.sh')" \
+    "$(fmt_cmd 'packagist.sh')" \
     "$(fmt_cmd 'update')" \
     "$(fmt_arg '[--username USERNAME]')" \
     "$(fmt_arg '[--token TOKEN]')"
   printf '  %s %s\n' \
-    "$(fmt_cmd 'scripts/packagist.sh')" \
+    "$(fmt_cmd 'packagist.sh')" \
     "$(fmt_cmd 'check')"
-  printf '  %s %s\n' "$(fmt_cmd 'scripts/packagist.sh')" "$(fmt_cmd 'help')"
+  printf '  %s %s\n' "$(fmt_cmd 'packagist.sh')" "$(fmt_cmd 'help')"
   print_blank
 
   printf '%b\n' "${COLOR_BLUE}Environment${COLOR_RESET}"
@@ -99,16 +99,16 @@ usage() {
 
   printf '%b\n' "${COLOR_BLUE}Examples${COLOR_RESET}"
   printf '  %s %s\n' \
-    "$(fmt_cmd 'scripts/packagist.sh')" \
+    "$(fmt_cmd 'packagist.sh')" \
     "$(fmt_cmd 'publish')"
   printf '  %s %s\n' \
-    "$(fmt_cmd 'scripts/packagist.sh')" \
+    "$(fmt_cmd 'packagist.sh')" \
     "$(fmt_cmd 'create')"
   printf '  %s %s\n' \
-    "$(fmt_cmd 'scripts/packagist.sh')" \
+    "$(fmt_cmd 'packagist.sh')" \
     "$(fmt_cmd 'update')"
   printf '  %s %s\n' \
-    "$(fmt_cmd 'scripts/packagist.sh')" \
+    "$(fmt_cmd 'packagist.sh')" \
     "$(fmt_cmd 'check')"
   print_blank
 
