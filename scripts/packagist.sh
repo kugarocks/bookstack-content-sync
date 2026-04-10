@@ -101,8 +101,8 @@ usage() {
   print_blank
 
   printf '%b\n' "${COLOR_BLUE}Environment${COLOR_RESET}"
-  printf '  %s   %s\n' "$(fmt_env 'PACKAGIST_USERNAME')" 'Packagist username'
-  printf '  %s      %s\n' "$(fmt_env 'PACKAGIST_TOKEN')" 'Packagist API token'
+  printf '  %s   %s\n' "$(fmt_env 'COMPOSER_PACKAGIST_USERNAME')" 'Packagist username'
+  printf '  %s      %s\n' "$(fmt_env 'COMPOSER_PACKAGIST_TOKEN')" 'Packagist API token'
   print_blank
 
   printf '%b\n' "${COLOR_BLUE}Examples${COLOR_RESET}"
@@ -259,8 +259,8 @@ main() {
 
   local repository=""
   local package_name=""
-  local username="${PACKAGIST_USERNAME:-}"
-  local token="${PACKAGIST_TOKEN:-}"
+  local username="${COMPOSER_PACKAGIST_USERNAME:-}"
+  local token="${COMPOSER_PACKAGIST_TOKEN:-}"
 
   while [[ $# -gt 0 ]]; do
     case "$1" in
@@ -305,16 +305,16 @@ main() {
     create)
       print_blank
       require_value '--repository' "$repository"
-      require_value 'PACKAGIST_USERNAME/--username' "$username"
-      require_value 'PACKAGIST_TOKEN/--token' "$token"
+      require_value 'COMPOSER_PACKAGIST_USERNAME/--username' "$username"
+      require_value 'COMPOSER_PACKAGIST_TOKEN/--token' "$token"
       create_package "$repository" "$username" "$token"
       print_blank
       ;;
     update)
       print_blank
       require_value '--repository' "$repository"
-      require_value 'PACKAGIST_USERNAME/--username' "$username"
-      require_value 'PACKAGIST_TOKEN/--token' "$token"
+      require_value 'COMPOSER_PACKAGIST_USERNAME/--username' "$username"
+      require_value 'COMPOSER_PACKAGIST_TOKEN/--token' "$token"
       update_package "$repository" "$username" "$token"
       print_blank
       ;;
@@ -322,8 +322,8 @@ main() {
       print_blank
       require_value '--repository' "$repository"
       require_value '--package' "$package_name"
-      require_value 'PACKAGIST_USERNAME/--username' "$username"
-      require_value 'PACKAGIST_TOKEN/--token' "$token"
+      require_value 'COMPOSER_PACKAGIST_USERNAME/--username' "$username"
+      require_value 'COMPOSER_PACKAGIST_TOKEN/--token' "$token"
       create_package "$repository" "$username" "$token"
       check_package_page "$package_name" || warn 'Package page is not reachable yet; update will still be requested'
       update_package "$repository" "$username" "$token"

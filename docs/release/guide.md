@@ -83,8 +83,8 @@ scripts/packagist.sh publish \
 
 Authentication is read from these environment variables by default:
 
-- `PACKAGIST_USERNAME`
-- `PACKAGIST_TOKEN`
+- `COMPOSER_PACKAGIST_USERNAME`
+- `COMPOSER_PACKAGIST_TOKEN`
 
 You can also pass `--username` and `--token` directly if needed.
 
