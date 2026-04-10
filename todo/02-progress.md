@@ -25,13 +25,15 @@
 - 初始化 Git 仓库
 - 建立 `todo/` 目录规范
 - 补充项目总览、实施方案、进度追踪文档
+- 新增 `todo/plans/` 目录，用于先确认后执行
+- 新增首份待确认方案文档：`todo/plans/01-package-name-and-namespace.md`
 - 确定日志按执行轮次记录
 
 ## 下一步建议
 
-1. 确定 Composer 包名与 PHP 版本范围
-2. 写出 `composer.json` 最小草案
-3. 设计 provider 与命令注册方式
+1. 确认包名与命名空间方案
+2. 确认 Composer 包最小骨架方案
+3. 写出 `composer.json` 最小草案
 4. 列出需要迁移的源码清单
 
 ## 阻塞项

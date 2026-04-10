@@ -1,0 +1,21 @@
+{
+  "name": "kugarocks/bookstack-content-sync",
+  "description": "External Composer extension that adds content sync commands to a BookStack host application.",
+  "type": "library",
+  "license": "MIT",
+  "require": {
+    "php": "^8.2"
+  },
+  "autoload": {
+    "psr-4": {
+      "KugaRocks\\BookStackContentSync\\": "src/"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "KugaRocks\\BookStackContentSync\\Providers\\ContentSyncServiceProvider"
+      ]
+    }
+  }
+}

@@ -5,6 +5,7 @@
 - 在 `/Users/kuga/github/kugarocks` 下创建新的扩展仓库
 - 初始化 Git 仓库
 - 建立中文 `todo/` 文档体系
+- 增加 `todo/plans/` 目录用于方案确认
 - 先沉淀整体方案、进度与日志机制
 
 ## 实际执行
@@ -12,9 +13,10 @@
 - 创建目录 `bookstack-content-sync`
 - 初始化 Git 仓库
 - 新建 `README.md`
-- 新建 `todo/00-项目总览.md`
-- 新建 `todo/01-实施方案.md`
-- 新建 `todo/02-进度追踪.md`
+- 新建 `todo/00-overview.md`
+- 新建 `todo/01-implementation-plan.md`
+- 新建 `todo/02-progress.md`
+- 新建 `todo/plans/README.md`
 - 新建 `todo/logs/README.md`
 - 新建本次执行日志文件
 
