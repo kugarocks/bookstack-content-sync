@@ -86,6 +86,7 @@ Use `docs-release-checklist.md` together with this guide:
 
 - `docs-release-checklist.md` covers the release-time verification flow
 - `docs-versioning-and-publishing.md` covers version naming and publishing expectations
+- `docs-publish-commands-v0.1.0.md` provides the concrete command sequence for the first tag
 
 ## Post-release validation
 

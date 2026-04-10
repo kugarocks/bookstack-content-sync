@@ -39,6 +39,7 @@ Recommended host checks:
 - Ensure the repository metadata is ready for Packagist if publishing publicly.
 - Add concise release notes describing new behavior, fixes, and any compatibility caveats.
 - Reuse or refine `docs-release-notes-v0.1.0.md` for the first public release.
+- Follow `docs-publish-commands-v0.1.0.md` for the exact command order when tagging and pushing.
 - Publish only after the validation steps above are complete.
 
 ## Current known limitations
