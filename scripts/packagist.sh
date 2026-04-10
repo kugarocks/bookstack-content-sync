@@ -1,0 +1,257 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+PACKAGIST_API_BASE="https://packagist.org/api"
+PACKAGIST_WEB_BASE="https://packagist.org/packages"
+
+if [[ -t 1 ]]; then
+  COLOR_BLUE='\033[1;34m'
+  COLOR_GREEN='\033[1;32m'
+  COLOR_YELLOW='\033[1;33m'
+  COLOR_RED='\033[1;31m'
+  COLOR_RESET='\033[0m'
+else
+  COLOR_BLUE=''
+  COLOR_GREEN=''
+  COLOR_YELLOW=''
+  COLOR_RED=''
+  COLOR_RESET=''
+fi
+
+info() {
+  printf '%b\n' "${COLOR_BLUE}==>${COLOR_RESET} $*"
+}
+
+success() {
+  printf '%b\n' "${COLOR_GREEN}OK${COLOR_RESET} $*"
+}
+
+warn() {
+  printf '%b\n' "${COLOR_YELLOW}WARN${COLOR_RESET} $*"
+}
+
+error() {
+  printf '%b\n' "${COLOR_RED}ERROR${COLOR_RESET} $*" >&2
+}
+
+usage() {
+  cat <<'USAGE'
+Usage:
+  scripts/packagist.sh publish --repository URL --package VENDOR/NAME [--username USERNAME] [--token TOKEN]
+  scripts/packagist.sh create  --repository URL [--username USERNAME] [--token TOKEN]
+  scripts/packagist.sh update  --repository URL [--username USERNAME] [--token TOKEN]
+  scripts/packagist.sh check   --package VENDOR/NAME
+  scripts/packagist.sh help
+
+Environment fallback:
+  PACKAGIST_USERNAME   Packagist username
+  PACKAGIST_TOKEN      Packagist API token
+
+Examples:
+  scripts/packagist.sh publish --repository https://github.com/you/bookstack-content-sync --package kugarocks/bookstack-content-sync
+  scripts/packagist.sh create --repository https://github.com/you/bookstack-content-sync
+  scripts/packagist.sh update --repository https://github.com/you/bookstack-content-sync
+  scripts/packagist.sh check --package kugarocks/bookstack-content-sync
+USAGE
+}
+
+require_command() {
+  if ! command -v "$1" >/dev/null 2>&1; then
+    error "Required command not found: $1"
+    exit 1
+  fi
+}
+
+require_value() {
+  local name="$1"
+  local value="$2"
+  if [[ -z "$value" ]]; then
+    error "Missing required value: $name"
+    usage
+    exit 1
+  fi
+}
+
+json_escape() {
+  python3 - <<'PY' "$1"
+import json
+import sys
+print(json.dumps(sys.argv[1]))
+PY
+}
+
+api_request() {
+  local endpoint="$1"
+  local payload="$2"
+  local username="$3"
+  local token="$4"
+  local tmp
+  tmp="$(mktemp)"
+  local http_code
+  http_code="$(curl -sS -o "$tmp" -w '%{http_code}' \
+    -X POST \
+    -H 'Content-Type: application/json' \
+    -H "Authorization: Bearer ${username}:${token}" \
+    "${PACKAGIST_API_BASE}/${endpoint}" \
+    -d "$payload")"
+  local body
+  body="$(cat "$tmp")"
+  rm -f "$tmp"
+  printf '%s\n%s' "$http_code" "$body"
+}
+
+looks_like_duplicate_create() {
+  local body="$1"
+  local lowered
+  lowered="$(printf '%s' "$body" | tr '[:upper:]' '[:lower:]')"
+  [[ "$lowered" == *"already"* ]] && [[ "$lowered" == *"package"* || "$lowered" == *"repository"* ]]
+}
+
+create_package() {
+  local repository="$1"
+  local username="$2"
+  local token="$3"
+  local payload
+  payload="{\"repository\":$(json_escape "$repository")}" 
+
+  info "Creating package on Packagist"
+  local response
+  response="$(api_request 'create-package' "$payload" "$username" "$token")"
+  local http_code body
+  http_code="$(printf '%s' "$response" | sed -n '1p')"
+  body="$(printf '%s' "$response" | sed '1d')"
+
+  if [[ "$http_code" =~ ^2 ]]; then
+    success "Package create request accepted"
+    return 0
+  fi
+
+  if looks_like_duplicate_create "$body"; then
+    warn "Package appears to be already registered on Packagist; continuing"
+    return 0
+  fi
+
+  error "Packagist create-package failed with HTTP ${http_code}"
+  printf '%s\n' "$body" >&2
+  return 1
+}
+
+update_package() {
+  local repository="$1"
+  local username="$2"
+  local token="$3"
+  local payload
+  payload="{\"repository\":$(json_escape "$repository")}" 
+
+  info "Requesting Packagist package update"
+  local response
+  response="$(api_request 'update-package' "$payload" "$username" "$token")"
+  local http_code body
+  http_code="$(printf '%s' "$response" | sed -n '1p')"
+  body="$(printf '%s' "$response" | sed '1d')"
+
+  if [[ "$http_code" =~ ^2 ]]; then
+    success "Package update request accepted"
+    return 0
+  fi
+
+  error "Packagist update-package failed with HTTP ${http_code}"
+  printf '%s\n' "$body" >&2
+  return 1
+}
+
+check_package_page() {
+  local package_name="$1"
+  local url="${PACKAGIST_WEB_BASE}/${package_name}"
+  info "Checking Packagist package page"
+
+  if curl -fsS "$url" >/dev/null; then
+    success "Package page is reachable: $url"
+    return 0
+  fi
+
+  error "Package page is not reachable yet: $url"
+  return 1
+}
+
+main() {
+  require_command curl
+  require_command python3
+
+  local command="${1:-help}"
+  shift || true
+
+  local repository=""
+  local package_name=""
+  local username="${PACKAGIST_USERNAME:-}"
+  local token="${PACKAGIST_TOKEN:-}"
+
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      --repository)
+        repository="${2:-}"
+        shift 2
+        ;;
+      --package)
+        package_name="${2:-}"
+        shift 2
+        ;;
+      --username)
+        username="${2:-}"
+        shift 2
+        ;;
+      --token)
+        token="${2:-}"
+        shift 2
+        ;;
+      -h|--help)
+        usage
+        exit 0
+        ;;
+      *)
+        error "Unknown argument: $1"
+        usage
+        exit 1
+        ;;
+    esac
+  done
+
+  case "$command" in
+    help)
+      usage
+      ;;
+    check)
+      require_value '--package' "$package_name"
+      check_package_page "$package_name"
+      ;;
+    create)
+      require_value '--repository' "$repository"
+      require_value 'PACKAGIST_USERNAME/--username' "$username"
+      require_value 'PACKAGIST_TOKEN/--token' "$token"
+      create_package "$repository" "$username" "$token"
+      ;;
+    update)
+      require_value '--repository' "$repository"
+      require_value 'PACKAGIST_USERNAME/--username' "$username"
+      require_value 'PACKAGIST_TOKEN/--token' "$token"
+      update_package "$repository" "$username" "$token"
+      ;;
+    publish)
+      require_value '--repository' "$repository"
+      require_value '--package' "$package_name"
+      require_value 'PACKAGIST_USERNAME/--username' "$username"
+      require_value 'PACKAGIST_TOKEN/--token' "$token"
+      create_package "$repository" "$username" "$token"
+      check_package_page "$package_name" || warn 'Package page is not reachable yet; update will still be requested'
+      update_package "$repository" "$username" "$token"
+      warn "If the package page exists but the new version is still missing, wait a moment and run update again."
+      ;;
+    *)
+      error "Unknown command: $command"
+      usage
+      exit 1
+      ;;
+  esac
+}
+
+main "$@"
