@@ -8,7 +8,7 @@ use InvalidArgumentException;
 readonly class LocalNode
 {
     /**
-     * @param array<int, array{key: ?string, value: string}> $tags
+     * @param array<int, array{name: string, value: string}> $tags
      */
     public function __construct(
         public NodeType $type,

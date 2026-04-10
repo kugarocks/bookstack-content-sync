@@ -37,13 +37,7 @@ class MetaFileBuilder
 
         $lines = [''];
         foreach ($tags as $tag) {
-            if ($tag['key'] !== null) {
-                $lines[] = '  - key: ' . $this->quote($tag['key']);
-                $lines[] = '    value: ' . $this->quote($tag['value']);
-                continue;
-            }
-
-            $lines[] = '  - value: ' . $this->quote($tag['value']);
+            $lines[] = '  - ' . $this->quote($this->formatTag($tag));
         }
 
         return implode("\n", $lines);
@@ -51,16 +45,28 @@ class MetaFileBuilder
 
     /**
      * @param RemoteTag[] $tags
-     * @return array<int, array{key: ?string, value: string}>
+     * @return array<int, array{name: string, value: string}>
      */
     protected function toTagMaps(array $tags): array
     {
         return array_map(function (RemoteTag $tag): array {
             return [
-                'key' => $tag->key,
+                'name' => $tag->name,
                 'value' => $tag->value,
             ];
         }, $tags);
+    }
+
+    /**
+     * @param array{name: string, value: string} $tag
+     */
+    protected function formatTag(array $tag): string
+    {
+        if ($tag['value'] === '') {
+            return $tag['name'];
+        }
+
+        return $tag['name'] . ':' . $tag['value'];
     }
 
     protected function quote(string $value): string

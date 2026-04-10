@@ -67,15 +67,14 @@ title: "Setup"
 slug: "setup"
 desc: "Setup steps"
 tags:
-  - key: "topic"
-    value: "install"
+  - "topic:install"
 YAML);
         file_put_contents($root . '/content/01-guides/01-laravel/02-new-chapter/01-first-run.md', <<<MD
 ---
 title: "First Run"
 slug: "first-run"
 tags:
-  - value: "quickstart"
+  - "quickstart"
 ---
 
 Boot the app

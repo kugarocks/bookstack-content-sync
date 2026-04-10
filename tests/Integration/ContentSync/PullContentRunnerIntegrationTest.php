@@ -125,7 +125,7 @@ class PullContentRunnerIntegrationTest extends TestCase
             $snapshot = json_decode(file_get_contents($projectRoot . '/snapshot.json'), true);
 
             $this->assertStringContainsString('type: "book"', $bookMeta);
-            $this->assertStringContainsString('value: "neovim"', $bookMeta);
+            $this->assertStringContainsString('- "series:neovim"', $bookMeta);
             $this->assertStringContainsString("---\ntitle: \"Overview\"\nslug: \"overview\"\n", $overviewPage);
             $this->assertStringContainsString("---\n\nBook-level page\n", $overviewPage);
             $this->assertStringNotContainsString('# Overview', $overviewPage);

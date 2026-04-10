@@ -85,7 +85,6 @@ class LocalFileParser
         $lines = preg_split('/\r?\n/', rtrim($contents, "\n"));
         $data = [];
         $currentKey = null;
-        $currentTagIndex = -1;
 
         foreach ($lines as $line) {
             if ($line === '') {
@@ -99,24 +98,16 @@ class LocalFileParser
                 if ($value === '') {
                     $data[$key] = [];
                     $currentKey = $key;
-                    $currentTagIndex = -1;
                     continue;
                 }
 
                 $data[$key] = $this->parseScalar($value);
                 $currentKey = null;
-                $currentTagIndex = -1;
                 continue;
             }
 
-            if ($currentKey === 'tags' && preg_match('/^\s{2}-\s+([a-z_]+):\s*(.*)$/', $line, $matches)) {
-                $data['tags'][] = [$matches[1] => $this->parseScalar($matches[2])];
-                $currentTagIndex = count($data['tags']) - 1;
-                continue;
-            }
-
-            if ($currentKey === 'tags' && $currentTagIndex >= 0 && preg_match('/^\s{4}([a-z_]+):\s*(.*)$/', $line, $matches)) {
-                $data['tags'][$currentTagIndex][$matches[1]] = $this->parseScalar($matches[2]);
+            if ($currentKey === 'tags' && preg_match('/^\s{2}-\s+(.*)$/', $line, $matches)) {
+                $data['tags'][] = $this->parseScalar($matches[1]);
                 continue;
             }
 
@@ -147,7 +138,7 @@ class LocalFileParser
 
     /**
      * @param array<string, mixed> $data
-     * @return array<int, array{key: ?string, value: string}>
+     * @return array<int, array{name: string, value: string}>
      */
     protected function parseTags(array $data, string $context): array
     {
@@ -156,19 +147,25 @@ class LocalFileParser
             throw new InvalidArgumentException("Field [tags] in {$context} must be an array");
         }
 
-        return array_map(function (array $tag) use ($context): array {
-            $value = $tag['value'] ?? null;
-            if (!is_string($value)) {
-                throw new InvalidArgumentException("Tag value in {$context} must be a string");
+        return array_map(function (mixed $tag) use ($context): array {
+            if (!is_string($tag)) {
+                throw new InvalidArgumentException("Tags in {$context} must use string entries like \"name\" or \"name:value\"");
             }
 
-            $key = $tag['key'] ?? null;
-            if ($key !== null && !is_string($key)) {
-                throw new InvalidArgumentException("Tag key in {$context} must be a string");
+            $parts = explode(':', $tag, 2);
+            $name = trim($parts[0]);
+            $value = isset($parts[1]) ? trim($parts[1]) : '';
+
+            if ($name === '') {
+                throw new InvalidArgumentException("Tag name in {$context} must not be empty");
+            }
+
+            if (count($parts) === 2 && $value === '') {
+                throw new InvalidArgumentException("Tag value in {$context} must not be empty when using name:value format");
             }
 
             return [
-                'key' => $key,
+                'name' => $name,
                 'value' => $value,
             ];
         }, $tags);

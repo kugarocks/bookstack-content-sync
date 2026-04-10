@@ -328,16 +328,9 @@ class PushPlanExecutor
     protected function mapTags(LocalNode $localNode): array
     {
         return array_map(function (array $tag): array {
-            if ($tag['key'] !== null) {
-                return [
-                    'name' => $tag['key'],
-                    'value' => $tag['value'],
-                ];
-            }
-
             return [
-                'name' => $tag['value'],
-                'value' => '',
+                'name' => $tag['name'],
+                'value' => $tag['value'],
             ];
         }, $localNode->tags);
     }

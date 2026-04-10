@@ -24,7 +24,7 @@ class SnapshotBuilder
             markdown: $this->normalizeMarkdown($node->markdown),
             tags: array_map(function (RemoteTag $tag): array {
                 return [
-                    'key' => $tag->key,
+                    'name' => $tag->name,
                     'value' => $tag->value,
                 ];
             }, $node->tags),

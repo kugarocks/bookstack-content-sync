@@ -87,7 +87,7 @@ class LocalProjectStateWriter
             description: $localNode->description,
             markdown: $localNode->markdown,
             tags: array_map(function (array $tag): RemoteTag {
-                return new RemoteTag($tag['key'], $tag['value']);
+                return new RemoteTag($tag['name'], $tag['value']);
             }, $localNode->tags),
             priority: $localNode->order,
             children: [],

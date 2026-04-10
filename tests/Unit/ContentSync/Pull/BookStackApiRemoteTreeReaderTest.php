@@ -108,11 +108,12 @@ class BookStackApiRemoteTreeReaderTest extends TestCase
             $this->assertSame(NodeType::Shelf, $roots[0]->type);
             $this->assertSame('Blog', $roots[0]->name);
             $this->assertSame('dev', $roots[0]->tags[0]->value);
+            $this->assertSame('topic', $roots[0]->tags[0]->name);
             $this->assertSame(NodeType::Book, $roots[0]->children[0]->type);
             $this->assertSame(NodeType::Chapter, $roots[0]->children[0]->children[0]->type);
             $this->assertSame("## Install\n", $roots[0]->children[0]->children[0]->children[0]->markdown);
-            $this->assertNull($roots[0]->children[0]->children[0]->children[0]->tags[0]->key);
-            $this->assertSame('quick-start', $roots[0]->children[0]->children[0]->children[0]->tags[0]->value);
+            $this->assertSame('quick-start', $roots[0]->children[0]->children[0]->children[0]->tags[0]->name);
+            $this->assertSame('', $roots[0]->children[0]->children[0]->children[0]->tags[0]->value);
 
             $this->assertSame(NodeType::Book, $roots[1]->type);
             $this->assertSame('Loose Book', $roots[1]->name);

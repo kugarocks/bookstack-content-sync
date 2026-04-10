@@ -37,9 +37,9 @@ class PullNodeFactory
         );
     }
 
-    public static function tag(string $value, ?string $key = null): RemoteTag
+    public static function tag(string $name, string $value = ''): RemoteTag
     {
-        return new RemoteTag($key, $value);
+        return new RemoteTag($name, $value);
     }
 
     public static function snapshotNode(NodeType $type, array $overrides = []): SnapshotNode

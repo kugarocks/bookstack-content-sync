@@ -173,14 +173,13 @@ class BookStackApiRemoteTreeReader implements PullRemoteTreeReader
             $name = trim((string) ($tag['name'] ?? ''));
             $value = trim((string) ($tag['value'] ?? ''));
 
-            if ($name !== '' && $value !== '') {
+            if ($name !== '') {
                 $mapped[] = new RemoteTag($name, $value);
                 continue;
             }
 
-            $plainValue = $name !== '' ? $name : $value;
-            if ($plainValue !== '') {
-                $mapped[] = new RemoteTag(null, $plainValue);
+            if ($value !== '') {
+                $mapped[] = new RemoteTag($value, '');
             }
         }
 
