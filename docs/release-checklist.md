@@ -10,7 +10,6 @@ Use this checklist before tagging or publishing a new version of `kugarocks/book
 - Run `composer validate --strict`.
 - Run `composer test`.
 - Review `README.md` and `docs/installation-and-compatibility.md` for any stale compatibility claims.
-- Confirm `todo/02-progress.md` reflects the latest verified state.
 
 ## Host validation
 

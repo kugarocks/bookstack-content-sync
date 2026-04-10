@@ -63,11 +63,6 @@ git tag -a v0.1.0 -m "Release v0.1.0"
 git push origin v0.1.0
 ```
 
-## Release artifact notes
-
-- `todo/` is kept in the repository for internal planning and logs.
-- `todo/` is excluded from release archives via `.gitattributes` export rules.
-
 ## Packagist readiness
 
 Before publishing on Packagist, confirm the following:

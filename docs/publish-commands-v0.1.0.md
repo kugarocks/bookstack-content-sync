@@ -19,14 +19,6 @@ composer validate --strict
 composer test
 ```
 
-Optional archive check to confirm `todo/` is excluded from release archives:
-
-```bash
-git archive --worktree-attributes --format=tar HEAD | tar -tf - | rg '^todo/'
-```
-
-Expected result: no output.
-
 ## Review release text
 
 Open and refine the first release draft if needed:

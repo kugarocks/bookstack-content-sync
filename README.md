@@ -149,7 +149,7 @@ vendor/bin/phpunit tests
 
 - decide whether the host-side verification setup should be preserved as-is or cleaned up before release
 - tighten package dependency declarations as needed after more host validation
-- refine and approve the final release text for the first public tag
+- publish the first public tag when ready
 
 ## Release prep
 

@@ -34,11 +34,6 @@ This release has been verified with the following checks:
 - Compatibility has been verified in a local host workflow, not across a broad BookStack version matrix.
 - Real remote write-path validation remains a controlled manual verification step.
 
-## Packaging
-
-- The repository keeps `todo/` for internal planning and execution records.
-- `todo/` is excluded from release archives via `.gitattributes` export rules.
-
 ## Suggested short release text
 
 First public packaged release of external BookStack content sync commands.
