@@ -31,6 +31,8 @@
     }
   },
   "scripts": {
-    "test": "phpunit tests"
+    "test": "phpunit tests",
+    "test-unit": "phpunit tests/Unit",
+    "test-integration": "phpunit tests/Integration"
   }
 }

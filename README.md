@@ -107,6 +107,18 @@ composer install
 composer test
 ```
 
+Run only unit tests:
+
+```bash
+composer test-unit
+```
+
+Run only integration tests:
+
+```bash
+composer test-integration
+```
+
 You can still run PHPUnit directly if needed:
 
 ```bash
