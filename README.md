@@ -119,6 +119,18 @@ Run only integration tests:
 composer test-integration
 ```
 
+Run pull-focused tests:
+
+```bash
+composer test-pull
+```
+
+Run push-focused tests:
+
+```bash
+composer test-push
+```
+
 You can still run PHPUnit directly if needed:
 
 ```bash

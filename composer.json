@@ -33,6 +33,8 @@
   "scripts": {
     "test": "phpunit tests",
     "test-unit": "phpunit tests/Unit",
-    "test-integration": "phpunit tests/Integration"
+    "test-integration": "phpunit tests/Integration",
+    "test-pull": "phpunit tests/Unit/ContentSync/Pull tests/Integration/ContentSync/PullContentCommandIntegrationTest.php tests/Integration/ContentSync/PullContentRunnerIntegrationTest.php",
+    "test-push": "phpunit tests/Unit/ContentSync/Push tests/Integration/ContentSync/PushPlanRunnerIntegrationTest.php tests/Integration/ContentSync/PushContentCommandIntegrationTest.php tests/Integration/ContentSync/PushContentRunnerIntegrationTest.php tests/Integration/ContentSync/ContentSyncRoundTripIntegrationTest.php"
   }
 }
