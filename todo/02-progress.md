@@ -3,7 +3,7 @@
 ## 当前状态
 
 - 项目状态：规划中
-- 当前阶段：Phase 3.1 - Pull migration in progress
+- 当前阶段：Phase 3.1 - Pull migration verified in host
 - 最后更新时间：2026-04-10
 
 ## 里程碑进度
@@ -14,7 +14,7 @@
 | 外部包骨架搭建 | 已完成 | 最小 Composer 骨架、provider 与命令占位已建立 |
 | 同步核心代码迁移 | 进行中 | Shared 与 Pull 已迁移，Push 尚未迁移 |
 | Provider 与命令接入 | 进行中 | Pull 命令已接入真实实现，Push 仍为占位 |
-| 宿主安装验证 | 进行中 | 已完成 path repository 安装与 pull 命令注册验证 |
+| 宿主安装验证 | 已完成 | 已完成 path repository 安装、命令接管与最小 pull 实跑 |
 | 文档与发布准备 | 未开始 | 放在最后阶段 |
 
 ## 已完成
