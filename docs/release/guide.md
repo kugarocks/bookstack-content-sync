@@ -19,6 +19,7 @@ Why `0.1.0` instead of `1.0.0`:
 Before tagging or publishing:
 
 - confirm the working tree is clean
+- confirm `docs/release/notes-v0.1.0.md` exists and matches the intended release tag
 - run `composer validate --strict`
 - run `composer test`
 - review `README.md` and `docs/installation-and-compatibility.md`
@@ -45,8 +46,8 @@ scripts/release.sh all v0.1.0
 
 What each subcommand does:
 
-- `check`: verifies a clean working tree, runs Composer validation, and runs the test suite
-- `tag`: creates an annotated tag and shows it locally
+- `check`: verifies a clean working tree, checks the expected release notes file, runs Composer validation, runs the test suite, and previews the release notes
+- `tag`: verifies the release notes file exists, creates an annotated tag, and shows it locally
 - `push`: pushes `main` and the given tag to `origin`
 - `all`: runs the full sequence in order
 
@@ -56,6 +57,7 @@ If you prefer to release manually:
 
 ```bash
 git status --short
+test -f docs/release/notes-v0.1.0.md
 composer validate --strict
 composer test
 sed -n '1,240p' docs/release/notes-v0.1.0.md
