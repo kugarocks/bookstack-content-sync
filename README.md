@@ -25,6 +25,7 @@ Verified in a local BookStack host environment:
 ## Requirements
 
 - PHP 8.2+
+- BookStack 26.03+
 - A BookStack host application running Laravel 12
 - A host environment that provides BookStack internal services such as `BookStack\Http\HttpRequestService`
 
@@ -111,6 +112,8 @@ Current assumptions:
 - command names can be overridden by the package provider during registration
 
 Because of that, compatibility should be treated as BookStack-version-sensitive rather than generic-Laravel-package-compatible.
+
+This package performs a runtime host-version check during service provider registration and refuses to load on BookStack versions below `26.03`.
 
 ## Verification summary
 

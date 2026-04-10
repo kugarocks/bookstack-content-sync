@@ -72,9 +72,12 @@ This package is not designed as a standalone Laravel package.
 It currently assumes:
 
 - a BookStack host application
+- BookStack 26.03 or newer
 - Laravel 12 era dependencies
 - availability of BookStack internal runtime services
 - compatibility with the BookStack command registration lifecycle
+
+In addition to those assumptions, the package now performs a runtime host-version check during service provider registration and refuses to load when the detected BookStack version is below `26.03`.
 
 ## Operational caution
 
