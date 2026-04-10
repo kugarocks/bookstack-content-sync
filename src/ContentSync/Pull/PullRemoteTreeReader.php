@@ -1,6 +1,6 @@
 <?php
 
-namespace KugaRocks\BookStackContentSync\ContentSync\Pull;
+namespace Kugarocks\BookStackContentSync\ContentSync\Pull;
 
 interface PullRemoteTreeReader
 {

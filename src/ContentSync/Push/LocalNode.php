@@ -1,8 +1,8 @@
 <?php
 
-namespace KugaRocks\BookStackContentSync\ContentSync\Push;
+namespace Kugarocks\BookStackContentSync\ContentSync\Push;
 
-use KugaRocks\BookStackContentSync\ContentSync\Shared\NodeType;
+use Kugarocks\BookStackContentSync\ContentSync\Shared\NodeType;
 use InvalidArgumentException;
 
 readonly class LocalNode

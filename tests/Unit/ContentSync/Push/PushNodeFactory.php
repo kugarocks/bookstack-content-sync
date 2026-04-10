@@ -2,10 +2,10 @@
 
 namespace Tests\Unit\ContentSync\Push;
 
-use KugaRocks\BookStackContentSync\ContentSync\Push\LocalNode;
-use KugaRocks\BookStackContentSync\ContentSync\Shared\NodeType;
-use KugaRocks\BookStackContentSync\ContentSync\Shared\SnapshotParent;
-use KugaRocks\BookStackContentSync\ContentSync\Shared\SnapshotNode;
+use Kugarocks\BookStackContentSync\ContentSync\Push\LocalNode;
+use Kugarocks\BookStackContentSync\ContentSync\Shared\NodeType;
+use Kugarocks\BookStackContentSync\ContentSync\Shared\SnapshotParent;
+use Kugarocks\BookStackContentSync\ContentSync\Shared\SnapshotNode;
 
 class PushNodeFactory
 {

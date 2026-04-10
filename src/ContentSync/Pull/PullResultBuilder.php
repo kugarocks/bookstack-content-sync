@@ -1,9 +1,9 @@
 <?php
 
-namespace KugaRocks\BookStackContentSync\ContentSync\Pull;
+namespace Kugarocks\BookStackContentSync\ContentSync\Pull;
 
-use KugaRocks\BookStackContentSync\ContentSync\Shared\NodeType;
-use KugaRocks\BookStackContentSync\ContentSync\Shared\SnapshotParent;
+use Kugarocks\BookStackContentSync\ContentSync\Shared\NodeType;
+use Kugarocks\BookStackContentSync\ContentSync\Shared\SnapshotParent;
 
 class PullResultBuilder
 {
@@ -40,7 +40,7 @@ class PullResultBuilder
 
     /**
      * @param ExportFilePlan[] $exportFilePlans
-     * @param \KugaRocks\BookStackContentSync\ContentSync\Shared\SnapshotNode[] $snapshotNodes
+     * @param \Kugarocks\BookStackContentSync\ContentSync\Shared\SnapshotNode[] $snapshotNodes
      */
     protected function buildNode(
         SyncConfig $config,

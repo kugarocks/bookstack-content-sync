@@ -2,20 +2,20 @@
 
 namespace Tests\Integration\ContentSync;
 
-use KugaRocks\BookStackContentSync\ContentSync\Pull\SyncConfigLoader;
-use KugaRocks\BookStackContentSync\ContentSync\Push\ContentDiffer;
-use KugaRocks\BookStackContentSync\ContentSync\Push\LocalContentScanner;
-use KugaRocks\BookStackContentSync\ContentSync\Push\LocalFileParser;
-use KugaRocks\BookStackContentSync\ContentSync\Push\PlanAction;
-use KugaRocks\BookStackContentSync\ContentSync\Push\ProjectStructureValidator;
-use KugaRocks\BookStackContentSync\ContentSync\Push\PushPlanBuilder;
-use KugaRocks\BookStackContentSync\ContentSync\Push\PushPlanRunner;
-use KugaRocks\BookStackContentSync\ContentSync\Push\PushProjectStateLoader;
-use KugaRocks\BookStackContentSync\ContentSync\Push\SnapshotFileLoader;
-use KugaRocks\BookStackContentSync\ContentSync\Push\SnapshotMatcher;
-use KugaRocks\BookStackContentSync\ContentSync\Push\StructureDiffer;
-use KugaRocks\BookStackContentSync\ContentSync\Shared\ContentHashBuilder;
-use KugaRocks\BookStackContentSync\ContentSync\Shared\TagNormalizer;
+use Kugarocks\BookStackContentSync\ContentSync\Pull\SyncConfigLoader;
+use Kugarocks\BookStackContentSync\ContentSync\Push\ContentDiffer;
+use Kugarocks\BookStackContentSync\ContentSync\Push\LocalContentScanner;
+use Kugarocks\BookStackContentSync\ContentSync\Push\LocalFileParser;
+use Kugarocks\BookStackContentSync\ContentSync\Push\PlanAction;
+use Kugarocks\BookStackContentSync\ContentSync\Push\ProjectStructureValidator;
+use Kugarocks\BookStackContentSync\ContentSync\Push\PushPlanBuilder;
+use Kugarocks\BookStackContentSync\ContentSync\Push\PushPlanRunner;
+use Kugarocks\BookStackContentSync\ContentSync\Push\PushProjectStateLoader;
+use Kugarocks\BookStackContentSync\ContentSync\Push\SnapshotFileLoader;
+use Kugarocks\BookStackContentSync\ContentSync\Push\SnapshotMatcher;
+use Kugarocks\BookStackContentSync\ContentSync\Push\StructureDiffer;
+use Kugarocks\BookStackContentSync\ContentSync\Shared\ContentHashBuilder;
+use Kugarocks\BookStackContentSync\ContentSync\Shared\TagNormalizer;
 use PHPUnit\Framework\TestCase;
 
 class PushPlanRunnerIntegrationTest extends TestCase

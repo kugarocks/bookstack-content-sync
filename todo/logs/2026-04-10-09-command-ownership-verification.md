@@ -12,7 +12,7 @@
 ## 结果
 
 - 当前宿主中生效的命令类为：
-  - `KugaRocks\BookStackContentSync\Console\Commands\PullContentCommand`
+  - `Kugarocks\BookStackContentSync\Console\Commands\PullContentCommand`
 
 ## 问题与判断
 

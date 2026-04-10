@@ -25,7 +25,7 @@
 ### 方案 A
 
 - Composer 包名：`kugarocks/bookstack-content-sync`
-- PHP 命名空间：`KugaRocks\\BookStackContentSync`
+- PHP 命名空间：`Kugarocks\\BookStackContentSync`
 - 仓库目录名：`bookstack-content-sync`
 - 对外名称：BookStack Content Sync
 
@@ -44,7 +44,7 @@
 ### 方案 B
 
 - Composer 包名：`kugarocks/bookstack-sync`
-- PHP 命名空间：`KugaRocks\\BookStackSync`
+- PHP 命名空间：`Kugarocks\\BookStackSync`
 - 仓库目录名：`bookstack-content-sync` 或后续改为 `bookstack-sync`
 - 对外名称：BookStack Sync
 
@@ -62,7 +62,7 @@
 ### 方案 C
 
 - Composer 包名：`kugarocks/bookstack-content-sync-extension`
-- PHP 命名空间：`KugaRocks\\BookStackContentSyncExtension`
+- PHP 命名空间：`Kugarocks\\BookStackContentSyncExtension`
 - 仓库目录名：`bookstack-content-sync`
 - 对外名称：BookStack Content Sync Extension
 
@@ -85,7 +85,7 @@
 
 - 当前目标非常明确，就是把 content sync 做成外部 Composer 扩展包
 - `bookstack-content-sync` 与当前 repo 目录一致，迁移成本最低
-- `KugaRocks\\BookStackContentSync` 能和宿主 `BookStack\\...` 清晰分层
+- `Kugarocks\\BookStackContentSync` 能和宿主 `BookStack\\...` 清晰分层
 - 先把名字定得准确，比定得过宽更重要
 
 ## 命名约束建议
@@ -100,16 +100,16 @@
 
 建议固定为：
 
-- `KugaRocks\\BookStackContentSync`
+- `Kugarocks\\BookStackContentSync`
 
 ### 类命名规则
 
 建议采用：
 
-- `KugaRocks\\BookStackContentSync\\ContentSync\\Pull\\...`
-- `KugaRocks\\BookStackContentSync\\ContentSync\\Push\\...`
-- `KugaRocks\\BookStackContentSync\\Console\\Commands\\...`
-- `KugaRocks\\BookStackContentSync\\Providers\\...`
+- `Kugarocks\\BookStackContentSync\\ContentSync\\Pull\\...`
+- `Kugarocks\\BookStackContentSync\\ContentSync\\Push\\...`
+- `Kugarocks\\BookStackContentSync\\Console\\Commands\\...`
+- `Kugarocks\\BookStackContentSync\\Providers\\...`
 
 说明：
 
@@ -120,7 +120,7 @@
 ## 待确认点
 
 1. 是否接受包名使用 `content-sync` 而不是更宽泛的 `sync`
-2. 是否接受命名空间使用 `KugaRocks` 前缀
+2. 是否接受命名空间使用 `Kugarocks` 前缀
 3. 是否保留 `ContentSync` 作为 namespace 中间层，便于平滑迁移
 4. 仓库目录是否也维持 `bookstack-content-sync` 不再调整
 

@@ -2,9 +2,9 @@
 
 namespace Tests\Unit\ContentSync\Push;
 
-use KugaRocks\BookStackContentSync\ContentSync\Push\LocalFileParser;
-use KugaRocks\BookStackContentSync\ContentSync\Shared\ContentHashBuilder;
-use KugaRocks\BookStackContentSync\ContentSync\Shared\TagNormalizer;
+use Kugarocks\BookStackContentSync\ContentSync\Push\LocalFileParser;
+use Kugarocks\BookStackContentSync\ContentSync\Shared\ContentHashBuilder;
+use Kugarocks\BookStackContentSync\ContentSync\Shared\TagNormalizer;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 

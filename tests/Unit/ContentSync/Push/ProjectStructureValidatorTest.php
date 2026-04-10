@@ -2,8 +2,8 @@
 
 namespace Tests\Unit\ContentSync\Push;
 
-use KugaRocks\BookStackContentSync\ContentSync\Push\ProjectStructureValidator;
-use KugaRocks\BookStackContentSync\ContentSync\Shared\NodeType;
+use Kugarocks\BookStackContentSync\ContentSync\Push\ProjectStructureValidator;
+use Kugarocks\BookStackContentSync\ContentSync\Shared\NodeType;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 

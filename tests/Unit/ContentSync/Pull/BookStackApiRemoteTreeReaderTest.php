@@ -2,10 +2,10 @@
 
 namespace Tests\Unit\ContentSync\Pull;
 
-use KugaRocks\BookStackContentSync\ContentSync\Pull\BookStackApiClient;
-use KugaRocks\BookStackContentSync\ContentSync\Pull\BookStackApiRemoteTreeReader;
-use KugaRocks\BookStackContentSync\ContentSync\Pull\SyncConfigEnvCredentialResolver;
-use KugaRocks\BookStackContentSync\ContentSync\Shared\NodeType;
+use Kugarocks\BookStackContentSync\ContentSync\Pull\BookStackApiClient;
+use Kugarocks\BookStackContentSync\ContentSync\Pull\BookStackApiRemoteTreeReader;
+use Kugarocks\BookStackContentSync\ContentSync\Pull\SyncConfigEnvCredentialResolver;
+use Kugarocks\BookStackContentSync\ContentSync\Shared\NodeType;
 use PHPUnit\Framework\TestCase;
 
 class BookStackApiRemoteTreeReaderTest extends TestCase

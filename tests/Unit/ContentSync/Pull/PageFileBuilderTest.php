@@ -2,9 +2,9 @@
 
 namespace Tests\Unit\ContentSync\Pull;
 
-use KugaRocks\BookStackContentSync\ContentSync\Pull\PageFileBuilder;
-use KugaRocks\BookStackContentSync\ContentSync\Shared\NodeType;
-use KugaRocks\BookStackContentSync\ContentSync\Shared\TagNormalizer;
+use Kugarocks\BookStackContentSync\ContentSync\Pull\PageFileBuilder;
+use Kugarocks\BookStackContentSync\ContentSync\Shared\NodeType;
+use Kugarocks\BookStackContentSync\ContentSync\Shared\TagNormalizer;
 use PHPUnit\Framework\TestCase;
 
 class PageFileBuilderTest extends TestCase

@@ -2,7 +2,7 @@
 
 namespace Tests\Unit\ContentSync\Pull;
 
-use KugaRocks\BookStackContentSync\ContentSync\Pull\SyncConfigLoader;
+use Kugarocks\BookStackContentSync\ContentSync\Pull\SyncConfigLoader;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 

@@ -1,8 +1,8 @@
 <?php
 
-namespace KugaRocks\BookStackContentSync\ContentSync\Pull;
+namespace Kugarocks\BookStackContentSync\ContentSync\Pull;
 
-use KugaRocks\BookStackContentSync\ContentSync\Shared\TagNormalizer;
+use Kugarocks\BookStackContentSync\ContentSync\Shared\TagNormalizer;
 
 class MetaFileBuilder
 {

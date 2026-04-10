@@ -1,15 +1,15 @@
 <?php
 
-namespace KugaRocks\BookStackContentSync\ContentSync\Push;
+namespace Kugarocks\BookStackContentSync\ContentSync\Push;
 
-use KugaRocks\BookStackContentSync\ContentSync\Pull\MetaFileBuilder;
-use KugaRocks\BookStackContentSync\ContentSync\Pull\PageFileBuilder;
-use KugaRocks\BookStackContentSync\ContentSync\Pull\RemoteNode;
-use KugaRocks\BookStackContentSync\ContentSync\Pull\RemoteTag;
-use KugaRocks\BookStackContentSync\ContentSync\Pull\SnapshotJsonBuilder;
-use KugaRocks\BookStackContentSync\ContentSync\Shared\NodeType;
-use KugaRocks\BookStackContentSync\ContentSync\Shared\SnapshotParent;
-use KugaRocks\BookStackContentSync\ContentSync\Shared\SnapshotNode;
+use Kugarocks\BookStackContentSync\ContentSync\Pull\MetaFileBuilder;
+use Kugarocks\BookStackContentSync\ContentSync\Pull\PageFileBuilder;
+use Kugarocks\BookStackContentSync\ContentSync\Pull\RemoteNode;
+use Kugarocks\BookStackContentSync\ContentSync\Pull\RemoteTag;
+use Kugarocks\BookStackContentSync\ContentSync\Pull\SnapshotJsonBuilder;
+use Kugarocks\BookStackContentSync\ContentSync\Shared\NodeType;
+use Kugarocks\BookStackContentSync\ContentSync\Shared\SnapshotParent;
+use Kugarocks\BookStackContentSync\ContentSync\Shared\SnapshotNode;
 use InvalidArgumentException;
 
 class LocalProjectStateWriter

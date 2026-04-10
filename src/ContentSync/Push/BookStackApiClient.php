@@ -1,6 +1,6 @@
 <?php
 
-namespace KugaRocks\BookStackContentSync\ContentSync\Push;
+namespace Kugarocks\BookStackContentSync\ContentSync\Push;
 
 use BookStack\Http\HttpRequestService;
 use GuzzleHttp\Psr7\Request;

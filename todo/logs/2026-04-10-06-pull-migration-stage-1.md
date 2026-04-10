@@ -12,7 +12,7 @@
 
 - 复制 `app/ContentSync/Shared/*` 到扩展包 `src/ContentSync/Shared/*`
 - 复制 `app/ContentSync/Pull/*` 到扩展包 `src/ContentSync/Pull/*`
-- 批量将 namespace 和 import 从 `BookStack\ContentSync\...` 调整为 `KugaRocks\BookStackContentSync\ContentSync\...`
+- 批量将 namespace 和 import 从 `BookStack\ContentSync\...` 调整为 `Kugarocks\BookStackContentSync\ContentSync\...`
 - 使用原仓库实现替换 `src/Console/Commands/PullContentCommand.php`
 - 更新 `src/Providers/ContentSyncServiceProvider.php`，增加 `PullRemoteTreeReader` 到 `BookStackApiRemoteTreeReader` 的绑定
 - 修正一个 pull 相关 docblock 命名空间引用

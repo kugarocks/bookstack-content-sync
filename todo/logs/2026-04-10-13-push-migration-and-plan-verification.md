@@ -22,7 +22,7 @@
 
 - `bookstack:push-content` 命令帮助输出正常
 - 宿主中实际生效的命令类为：
-  - `KugaRocks\BookStackContentSync\Console\Commands\PushContentCommand`
+  - `Kugarocks\BookStackContentSync\Console\Commands\PushContentCommand`
 - push plan 实跑成功，输出为：
   - `Starting push plan`
   - `Loading local project state`

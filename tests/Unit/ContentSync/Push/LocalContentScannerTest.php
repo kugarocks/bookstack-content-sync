@@ -2,10 +2,10 @@
 
 namespace Tests\Unit\ContentSync\Push;
 
-use KugaRocks\BookStackContentSync\ContentSync\Push\LocalContentScanner;
-use KugaRocks\BookStackContentSync\ContentSync\Push\LocalFileParser;
-use KugaRocks\BookStackContentSync\ContentSync\Shared\ContentHashBuilder;
-use KugaRocks\BookStackContentSync\ContentSync\Shared\TagNormalizer;
+use Kugarocks\BookStackContentSync\ContentSync\Push\LocalContentScanner;
+use Kugarocks\BookStackContentSync\ContentSync\Push\LocalFileParser;
+use Kugarocks\BookStackContentSync\ContentSync\Shared\ContentHashBuilder;
+use Kugarocks\BookStackContentSync\ContentSync\Shared\TagNormalizer;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 
@@ -203,11 +203,11 @@ tags: []
 Body
 MD);
 
-        $loader = new \KugaRocks\BookStackContentSync\ContentSync\Push\PushProjectStateLoader(
-            new \KugaRocks\BookStackContentSync\ContentSync\Pull\SyncConfigLoader(),
-            new \KugaRocks\BookStackContentSync\ContentSync\Push\SnapshotFileLoader(),
+        $loader = new \Kugarocks\BookStackContentSync\ContentSync\Push\PushProjectStateLoader(
+            new \Kugarocks\BookStackContentSync\ContentSync\Pull\SyncConfigLoader(),
+            new \Kugarocks\BookStackContentSync\ContentSync\Push\SnapshotFileLoader(),
             $this->scanner(),
-            new \KugaRocks\BookStackContentSync\ContentSync\Push\ProjectStructureValidator(),
+            new \Kugarocks\BookStackContentSync\ContentSync\Push\ProjectStructureValidator(),
         );
 
         $this->expectException(InvalidArgumentException::class);

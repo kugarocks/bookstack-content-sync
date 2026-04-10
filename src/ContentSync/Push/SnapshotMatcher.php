@@ -1,8 +1,8 @@
 <?php
 
-namespace KugaRocks\BookStackContentSync\ContentSync\Push;
+namespace Kugarocks\BookStackContentSync\ContentSync\Push;
 
-use KugaRocks\BookStackContentSync\ContentSync\Shared\SnapshotNode;
+use Kugarocks\BookStackContentSync\ContentSync\Shared\SnapshotNode;
 use InvalidArgumentException;
 
 class SnapshotMatcher

@@ -2,13 +2,13 @@
 
 namespace Tests\Unit\ContentSync\Push;
 
-use KugaRocks\BookStackContentSync\ContentSync\Pull\SyncConfigLoader;
-use KugaRocks\BookStackContentSync\ContentSync\Push\LocalContentScanner;
-use KugaRocks\BookStackContentSync\ContentSync\Push\ProjectStructureValidator;
-use KugaRocks\BookStackContentSync\ContentSync\Push\PushProjectStateLoader;
-use KugaRocks\BookStackContentSync\ContentSync\Push\SnapshotFileLoader;
-use KugaRocks\BookStackContentSync\ContentSync\Shared\ContentHashBuilder;
-use KugaRocks\BookStackContentSync\ContentSync\Shared\TagNormalizer;
+use Kugarocks\BookStackContentSync\ContentSync\Pull\SyncConfigLoader;
+use Kugarocks\BookStackContentSync\ContentSync\Push\LocalContentScanner;
+use Kugarocks\BookStackContentSync\ContentSync\Push\ProjectStructureValidator;
+use Kugarocks\BookStackContentSync\ContentSync\Push\PushProjectStateLoader;
+use Kugarocks\BookStackContentSync\ContentSync\Push\SnapshotFileLoader;
+use Kugarocks\BookStackContentSync\ContentSync\Shared\ContentHashBuilder;
+use Kugarocks\BookStackContentSync\ContentSync\Shared\TagNormalizer;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 
@@ -51,7 +51,7 @@ YAML);
         $loader = new PushProjectStateLoader(
             new SyncConfigLoader(),
             new SnapshotFileLoader(),
-            new LocalContentScanner(new \KugaRocks\BookStackContentSync\ContentSync\Push\LocalFileParser(new ContentHashBuilder(new TagNormalizer()))),
+            new LocalContentScanner(new \Kugarocks\BookStackContentSync\ContentSync\Push\LocalFileParser(new ContentHashBuilder(new TagNormalizer()))),
             new ProjectStructureValidator(),
         );
 
@@ -94,7 +94,7 @@ MD);
         $loader = new PushProjectStateLoader(
             new SyncConfigLoader(),
             new SnapshotFileLoader(),
-            new LocalContentScanner(new \KugaRocks\BookStackContentSync\ContentSync\Push\LocalFileParser(new ContentHashBuilder(new TagNormalizer()))),
+            new LocalContentScanner(new \Kugarocks\BookStackContentSync\ContentSync\Push\LocalFileParser(new ContentHashBuilder(new TagNormalizer()))),
             new ProjectStructureValidator(),
         );
 

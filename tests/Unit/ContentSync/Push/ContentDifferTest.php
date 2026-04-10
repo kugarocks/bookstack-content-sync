@@ -2,8 +2,8 @@
 
 namespace Tests\Unit\ContentSync\Push;
 
-use KugaRocks\BookStackContentSync\ContentSync\Push\ContentDiffer;
-use KugaRocks\BookStackContentSync\ContentSync\Shared\NodeType;
+use Kugarocks\BookStackContentSync\ContentSync\Push\ContentDiffer;
+use Kugarocks\BookStackContentSync\ContentSync\Shared\NodeType;
 use PHPUnit\Framework\TestCase;
 
 class ContentDifferTest extends TestCase

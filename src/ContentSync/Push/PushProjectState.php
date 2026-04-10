@@ -1,9 +1,9 @@
 <?php
 
-namespace KugaRocks\BookStackContentSync\ContentSync\Push;
+namespace Kugarocks\BookStackContentSync\ContentSync\Push;
 
-use KugaRocks\BookStackContentSync\ContentSync\Pull\SyncConfig;
-use KugaRocks\BookStackContentSync\ContentSync\Shared\SnapshotNode;
+use Kugarocks\BookStackContentSync\ContentSync\Pull\SyncConfig;
+use Kugarocks\BookStackContentSync\ContentSync\Shared\SnapshotNode;
 
 readonly class PushProjectState
 {

@@ -1,8 +1,8 @@
 <?php
 
-namespace KugaRocks\BookStackContentSync\Console\Commands;
+namespace Kugarocks\BookStackContentSync\Console\Commands;
 
-use KugaRocks\BookStackContentSync\ContentSync\Pull\PullContentRunner;
+use Kugarocks\BookStackContentSync\ContentSync\Pull\PullContentRunner;
 use Illuminate\Console\Command;
 use Throwable;
 

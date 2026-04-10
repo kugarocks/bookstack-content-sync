@@ -1,10 +1,10 @@
 <?php
 
-namespace KugaRocks\BookStackContentSync\ContentSync\Push;
+namespace Kugarocks\BookStackContentSync\ContentSync\Push;
 
-use KugaRocks\BookStackContentSync\ContentSync\Shared\ContentHashBuilder;
-use KugaRocks\BookStackContentSync\ContentSync\Shared\ContentHashData;
-use KugaRocks\BookStackContentSync\ContentSync\Shared\NodeType;
+use Kugarocks\BookStackContentSync\ContentSync\Shared\ContentHashBuilder;
+use Kugarocks\BookStackContentSync\ContentSync\Shared\ContentHashData;
+use Kugarocks\BookStackContentSync\ContentSync\Shared\NodeType;
 use InvalidArgumentException;
 
 class LocalFileParser

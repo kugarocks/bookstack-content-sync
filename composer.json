@@ -11,14 +11,14 @@
   },
   "autoload": {
     "psr-4": {
-      "KugaRocks\\BookStackContentSync\\": "src/",
+      "Kugarocks\\BookStackContentSync\\": "src/",
       "BookStack\\": "src/Support/BookStack/"
     }
   },
   "extra": {
     "laravel": {
       "providers": [
-        "KugaRocks\\BookStackContentSync\\Providers\\ContentSyncServiceProvider"
+        "Kugarocks\\BookStackContentSync\\Providers\\ContentSyncServiceProvider"
       ]
     }
   },

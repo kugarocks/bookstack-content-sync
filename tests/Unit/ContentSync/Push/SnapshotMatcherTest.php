@@ -2,10 +2,10 @@
 
 namespace Tests\Unit\ContentSync\Push;
 
-use KugaRocks\BookStackContentSync\ContentSync\Push\LocalNode;
-use KugaRocks\BookStackContentSync\ContentSync\Shared\NodeType;
-use KugaRocks\BookStackContentSync\ContentSync\Push\SnapshotMatcher;
-use KugaRocks\BookStackContentSync\ContentSync\Shared\SnapshotNode;
+use Kugarocks\BookStackContentSync\ContentSync\Push\LocalNode;
+use Kugarocks\BookStackContentSync\ContentSync\Shared\NodeType;
+use Kugarocks\BookStackContentSync\ContentSync\Push\SnapshotMatcher;
+use Kugarocks\BookStackContentSync\ContentSync\Shared\SnapshotNode;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 

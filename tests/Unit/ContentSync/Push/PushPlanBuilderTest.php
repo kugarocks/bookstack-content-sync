@@ -2,13 +2,13 @@
 
 namespace Tests\Unit\ContentSync\Push;
 
-use KugaRocks\BookStackContentSync\ContentSync\Push\ContentDiffer;
-use KugaRocks\BookStackContentSync\ContentSync\Shared\NodeType;
+use Kugarocks\BookStackContentSync\ContentSync\Push\ContentDiffer;
+use Kugarocks\BookStackContentSync\ContentSync\Shared\NodeType;
 use PHPUnit\Framework\TestCase;
-use KugaRocks\BookStackContentSync\ContentSync\Push\PlanAction;
-use KugaRocks\BookStackContentSync\ContentSync\Push\PushPlanBuilder;
-use KugaRocks\BookStackContentSync\ContentSync\Push\SnapshotMatcher;
-use KugaRocks\BookStackContentSync\ContentSync\Push\StructureDiffer;
+use Kugarocks\BookStackContentSync\ContentSync\Push\PlanAction;
+use Kugarocks\BookStackContentSync\ContentSync\Push\PushPlanBuilder;
+use Kugarocks\BookStackContentSync\ContentSync\Push\SnapshotMatcher;
+use Kugarocks\BookStackContentSync\ContentSync\Push\StructureDiffer;
 
 class PushPlanBuilderTest extends TestCase
 {

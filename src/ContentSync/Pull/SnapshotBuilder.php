@@ -1,11 +1,11 @@
 <?php
 
-namespace KugaRocks\BookStackContentSync\ContentSync\Pull;
+namespace Kugarocks\BookStackContentSync\ContentSync\Pull;
 
-use KugaRocks\BookStackContentSync\ContentSync\Shared\ContentHashBuilder;
-use KugaRocks\BookStackContentSync\ContentSync\Shared\ContentHashData;
-use KugaRocks\BookStackContentSync\ContentSync\Shared\SnapshotParent;
-use KugaRocks\BookStackContentSync\ContentSync\Shared\SnapshotNode;
+use Kugarocks\BookStackContentSync\ContentSync\Shared\ContentHashBuilder;
+use Kugarocks\BookStackContentSync\ContentSync\Shared\ContentHashData;
+use Kugarocks\BookStackContentSync\ContentSync\Shared\SnapshotParent;
+use Kugarocks\BookStackContentSync\ContentSync\Shared\SnapshotNode;
 
 class SnapshotBuilder
 {

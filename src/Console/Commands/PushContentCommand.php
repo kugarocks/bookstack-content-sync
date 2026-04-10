@@ -1,12 +1,12 @@
 <?php
 
-namespace KugaRocks\BookStackContentSync\Console\Commands;
+namespace Kugarocks\BookStackContentSync\Console\Commands;
 
-use KugaRocks\BookStackContentSync\ContentSync\Push\PlanAction;
-use KugaRocks\BookStackContentSync\ContentSync\Push\PushContentRunner;
-use KugaRocks\BookStackContentSync\ContentSync\Push\PushPlanRunner;
-use KugaRocks\BookStackContentSync\ContentSync\Push\PushPlanSummary;
-use KugaRocks\BookStackContentSync\ContentSync\Shared\NodeType;
+use Kugarocks\BookStackContentSync\ContentSync\Push\PlanAction;
+use Kugarocks\BookStackContentSync\ContentSync\Push\PushContentRunner;
+use Kugarocks\BookStackContentSync\ContentSync\Push\PushPlanRunner;
+use Kugarocks\BookStackContentSync\ContentSync\Push\PushPlanSummary;
+use Kugarocks\BookStackContentSync\ContentSync\Shared\NodeType;
 use Illuminate\Console\Command;
 use Throwable;
 

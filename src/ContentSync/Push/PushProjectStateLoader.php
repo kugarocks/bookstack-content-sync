@@ -1,8 +1,8 @@
 <?php
 
-namespace KugaRocks\BookStackContentSync\ContentSync\Push;
+namespace Kugarocks\BookStackContentSync\ContentSync\Push;
 
-use KugaRocks\BookStackContentSync\ContentSync\Pull\SyncConfigLoader;
+use Kugarocks\BookStackContentSync\ContentSync\Pull\SyncConfigLoader;
 
 class PushProjectStateLoader
 {

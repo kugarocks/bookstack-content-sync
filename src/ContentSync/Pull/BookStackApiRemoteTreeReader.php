@@ -1,8 +1,8 @@
 <?php
 
-namespace KugaRocks\BookStackContentSync\ContentSync\Pull;
+namespace Kugarocks\BookStackContentSync\ContentSync\Pull;
 
-use KugaRocks\BookStackContentSync\ContentSync\Shared\NodeType;
+use Kugarocks\BookStackContentSync\ContentSync\Shared\NodeType;
 use InvalidArgumentException;
 
 class BookStackApiRemoteTreeReader implements PullRemoteTreeReader

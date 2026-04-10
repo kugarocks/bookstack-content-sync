@@ -1,12 +1,12 @@
 <?php
 
-namespace KugaRocks\BookStackContentSync\Providers;
+namespace Kugarocks\BookStackContentSync\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use KugaRocks\BookStackContentSync\Console\Commands\PullContentCommand;
-use KugaRocks\BookStackContentSync\Console\Commands\PushContentCommand;
-use KugaRocks\BookStackContentSync\ContentSync\Pull\BookStackApiRemoteTreeReader;
-use KugaRocks\BookStackContentSync\ContentSync\Pull\PullRemoteTreeReader;
+use Kugarocks\BookStackContentSync\Console\Commands\PullContentCommand;
+use Kugarocks\BookStackContentSync\Console\Commands\PushContentCommand;
+use Kugarocks\BookStackContentSync\ContentSync\Pull\BookStackApiRemoteTreeReader;
+use Kugarocks\BookStackContentSync\ContentSync\Pull\PullRemoteTreeReader;
 
 class ContentSyncServiceProvider extends ServiceProvider
 {

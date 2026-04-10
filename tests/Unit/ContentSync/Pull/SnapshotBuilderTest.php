@@ -2,11 +2,11 @@
 
 namespace Tests\Unit\ContentSync\Pull;
 
-use KugaRocks\BookStackContentSync\ContentSync\Pull\SnapshotBuilder;
-use KugaRocks\BookStackContentSync\ContentSync\Shared\ContentHashBuilder;
-use KugaRocks\BookStackContentSync\ContentSync\Shared\ContentHashData;
-use KugaRocks\BookStackContentSync\ContentSync\Shared\NodeType;
-use KugaRocks\BookStackContentSync\ContentSync\Shared\TagNormalizer;
+use Kugarocks\BookStackContentSync\ContentSync\Pull\SnapshotBuilder;
+use Kugarocks\BookStackContentSync\ContentSync\Shared\ContentHashBuilder;
+use Kugarocks\BookStackContentSync\ContentSync\Shared\ContentHashData;
+use Kugarocks\BookStackContentSync\ContentSync\Shared\NodeType;
+use Kugarocks\BookStackContentSync\ContentSync\Shared\TagNormalizer;
 use PHPUnit\Framework\TestCase;
 
 class SnapshotBuilderTest extends TestCase

@@ -1,6 +1,6 @@
 <?php
 
-namespace KugaRocks\BookStackContentSync\ContentSync\Shared;
+namespace Kugarocks\BookStackContentSync\ContentSync\Shared;
 
 readonly class SnapshotParent
 {

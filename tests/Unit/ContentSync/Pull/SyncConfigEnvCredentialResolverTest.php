@@ -2,7 +2,7 @@
 
 namespace Tests\Unit\ContentSync\Pull;
 
-use KugaRocks\BookStackContentSync\ContentSync\Pull\SyncConfigEnvCredentialResolver;
+use Kugarocks\BookStackContentSync\ContentSync\Pull\SyncConfigEnvCredentialResolver;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 
