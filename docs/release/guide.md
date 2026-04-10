@@ -76,10 +76,13 @@ Use `docs/release/notes-v0.1.0.md` as the base text for the first public release
 If the repository has already been pushed and tagged, you can register and refresh the package on Packagist with:
 
 ```bash
-scripts/packagist.sh publish \
-  --repository https://github.com/yourname/bookstack-content-sync \
-  --package kugarocks/bookstack-content-sync
+scripts/packagist.sh publish
 ```
+
+The helper is pinned to:
+
+- repository: `https://github.com/kugarocks/bookstack-content-sync`
+- package: `kugarocks/bookstack-content-sync`
 
 Authentication is read from these environment variables by default:
 

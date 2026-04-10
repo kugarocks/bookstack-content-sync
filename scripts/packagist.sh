@@ -3,6 +3,8 @@ set -euo pipefail
 
 PACKAGIST_API_BASE="https://packagist.org/api"
 PACKAGIST_WEB_BASE="https://packagist.org/packages"
+PACKAGE_REPOSITORY="https://github.com/kugarocks/bookstack-content-sync"
+PACKAGE_NAME="kugarocks/bookstack-content-sync"
 
 if [[ -t 1 ]]; then
   COLOR_BLUE='\033[1;34m'
@@ -69,34 +71,24 @@ usage() {
   print_blank
 
   printf '%b\n' "${COLOR_BLUE}Usage${COLOR_RESET}"
-  printf '  %s %s %s %s %s %s %s %s\n' \
+  printf '  %s %s %s %s\n' \
     "$(fmt_cmd 'scripts/packagist.sh')" \
     "$(fmt_cmd 'publish')" \
-    "$(fmt_arg '--repository')" \
-    "$(fmt_meta 'URL')" \
-    "$(fmt_arg '--package')" \
-    "$(fmt_meta 'VENDOR/NAME')" \
-    "$(fmt_arg '[--username USERNAME]')" \
-    "$(fmt_arg '[--token TOKEN]')"
-  printf '  %s %s %s %s %s %s\n' \
-    "$(fmt_cmd 'scripts/packagist.sh')" \
-    "$(fmt_cmd 'create')" \
-    "$(fmt_arg '--repository')" \
-    "$(fmt_meta 'URL')" \
-    "$(fmt_arg '[--username USERNAME]')" \
-    "$(fmt_arg '[--token TOKEN]')"
-  printf '  %s %s %s %s %s %s\n' \
-    "$(fmt_cmd 'scripts/packagist.sh')" \
-    "$(fmt_cmd 'update')" \
-    "$(fmt_arg '--repository')" \
-    "$(fmt_meta 'URL')" \
     "$(fmt_arg '[--username USERNAME]')" \
     "$(fmt_arg '[--token TOKEN]')"
   printf '  %s %s %s %s\n' \
     "$(fmt_cmd 'scripts/packagist.sh')" \
-    "$(fmt_cmd 'check')" \
-    "$(fmt_arg '--package')" \
-    "$(fmt_meta 'VENDOR/NAME')"
+    "$(fmt_cmd 'create')" \
+    "$(fmt_arg '[--username USERNAME]')" \
+    "$(fmt_arg '[--token TOKEN]')"
+  printf '  %s %s %s %s\n' \
+    "$(fmt_cmd 'scripts/packagist.sh')" \
+    "$(fmt_cmd 'update')" \
+    "$(fmt_arg '[--username USERNAME]')" \
+    "$(fmt_arg '[--token TOKEN]')"
+  printf '  %s %s\n' \
+    "$(fmt_cmd 'scripts/packagist.sh')" \
+    "$(fmt_cmd 'check')"
   printf '  %s %s\n' "$(fmt_cmd 'scripts/packagist.sh')" "$(fmt_cmd 'help')"
   print_blank
 
@@ -106,28 +98,23 @@ usage() {
   print_blank
 
   printf '%b\n' "${COLOR_BLUE}Examples${COLOR_RESET}"
-  printf '  %s %s %s %s %s %s\n' \
+  printf '  %s %s\n' \
     "$(fmt_cmd 'scripts/packagist.sh')" \
-    "$(fmt_cmd 'publish')" \
-    "$(fmt_arg '--repository')" \
-    "$(fmt_meta 'https://github.com/you/bookstack-content-sync')" \
-    "$(fmt_arg '--package')" \
-    "$(fmt_meta 'kugarocks/bookstack-content-sync')"
-  printf '  %s %s %s %s\n' \
+    "$(fmt_cmd 'publish')"
+  printf '  %s %s\n' \
     "$(fmt_cmd 'scripts/packagist.sh')" \
-    "$(fmt_cmd 'create')" \
-    "$(fmt_arg '--repository')" \
-    "$(fmt_meta 'https://github.com/you/bookstack-content-sync')"
-  printf '  %s %s %s %s\n' \
+    "$(fmt_cmd 'create')"
+  printf '  %s %s\n' \
     "$(fmt_cmd 'scripts/packagist.sh')" \
-    "$(fmt_cmd 'update')" \
-    "$(fmt_arg '--repository')" \
-    "$(fmt_meta 'https://github.com/you/bookstack-content-sync')"
-  printf '  %s %s %s %s\n' \
+    "$(fmt_cmd 'update')"
+  printf '  %s %s\n' \
     "$(fmt_cmd 'scripts/packagist.sh')" \
-    "$(fmt_cmd 'check')" \
-    "$(fmt_arg '--package')" \
-    "$(fmt_meta 'kugarocks/bookstack-content-sync')"
+    "$(fmt_cmd 'check')"
+  print_blank
+
+  printf '%b\n' "${COLOR_BLUE}Defaults${COLOR_RESET}"
+  printf '  %s   %s\n' "$(fmt_meta 'Repository')" "$(fmt_meta "${PACKAGE_REPOSITORY}")"
+  printf '  %s      %s\n' "$(fmt_meta 'Package')" "$(fmt_meta "${PACKAGE_NAME}")"
   print_blank
 }
 
@@ -257,21 +244,13 @@ main() {
   local command="${1:-help}"
   shift || true
 
-  local repository=""
-  local package_name=""
+  local repository="$PACKAGE_REPOSITORY"
+  local package_name="$PACKAGE_NAME"
   local username="${COMPOSER_PACKAGIST_USERNAME:-}"
   local token="${COMPOSER_PACKAGIST_TOKEN:-}"
 
   while [[ $# -gt 0 ]]; do
     case "$1" in
-      --repository)
-        repository="${2:-}"
-        shift 2
-        ;;
-      --package)
-        package_name="${2:-}"
-        shift 2
-        ;;
       --username)
         username="${2:-}"
         shift 2
