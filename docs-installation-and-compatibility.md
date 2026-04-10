@@ -44,10 +44,11 @@ The following has been verified in a local BookStack host:
 - the package owns the `bookstack:push-content` command
 - pull execution works against a local BookStack instance
 - push plan execution works against pulled local content
+- no-change `push --execute` execution completes successfully
 
 ## What is not yet verified
 
-- controlled `push --execute` validation
+- controlled write-path `push --execute` validation
 - published package distribution outside local path repository usage
 - automated cross-version compatibility checks
 

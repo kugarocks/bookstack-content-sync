@@ -16,8 +16,9 @@ Verified in a local BookStack host environment:
 - command ownership takeover for pull and push
 - successful pull execution
 - successful push plan execution
+- successful no-change push execute execution
 
-`push --execute` has not been executed yet in this repository workflow. The current decision is that a controlled no-change execute run is safe to perform in a later round.
+`push --execute` has been verified in a controlled no-change scenario in the local BookStack host workflow.
 
 ## Requirements
 
@@ -99,6 +100,6 @@ Local verification completed so far:
 
 ## Next steps
 
-- run a controlled no-change `push --execute` validation
+- validate a controlled write-path `push --execute` scenario when needed
 - tighten package dependency declarations as needed after more host validation
 - add automated verification coverage where practical
