@@ -107,6 +107,13 @@ composer install
 composer test
 ```
 
+Test boundaries:
+
+- Unit tests validate isolated sync logic.
+- Integration tests execute real local file reads and writes in temporary directories.
+- Integration tests do not call a real BookStack server; HTTP is mocked through the package test shim.
+- Host verification is still required to confirm package discovery and real command takeover inside BookStack.
+
 Run only unit tests:
 
 ```bash
@@ -142,3 +149,7 @@ vendor/bin/phpunit tests
 - validate a controlled write-path `push --execute` scenario when needed
 - tighten package dependency declarations as needed after more host validation
 - add automated verification coverage where practical
+
+## Release prep
+
+Before tagging or publishing a version, use `docs-release-checklist.md` to review package validation, host validation, and compatibility notes.
