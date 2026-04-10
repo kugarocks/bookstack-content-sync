@@ -3,7 +3,7 @@
 namespace Tests\Unit\ContentSync\Pull;
 
 use Kugarocks\BookStackContentSync\ContentSync\Pull\BookStackApiClient;
-use BookStack\Http\HttpRequestService;
+use Kugarocks\BookStackContentSync\Support\BookStack\Http\HttpRequestService;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
 

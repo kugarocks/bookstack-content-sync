@@ -1,6 +1,6 @@
 <?php
 
-namespace BookStack\Http;
+namespace Kugarocks\BookStackContentSync\Support\BookStack\Http;
 
 use GuzzleHttp\Psr7\Request as GuzzleRequest;
 

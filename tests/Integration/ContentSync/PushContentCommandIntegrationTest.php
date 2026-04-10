@@ -25,7 +25,7 @@ use Kugarocks\BookStackContentSync\ContentSync\Push\SnapshotMatcher;
 use Kugarocks\BookStackContentSync\ContentSync\Push\StructureDiffer;
 use Kugarocks\BookStackContentSync\ContentSync\Shared\ContentHashBuilder;
 use Kugarocks\BookStackContentSync\ContentSync\Shared\TagNormalizer;
-use BookStack\Http\HttpRequestService;
+use Kugarocks\BookStackContentSync\Support\BookStack\Http\HttpRequestService;
 use GuzzleHttp\Psr7\Response;
 use Illuminate\Console\OutputStyle;
 use Illuminate\Console\View\Components\Factory as ConsoleComponentFactory;

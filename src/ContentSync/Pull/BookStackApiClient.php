@@ -2,7 +2,7 @@
 
 namespace Kugarocks\BookStackContentSync\ContentSync\Pull;
 
-use BookStack\Http\HttpRequestService;
+use Kugarocks\BookStackContentSync\Support\BookStack\Http\HttpRequestService;
 use GuzzleHttp\Psr7\Request;
 use InvalidArgumentException;
 use JsonException;

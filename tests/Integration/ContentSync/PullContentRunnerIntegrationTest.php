@@ -16,7 +16,7 @@ use Kugarocks\BookStackContentSync\ContentSync\Pull\SyncConfigEnvCredentialResol
 use Kugarocks\BookStackContentSync\ContentSync\Pull\SyncConfigLoader;
 use Kugarocks\BookStackContentSync\ContentSync\Shared\ContentHashBuilder;
 use Kugarocks\BookStackContentSync\ContentSync\Shared\TagNormalizer;
-use BookStack\Http\HttpRequestService;
+use Kugarocks\BookStackContentSync\Support\BookStack\Http\HttpRequestService;
 use GuzzleHttp\Psr7\Response;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;

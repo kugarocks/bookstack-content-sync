@@ -22,8 +22,8 @@ use Kugarocks\BookStackContentSync\ContentSync\Push\SnapshotMatcher;
 use Kugarocks\BookStackContentSync\ContentSync\Push\StructureDiffer;
 use Kugarocks\BookStackContentSync\ContentSync\Shared\ContentHashBuilder;
 use Kugarocks\BookStackContentSync\ContentSync\Shared\TagNormalizer;
-use BookStack\Http\HttpClientHistory;
-use BookStack\Http\HttpRequestService;
+use Kugarocks\BookStackContentSync\Support\BookStack\Http\HttpClientHistory;
+use Kugarocks\BookStackContentSync\Support\BookStack\Http\HttpRequestService;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
 

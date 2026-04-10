@@ -11,8 +11,7 @@
   },
   "autoload": {
     "psr-4": {
-      "Kugarocks\\BookStackContentSync\\": "src/",
-      "BookStack\\": "src/Support/BookStack/"
+      "Kugarocks\\BookStackContentSync\\": "src/"
     }
   },
   "extra": {
