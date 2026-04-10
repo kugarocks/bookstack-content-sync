@@ -23,7 +23,7 @@ Before tagging or publishing:
 - run `composer test`
 - review `README.md` and `docs/installation-and-compatibility.md`
 - confirm the local BookStack host verification is still representative
-- refine `docs/release-notes-v0.1.0.md` if needed
+- refine `docs/release/notes-v0.1.0.md` if needed
 
 If the release changes push behavior, repeat a controlled host-side `bookstack:push-content --execute` verification.
 
@@ -58,7 +58,7 @@ If you prefer to release manually:
 git status --short
 composer validate --strict
 composer test
-sed -n '1,240p' docs/release-notes-v0.1.0.md
+sed -n '1,240p' docs/release/notes-v0.1.0.md
 git tag -a v0.1.0 -m "Release v0.1.0"
 git show v0.1.0 --stat --no-patch
 git push origin main
@@ -67,7 +67,7 @@ git push origin v0.1.0
 
 ## Release notes
 
-Use `docs/release-notes-v0.1.0.md` as the base text for the first public release.
+Use `docs/release/notes-v0.1.0.md` as the base text for the first public release.
 
 ## Packagist notes
 

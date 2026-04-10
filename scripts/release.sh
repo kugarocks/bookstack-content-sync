@@ -37,7 +37,7 @@ run_checks() {
   composer test
 
   echo "==> Reviewing release notes hint"
-  echo "Review docs/release-notes-${tag}.md if it exists, or update the matching release notes file manually."
+  echo "Review docs/release/notes-${tag}.md if it exists, or update the matching release notes file manually."
 }
 
 create_tag() {
