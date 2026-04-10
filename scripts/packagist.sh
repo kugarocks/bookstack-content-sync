@@ -10,6 +10,9 @@ if [[ -t 1 ]]; then
   COLOR_YELLOW='\033[1;33m'
   COLOR_RED='\033[1;31m'
   COLOR_BOLD='\033[1m'
+  COLOR_CYAN='\033[1;36m'
+  COLOR_MAGENTA='\033[1;35m'
+  COLOR_DIM='\033[2m'
   COLOR_RESET='\033[0m'
 else
   COLOR_BLUE=''
@@ -17,11 +20,30 @@ else
   COLOR_YELLOW=''
   COLOR_RED=''
   COLOR_BOLD=''
+  COLOR_CYAN=''
+  COLOR_MAGENTA=''
+  COLOR_DIM=''
   COLOR_RESET=''
 fi
 
 print_blank() {
   printf '\n'
+}
+
+fmt_cmd() {
+  printf '%b' "${COLOR_CYAN}$1${COLOR_RESET}"
+}
+
+fmt_arg() {
+  printf '%b' "${COLOR_YELLOW}$1${COLOR_RESET}"
+}
+
+fmt_meta() {
+  printf '%b' "${COLOR_MAGENTA}$1${COLOR_RESET}"
+}
+
+fmt_env() {
+  printf '%b' "${COLOR_GREEN}$1${COLOR_RESET}"
 }
 
 info() {
@@ -43,28 +65,69 @@ error() {
 usage() {
   print_blank
   printf '%b\n' "${COLOR_BOLD}Packagist Helper${COLOR_RESET}"
+  printf '%b\n' "${COLOR_DIM}Create, refresh, and verify the Packagist package entry.${COLOR_RESET}"
+  print_blank
+
   printf '%b\n' "${COLOR_BLUE}Usage${COLOR_RESET}"
-  cat <<'USAGE'
-  scripts/packagist.sh publish --repository URL --package VENDOR/NAME [--username USERNAME] [--token TOKEN]
-  scripts/packagist.sh create  --repository URL [--username USERNAME] [--token TOKEN]
-  scripts/packagist.sh update  --repository URL [--username USERNAME] [--token TOKEN]
-  scripts/packagist.sh check   --package VENDOR/NAME
-  scripts/packagist.sh help
-USAGE
+  printf '  %s %s %s %s %s %s %s %s\n' \
+    "$(fmt_cmd 'scripts/packagist.sh')" \
+    "$(fmt_cmd 'publish')" \
+    "$(fmt_arg '--repository')" \
+    "$(fmt_meta 'URL')" \
+    "$(fmt_arg '--package')" \
+    "$(fmt_meta 'VENDOR/NAME')" \
+    "$(fmt_arg '[--username USERNAME]')" \
+    "$(fmt_arg '[--token TOKEN]')"
+  printf '  %s %s %s %s %s %s\n' \
+    "$(fmt_cmd 'scripts/packagist.sh')" \
+    "$(fmt_cmd 'create')" \
+    "$(fmt_arg '--repository')" \
+    "$(fmt_meta 'URL')" \
+    "$(fmt_arg '[--username USERNAME]')" \
+    "$(fmt_arg '[--token TOKEN]')"
+  printf '  %s %s %s %s %s %s\n' \
+    "$(fmt_cmd 'scripts/packagist.sh')" \
+    "$(fmt_cmd 'update')" \
+    "$(fmt_arg '--repository')" \
+    "$(fmt_meta 'URL')" \
+    "$(fmt_arg '[--username USERNAME]')" \
+    "$(fmt_arg '[--token TOKEN]')"
+  printf '  %s %s %s %s\n' \
+    "$(fmt_cmd 'scripts/packagist.sh')" \
+    "$(fmt_cmd 'check')" \
+    "$(fmt_arg '--package')" \
+    "$(fmt_meta 'VENDOR/NAME')"
+  printf '  %s %s\n' "$(fmt_cmd 'scripts/packagist.sh')" "$(fmt_cmd 'help')"
   print_blank
+
   printf '%b\n' "${COLOR_BLUE}Environment${COLOR_RESET}"
-  cat <<'ENVVARS'
-  PACKAGIST_USERNAME   Packagist username
-  PACKAGIST_TOKEN      Packagist API token
-ENVVARS
+  printf '  %s   %s\n' "$(fmt_env 'PACKAGIST_USERNAME')" 'Packagist username'
+  printf '  %s      %s\n' "$(fmt_env 'PACKAGIST_TOKEN')" 'Packagist API token'
   print_blank
+
   printf '%b\n' "${COLOR_BLUE}Examples${COLOR_RESET}"
-  cat <<'EXAMPLES'
-  scripts/packagist.sh publish --repository https://github.com/you/bookstack-content-sync --package kugarocks/bookstack-content-sync
-  scripts/packagist.sh create --repository https://github.com/you/bookstack-content-sync
-  scripts/packagist.sh update --repository https://github.com/you/bookstack-content-sync
-  scripts/packagist.sh check --package kugarocks/bookstack-content-sync
-EXAMPLES
+  printf '  %s %s %s %s %s %s\n' \
+    "$(fmt_cmd 'scripts/packagist.sh')" \
+    "$(fmt_cmd 'publish')" \
+    "$(fmt_arg '--repository')" \
+    "$(fmt_meta 'https://github.com/you/bookstack-content-sync')" \
+    "$(fmt_arg '--package')" \
+    "$(fmt_meta 'kugarocks/bookstack-content-sync')"
+  printf '  %s %s %s %s\n' \
+    "$(fmt_cmd 'scripts/packagist.sh')" \
+    "$(fmt_cmd 'create')" \
+    "$(fmt_arg '--repository')" \
+    "$(fmt_meta 'https://github.com/you/bookstack-content-sync')"
+  printf '  %s %s %s %s\n' \
+    "$(fmt_cmd 'scripts/packagist.sh')" \
+    "$(fmt_cmd 'update')" \
+    "$(fmt_arg '--repository')" \
+    "$(fmt_meta 'https://github.com/you/bookstack-content-sync')"
+  printf '  %s %s %s %s\n' \
+    "$(fmt_cmd 'scripts/packagist.sh')" \
+    "$(fmt_cmd 'check')" \
+    "$(fmt_arg '--package')" \
+    "$(fmt_meta 'kugarocks/bookstack-content-sync')"
   print_blank
 }
 

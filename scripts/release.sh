@@ -7,6 +7,9 @@ if [[ -t 1 ]]; then
   COLOR_YELLOW='\033[1;33m'
   COLOR_RED='\033[1;31m'
   COLOR_BOLD='\033[1m'
+  COLOR_CYAN='\033[1;36m'
+  COLOR_MAGENTA='\033[1;35m'
+  COLOR_DIM='\033[2m'
   COLOR_RESET='\033[0m'
 else
   COLOR_BLUE=''
@@ -14,11 +17,26 @@ else
   COLOR_YELLOW=''
   COLOR_RED=''
   COLOR_BOLD=''
+  COLOR_CYAN=''
+  COLOR_MAGENTA=''
+  COLOR_DIM=''
   COLOR_RESET=''
 fi
 
 print_blank() {
   printf '\n'
+}
+
+fmt_cmd() {
+  printf '%b' "${COLOR_CYAN}$1${COLOR_RESET}"
+}
+
+fmt_arg() {
+  printf '%b' "${COLOR_YELLOW}$1${COLOR_RESET}"
+}
+
+fmt_meta() {
+  printf '%b' "${COLOR_MAGENTA}$1${COLOR_RESET}"
 }
 
 info() {
@@ -40,21 +58,21 @@ error() {
 usage() {
   print_blank
   printf '%b\n' "${COLOR_BOLD}Release Helper${COLOR_RESET}"
-  printf '%b\n' "${COLOR_BLUE}Usage${COLOR_RESET}"
-  cat <<'USAGE'
-  scripts/release.sh check [tag]
-  scripts/release.sh tag <tag>
-  scripts/release.sh push <tag>
-  scripts/release.sh all <tag>
-USAGE
+  printf '%b\n' "${COLOR_DIM}Tag, push, and release checks for this repository.${COLOR_RESET}"
   print_blank
+
+  printf '%b\n' "${COLOR_BLUE}Usage${COLOR_RESET}"
+  printf '  %s %s %s\n' "$(fmt_cmd 'scripts/release.sh')" "$(fmt_cmd 'check')" "$(fmt_arg '[tag]')"
+  printf '  %s %s %s\n' "$(fmt_cmd 'scripts/release.sh')" "$(fmt_cmd 'tag')" "$(fmt_arg '<tag>')"
+  printf '  %s %s %s\n' "$(fmt_cmd 'scripts/release.sh')" "$(fmt_cmd 'push')" "$(fmt_arg '<tag>')"
+  printf '  %s %s %s\n' "$(fmt_cmd 'scripts/release.sh')" "$(fmt_cmd 'all')" "$(fmt_arg '<tag>')"
+  print_blank
+
   printf '%b\n' "${COLOR_BLUE}Examples${COLOR_RESET}"
-  cat <<'EXAMPLES'
-  scripts/release.sh check v0.1.0
-  scripts/release.sh tag v0.1.0
-  scripts/release.sh push v0.1.0
-  scripts/release.sh all v0.1.0
-EXAMPLES
+  printf '  %s %s %s\n' "$(fmt_cmd 'scripts/release.sh')" "$(fmt_cmd 'check')" "$(fmt_meta 'v0.1.0')"
+  printf '  %s %s %s\n' "$(fmt_cmd 'scripts/release.sh')" "$(fmt_cmd 'tag')" "$(fmt_meta 'v0.1.0')"
+  printf '  %s %s %s\n' "$(fmt_cmd 'scripts/release.sh')" "$(fmt_cmd 'push')" "$(fmt_meta 'v0.1.0')"
+  printf '  %s %s %s\n' "$(fmt_cmd 'scripts/release.sh')" "$(fmt_cmd 'all')" "$(fmt_meta 'v0.1.0')"
   print_blank
 }
 
