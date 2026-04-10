@@ -98,6 +98,21 @@ Local verification completed so far:
 - command ownership check for push
 - successful push plan run with `No remote changes required`
 
+## Running tests
+
+Install dependencies and run the full package test suite:
+
+```bash
+composer install
+composer test
+```
+
+You can still run PHPUnit directly if needed:
+
+```bash
+vendor/bin/phpunit tests
+```
+
 ## Next steps
 
 - validate a controlled write-path `push --execute` scenario when needed
