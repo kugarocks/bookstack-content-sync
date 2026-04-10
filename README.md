@@ -72,40 +72,40 @@ The `@dev` suffix is only needed for local path installation while the package i
 
 ## Commands
 
-### Initialize project
+### Initialize content directory
 
-Create a local sync project directory and starter `sync.json`:
+Create a local sync content directory and starter `sync.json`:
 
 ```bash
-php artisan bookstack:init-content-dir /path/to/project
+php artisan bookstack:init-content-dir /path/to/content-dir
 ```
 
 This command creates the target directory if needed, writes `sync.json`, and reminds you which environment variables to export before running a pull.
 
 ### Pull
 
-Initialize the project first if `sync.json` does not exist yet:
+Initialize the content directory first if `sync.json` does not exist yet:
 
 ```bash
-php artisan bookstack:init-content-dir /path/to/project
+php artisan bookstack:init-content-dir /path/to/content-dir
 ```
 
-Then pull remote content into that project:
+Then pull remote content into that directory:
 
 ```bash
-php artisan bookstack:pull-content /path/to/project
+php artisan bookstack:pull-content /path/to/content-dir
 ```
 
 ### Push plan
 
 ```bash
-php artisan bookstack:push-content /path/to/project
+php artisan bookstack:push-content /path/to/content-dir
 ```
 
 ### Push execute
 
 ```bash
-php artisan bookstack:push-content /path/to/project --execute
+php artisan bookstack:push-content /path/to/content-dir --execute
 ```
 
 ## Compatibility notes
