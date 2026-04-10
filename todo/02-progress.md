@@ -31,6 +31,7 @@
 - 新增第三份待确认方案文档：`todo/plans/03-code-migration-boundary.md`
 - 新增第四份待确认方案文档：`todo/plans/04-host-integration-verification.md`
 - 新增第五份待确认方案文档：`todo/plans/05-minimal-pull-run-verification.md`
+- 新增第六份待确认方案文档：`todo/plans/06-push-migration-and-verification.md`
 - 恢复第一轮真实 pull 代码迁移
 - 确定日志按执行轮次记录
 
