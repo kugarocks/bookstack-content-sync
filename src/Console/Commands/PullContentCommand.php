@@ -20,6 +20,7 @@ class PullContentCommand extends Command
     public function handle(): int
     {
         $projectPath = (string) $this->argument('projectPath');
+        $syncPath = rtrim($projectPath, '/') . '/sync.json';
 
         try {
             $this->renderStage('Starting pull', 'info');
@@ -27,6 +28,13 @@ class PullContentCommand extends Command
         } catch (Throwable $exception) {
             $this->renderStage('Pull failed.', 'error');
             $this->error($exception->getMessage());
+            if (str_contains($exception->getMessage(), "Sync config file not found at path [{$syncPath}]")) {
+                $this->newLine();
+                $this->line(sprintf(
+                    '<fg=yellow>Tip:</> run <fg=white>php artisan bookstack:init-content-project %s</> first, then export the required API token environment variables.',
+                    $projectPath
+                ));
+            }
             $this->finishOutput();
 
             return self::FAILURE;

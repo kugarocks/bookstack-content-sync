@@ -9,6 +9,7 @@ It keeps the pull and push command behavior unchanged while making Packagist pub
 
 - Packagist publishing helper at `packagist.sh`
 - release helper at `release.sh`
+- project initializer command at `bookstack:init-content-project`
 - simplified Packagist helper defaults for the canonical repository and package name
 - improved helper script terminal output and help text
 - updated release documentation for the root-level helper scripts
@@ -20,12 +21,14 @@ This release has been verified with the following checks:
 
 - `bash packagist.sh help`
 - `bash release.sh`
+- `php vendor/bin/phpunit tests/Integration/ContentSync/InitContentProjectCommandIntegrationTest.php tests/Integration/ContentSync/PullContentCommandIntegrationTest.php`
 - `composer dump-autoload`
 - `php vendor/bin/phpunit tests/Unit/ContentSync/Pull/BookStackApiClientTest.php tests/Integration/ContentSync/PullContentRunnerIntegrationTest.php tests/Integration/ContentSync/PushContentRunnerIntegrationTest.php`
 
 ## Notes for adopters
 
 - This release is primarily operational polish and packaging safety; it does not introduce new end-user sync commands.
+- Use `bookstack:init-content-project` to create a new sync project directory before the first pull.
 - The Packagist and release helper scripts now live at the repository root for easier direct execution.
 - Internal helper classes now stay within the package namespace, so Composer should no longer warn about ambiguous resolution against BookStack host classes such as `BookStack\Http\HttpRequestService` and `BookStack\Http\HttpClientHistory`.
 

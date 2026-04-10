@@ -119,6 +119,24 @@ class PullContentCommandIntegrationTest extends TestCase
         $this->deleteDirectory($projectRoot);
     }
 
+    public function test_command_suggests_init_command_when_sync_config_is_missing(): void
+    {
+        $projectRoot = $this->createTempDirectory();
+
+        $command = new PullContentCommand($this->runner(new HttpRequestService()));
+        $command->setLaravel($this->consoleContainer());
+        $tester = new CommandTester($command);
+
+        $exitCode = $tester->execute(['projectPath' => $projectRoot]);
+
+        $this->assertSame(1, $exitCode);
+        $this->assertStringContainsString('Pull failed.', $tester->getDisplay());
+        $this->assertStringContainsString('Sync config file not found', $tester->getDisplay());
+        $this->assertStringContainsString("php artisan bookstack:init-content-project {$projectRoot}", $tester->getDisplay());
+
+        $this->deleteDirectory($projectRoot);
+    }
+
     public function test_command_reports_error_when_target_directory_is_not_empty(): void
     {
         $projectRoot = $this->createTempDirectory();

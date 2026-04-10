@@ -6,6 +6,7 @@ External Composer extension for running BookStack content sync commands from a B
 
 This package currently provides a working host-integrated implementation for:
 
+- `bookstack:init-content-project`
 - `bookstack:pull-content`
 - `bookstack:push-content`
 
@@ -71,7 +72,25 @@ The `@dev` suffix is only needed for local path installation while the package i
 
 ## Commands
 
+### Initialize project
+
+Create a local sync project directory and starter `sync.json`:
+
+```bash
+php artisan bookstack:init-content-project /path/to/project
+```
+
+This command creates the target directory if needed, writes `sync.json`, and reminds you which environment variables to export before running a pull.
+
 ### Pull
+
+Initialize the project first if `sync.json` does not exist yet:
+
+```bash
+php artisan bookstack:init-content-project /path/to/project
+```
+
+Then pull remote content into that project:
 
 ```bash
 php artisan bookstack:pull-content /path/to/project
