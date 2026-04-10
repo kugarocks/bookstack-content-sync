@@ -25,6 +25,7 @@ Recommended host checks:
 - Confirm the package owns both command registrations.
 - Perform at least one controlled pull run.
 - If the release changes push behavior, perform a controlled `bookstack:push-content --execute` validation.
+- If the verification touches real content, prefer a small reversible update and confirm the project returns to `No remote changes required` afterward.
 
 ## Compatibility review
 

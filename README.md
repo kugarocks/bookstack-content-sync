@@ -17,8 +17,9 @@ Verified in a local BookStack host environment:
 - successful pull execution
 - successful push plan execution
 - successful no-change push execute execution
+- successful controlled write-path push execute execution with post-check stabilization
 
-`push --execute` has been verified in a controlled no-change scenario in the local BookStack host workflow.
+`push --execute` has been verified in both a controlled no-change scenario and a minimal real write-path scenario in the local BookStack host workflow.
 
 ## Requirements
 
@@ -146,9 +147,9 @@ vendor/bin/phpunit tests
 
 ## Next steps
 
-- validate a controlled write-path `push --execute` scenario when needed
+- decide whether the host-side verification setup should be preserved as-is or cleaned up before release
 - tighten package dependency declarations as needed after more host validation
-- add automated verification coverage where practical
+- prepare release notes for the first public tag
 
 ## Release prep
 

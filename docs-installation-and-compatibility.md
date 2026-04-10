@@ -45,10 +45,10 @@ The following has been verified in a local BookStack host:
 - pull execution works against a local BookStack instance
 - push plan execution works against pulled local content
 - no-change `push --execute` execution completes successfully
+- controlled write-path `push --execute` validation completes successfully in a minimal single-page update scenario
 
 ## What is not yet verified
 
-- controlled write-path `push --execute` validation
 - published package distribution outside local path repository usage
 - automated cross-version compatibility checks
 
