@@ -9,7 +9,7 @@
 ## 实际执行
 
 - 按当前需求取消 GitHub workflow，避免引入不需要的远端自动化配置
-- 新增 `docs-release-checklist.md`，整理包验证、宿主验证、版本发布与已知限制
+- 新增 `docs/release-checklist.md`，整理包验证、宿主验证、版本发布与已知限制
 - 更新 `README.md`，补测试分层边界与发布前检查文档入口
 - 本地执行 `composer validate --strict` 与 `composer test`，确认当前包仓库测试通过
 

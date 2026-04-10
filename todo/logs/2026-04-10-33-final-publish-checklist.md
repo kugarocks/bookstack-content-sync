@@ -8,8 +8,8 @@
 ## 实际执行
 
 - 复查当前包仓库状态，确认工作区干净
-- 对照 `docs-release-checklist.md`、`docs-versioning-and-publishing.md` 与 `docs-release-notes-v0.1.0.md` 检查当前发布材料
-- 新增 `docs-publish-commands-v0.1.0.md`，整理首发前检查、tag、push 与 Packagist 更新顺序
+- 对照 `docs/release-checklist.md`、`docs/versioning-and-publishing.md` 与 `docs/release-notes-v0.1.0.md` 检查当前发布材料
+- 新增 `docs/publish-commands-v0.1.0.md`，整理首发前检查、tag、push 与 Packagist 更新顺序
 - 将该文档入口补充到现有发布文档中
 
 ## 结果

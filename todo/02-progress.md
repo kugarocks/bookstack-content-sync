@@ -52,8 +52,8 @@
 ## 下一步建议
 
 1. 决定是否现在正式打出 `v0.1.0`
-2. 基于 `docs-release-notes-v0.1.0.md` 收敛首发 release note
-3. 按 `docs-publish-commands-v0.1.0.md` 执行实际 tag 与 push
+2. 基于 `docs/release-notes-v0.1.0.md` 收敛首发 release note
+3. 按 `docs/publish-commands-v0.1.0.md` 执行实际 tag 与 push
 4. 如有需要，再补宿主侧集成说明或保留验证脚本
 
 ## 阻塞项

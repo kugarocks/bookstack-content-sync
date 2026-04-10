@@ -9,8 +9,8 @@
 ## 实际执行
 
 - 新增 `.gitattributes`，使用 `/todo export-ignore` 排除发布归档中的 `todo/`
-- 新增 `docs-release-notes-v0.1.0.md`，作为首发版本说明草案
-- 更新 `README.md`、`docs-versioning-and-publishing.md` 与 `docs-release-checklist.md`，补充 release note 与发布产物说明
+- 新增 `docs/release-notes-v0.1.0.md`，作为首发版本说明草案
+- 更新 `README.md`、`docs/versioning-and-publishing.md` 与 `docs/release-checklist.md`，补充 release note 与发布产物说明
 - 更新 `todo/02-progress.md`，同步当前发布准备状态
 
 ## 结果

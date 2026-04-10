@@ -17,7 +17,7 @@
   - 命令用法
   - 兼容性说明
   - 当前验证结果摘要
-- 新建 `docs-installation-and-compatibility.md`
+- 新建 `docs/installation-and-compatibility.md`
 - 更新 `todo/02-progress.md`
 
 ## 产出

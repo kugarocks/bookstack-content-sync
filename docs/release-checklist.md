@@ -9,7 +9,7 @@ Use this checklist before tagging or publishing a new version of `kugarocks/book
 - Confirm the working tree is clean.
 - Run `composer validate --strict`.
 - Run `composer test`.
-- Review `README.md` and `docs-installation-and-compatibility.md` for any stale compatibility claims.
+- Review `README.md` and `docs/installation-and-compatibility.md` for any stale compatibility claims.
 - Confirm `todo/02-progress.md` reflects the latest verified state.
 
 ## Host validation
@@ -35,11 +35,11 @@ Recommended host checks:
 
 ## Versioning and publishing
 
-- Choose the release version according to `docs-versioning-and-publishing.md` and create a matching Git tag.
+- Choose the release version according to `docs/versioning-and-publishing.md` and create a matching Git tag.
 - Ensure the repository metadata is ready for Packagist if publishing publicly.
 - Add concise release notes describing new behavior, fixes, and any compatibility caveats.
-- Reuse or refine `docs-release-notes-v0.1.0.md` for the first public release.
-- Follow `docs-publish-commands-v0.1.0.md` for the exact command order when tagging and pushing.
+- Reuse or refine `docs/release-notes-v0.1.0.md` for the first public release.
+- Follow `docs/publish-commands-v0.1.0.md` for the exact command order when tagging and pushing.
 - Publish only after the validation steps above are complete.
 
 ## Current known limitations

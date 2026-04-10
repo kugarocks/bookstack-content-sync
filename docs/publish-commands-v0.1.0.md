@@ -32,7 +32,7 @@ Expected result: no output.
 Open and refine the first release draft if needed:
 
 ```bash
-sed -n '1,240p' docs-release-notes-v0.1.0.md
+sed -n '1,240p' docs/release-notes-v0.1.0.md
 ```
 
 ## Create the tag
@@ -67,7 +67,7 @@ After the tag is pushed:
 
 ## Suggested release payload
 
-Use `docs-release-notes-v0.1.0.md` as the base text for:
+Use `docs/release-notes-v0.1.0.md` as the base text for:
 
 - Git hosting release notes
 - changelog entry if you add one later
