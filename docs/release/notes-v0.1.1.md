@@ -9,7 +9,7 @@ It keeps the pull and push command behavior unchanged while making Packagist pub
 
 - Packagist publishing helper at `packagist.sh`
 - release helper at `release.sh`
-- project initializer command at `bookstack:init-content-project`
+- project initializer command at `bookstack:init-content-dir`
 - simplified Packagist helper defaults for the canonical repository and package name
 - improved helper script terminal output and help text
 - updated release documentation for the root-level helper scripts
@@ -28,7 +28,7 @@ This release has been verified with the following checks:
 ## Notes for adopters
 
 - This release is primarily operational polish and packaging safety; it does not introduce new end-user sync commands.
-- Use `bookstack:init-content-project` to create a new sync project directory before the first pull.
+- Use `bookstack:init-content-dir` to create a new sync project directory before the first pull.
 - The Packagist and release helper scripts now live at the repository root for easier direct execution.
 - Internal helper classes now stay within the package namespace, so Composer should no longer warn about ambiguous resolution against BookStack host classes such as `BookStack\Http\HttpRequestService` and `BookStack\Http\HttpClientHistory`.
 

@@ -13,7 +13,7 @@ class InitContentProjectCommandIntegrationTest extends TestCase
 {
     public function test_command_creates_project_directory_and_sync_config(): void
     {
-        $projectRoot = sys_get_temp_dir() . '/init-content-project-' . bin2hex(random_bytes(8));
+        $projectRoot = sys_get_temp_dir() . '/init-content-dir-' . bin2hex(random_bytes(8));
 
         $command = new InitContentProjectCommand();
         $command->setLaravel($this->consoleContainer());
@@ -36,7 +36,7 @@ class InitContentProjectCommandIntegrationTest extends TestCase
 
     public function test_command_fails_when_sync_config_already_exists(): void
     {
-        $projectRoot = sys_get_temp_dir() . '/init-content-project-' . bin2hex(random_bytes(8));
+        $projectRoot = sys_get_temp_dir() . '/init-content-dir-' . bin2hex(random_bytes(8));
         mkdir($projectRoot, 0777, true);
         file_put_contents($projectRoot . '/sync.json', '{}');
 

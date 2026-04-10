@@ -132,7 +132,7 @@ class PullContentCommandIntegrationTest extends TestCase
         $this->assertSame(1, $exitCode);
         $this->assertStringContainsString('Pull failed.', $tester->getDisplay());
         $this->assertStringContainsString('Sync config file not found', $tester->getDisplay());
-        $this->assertStringContainsString("php artisan bookstack:init-content-project {$projectRoot}", $tester->getDisplay());
+        $this->assertStringContainsString("php artisan bookstack:init-content-dir {$projectRoot}", $tester->getDisplay());
 
         $this->deleteDirectory($projectRoot);
     }

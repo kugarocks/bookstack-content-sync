@@ -31,7 +31,7 @@ class PullContentCommand extends Command
             if (str_contains($exception->getMessage(), "Sync config file not found at path [{$syncPath}]")) {
                 $this->newLine();
                 $this->line(sprintf(
-                    '<fg=yellow>Tip:</> run <fg=white>php artisan bookstack:init-content-project %s</> first, then export the required API token environment variables.',
+                    '<fg=yellow>Tip:</> run <fg=white>php artisan bookstack:init-content-dir %s</> first, then export the required API token environment variables.',
                     $projectPath
                 ));
             }

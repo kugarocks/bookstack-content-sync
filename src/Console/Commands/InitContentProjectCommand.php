@@ -7,7 +7,7 @@ use JsonException;
 
 class InitContentProjectCommand extends Command
 {
-    protected $signature = 'bookstack:init-content-project {projectPath} {--app-url=https://docs.example.com} {--content-path=content} {--token-id-env=BOOKSTACK_API_TOKEN_ID} {--token-secret-env=BOOKSTACK_API_TOKEN_SECRET}';
+    protected $signature = 'bookstack:init-content-dir {projectPath} {--app-url=https://docs.example.com} {--content-path=content} {--token-id-env=BOOKSTACK_API_TOKEN_ID} {--token-secret-env=BOOKSTACK_API_TOKEN_SECRET}';
     protected $description = 'Initialize a local content project directory for BookStack sync';
 
     public function handle(): int
