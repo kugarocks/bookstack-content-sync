@@ -156,3 +156,5 @@ vendor/bin/phpunit tests
 Before tagging or publishing a version, use `docs-release-checklist.md` to review package validation, host validation, and compatibility notes.
 
 For version naming, first-release guidance, and Packagist preparation notes, also see `docs-versioning-and-publishing.md`.
+
+For the current first-release draft text, see `docs-release-notes-v0.1.0.md`.

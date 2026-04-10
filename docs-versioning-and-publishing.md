@@ -43,6 +43,10 @@ Use a minor release when:
 - changing assumptions about the host BookStack runtime
 - adding meaningful new sync functionality
 
+## Release note draft
+
+Use `docs-release-notes-v0.1.0.md` as the starting point for the first public release text.
+
 ## Tagging example
 
 Create and push a release tag:
@@ -58,6 +62,11 @@ If you want an annotated tag:
 git tag -a v0.1.0 -m "Release v0.1.0"
 git push origin v0.1.0
 ```
+
+## Release artifact notes
+
+- `todo/` is kept in the repository for internal planning and logs.
+- `todo/` is excluded from release archives via `.gitattributes` export rules.
 
 ## Packagist readiness
 

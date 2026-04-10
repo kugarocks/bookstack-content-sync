@@ -38,6 +38,7 @@ Recommended host checks:
 - Choose the release version according to `docs-versioning-and-publishing.md` and create a matching Git tag.
 - Ensure the repository metadata is ready for Packagist if publishing publicly.
 - Add concise release notes describing new behavior, fixes, and any compatibility caveats.
+- Reuse or refine `docs-release-notes-v0.1.0.md` for the first public release.
 - Publish only after the validation steps above are complete.
 
 ## Current known limitations
