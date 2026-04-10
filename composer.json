@@ -6,11 +6,13 @@
   "require": {
     "php": "^8.2",
     "guzzlehttp/psr7": "^2.8",
-    "illuminate/console": "^12.0"
+    "illuminate/console": "^12.0",
+    "guzzlehttp/guzzle": "^7.9"
   },
   "autoload": {
     "psr-4": {
-      "KugaRocks\\BookStackContentSync\\": "src/"
+      "KugaRocks\\BookStackContentSync\\": "src/",
+      "BookStack\\": "src/Support/BookStack/"
     }
   },
   "extra": {
