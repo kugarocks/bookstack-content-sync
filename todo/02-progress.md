@@ -3,7 +3,7 @@
 ## 当前状态
 
 - 项目状态：规划中
-- 当前阶段：Phase 1 - 方案与骨架
+- 当前阶段：Phase 3.1 - Pull migration in progress
 - 最后更新时间：2026-04-10
 
 ## 里程碑进度
@@ -29,6 +29,7 @@
 - 新增首份待确认方案文档：`todo/plans/01-package-name-and-namespace.md`
 - 新增第二份待确认方案文档：`todo/plans/02-composer-package-skeleton.md`
 - 新增第三份待确认方案文档：`todo/plans/03-code-migration-boundary.md`
+- 恢复第一轮真实 pull 代码迁移
 - 确定日志按执行轮次记录
 
 ## 下一步建议
