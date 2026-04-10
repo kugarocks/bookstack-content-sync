@@ -3,7 +3,7 @@
 ## 当前状态
 
 - 项目状态：规划中
-- 当前阶段：Phase 3.1 - Pull migration verified in host
+- 当前阶段：Phase 3.2 - Push plan verified in host
 - 最后更新时间：2026-04-10
 
 ## 里程碑进度
@@ -12,8 +12,8 @@
 | --- | --- | --- |
 | 方案冻结 | 已完成 | 已建立并持续补充方案文档 |
 | 外部包骨架搭建 | 已完成 | 最小 Composer 骨架、provider 与命令占位已建立 |
-| 同步核心代码迁移 | 进行中 | Shared 与 Pull 已迁移，Push 尚未迁移 |
-| Provider 与命令接入 | 进行中 | Pull 命令已接入真实实现，Push 仍为占位 |
+| 同步核心代码迁移 | 已完成 | Shared、Pull、Push 已全部迁移到扩展包 |
+| Provider 与命令接入 | 已完成 | Pull 与 Push 命令均已由扩展包真实实现接管 |
 | 宿主安装验证 | 已完成 | 已完成 path repository 安装、命令接管与最小 pull 实跑 |
 | 文档与发布准备 | 未开始 | 放在最后阶段 |
 
@@ -37,10 +37,10 @@
 
 ## 下一步建议
 
-1. 在 BookStack 宿主中验证当前 pull 迁移结果
-2. 继续迁移 push plan / execute 链路
-3. 补充包的依赖与安装说明
-4. 视验证结果决定是否整理测试策略
+1. 决定是否进入 push execute 验证
+2. 补充扩展包 `composer.json` 的依赖声明
+3. 评估是否需要为宿主验证补自动化测试
+4. 整理安装说明与兼容性文档
 
 ## 阻塞项
 
