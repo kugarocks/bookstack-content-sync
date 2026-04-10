@@ -15,7 +15,7 @@
 | 同步核心代码迁移 | 已完成 | Shared、Pull、Push 已全部迁移到扩展包 |
 | Provider 与命令接入 | 已完成 | Pull 与 Push 命令均已由扩展包真实实现接管 |
 | 宿主安装验证 | 已完成 | 已完成 path repository 安装、命令接管与最小 pull 实跑 |
-| 文档与发布准备 | 进行中 | README、安装说明、测试命令与完整相关测试已补充，发布清单与版本策略待完善 |
+| 文档与发布准备 | 进行中 | README、安装说明、发布清单与首发版本策略已补充，仍待决定首个正式 tag 与宿主写入验证范围 |
 
 ## 已完成
 
@@ -43,13 +43,15 @@
 - 完成 push plan 与 no-change push execute 验证
 - 完成所有直接相关的单元测试与集成测试迁移
 - 增加 `composer test`、`composer test-unit`、`composer test-integration`、`composer test-pull`、`composer test-push`
+- 完成 PHP 命名空间从 `KugaRocks` 到 `Kugarocks` 的统一
+- 补充发布清单与首发版本策略文档
 
 ## 下一步建议
 
-1. 继续补发布前检查材料，明确 tag / Packagist / 宿主验证步骤
+1. 决定首个发布 tag 是否采用 `v0.1.0`
 2. 评估是否要增加一次受控的真实写入型 `push --execute` 宿主验证
 3. 视需要补充宿主侧集成说明或保留验证脚本
-4. 收敛首个可发布版本的兼容性声明与版本策略
+4. 收敛首个可发布版本的兼容性声明，并准备 release note
 
 ## 阻塞项
 
