@@ -9,14 +9,20 @@ if [[ -t 1 ]]; then
   COLOR_GREEN='\033[1;32m'
   COLOR_YELLOW='\033[1;33m'
   COLOR_RED='\033[1;31m'
+  COLOR_BOLD='\033[1m'
   COLOR_RESET='\033[0m'
 else
   COLOR_BLUE=''
   COLOR_GREEN=''
   COLOR_YELLOW=''
   COLOR_RED=''
+  COLOR_BOLD=''
   COLOR_RESET=''
 fi
+
+print_blank() {
+  printf '\n'
+}
 
 info() {
   printf '%b\n' "${COLOR_BLUE}==>${COLOR_RESET} $*"
@@ -35,24 +41,31 @@ error() {
 }
 
 usage() {
+  print_blank
+  printf '%b\n' "${COLOR_BOLD}Packagist Helper${COLOR_RESET}"
+  printf '%b\n' "${COLOR_BLUE}Usage${COLOR_RESET}"
   cat <<'USAGE'
-Usage:
   scripts/packagist.sh publish --repository URL --package VENDOR/NAME [--username USERNAME] [--token TOKEN]
   scripts/packagist.sh create  --repository URL [--username USERNAME] [--token TOKEN]
   scripts/packagist.sh update  --repository URL [--username USERNAME] [--token TOKEN]
   scripts/packagist.sh check   --package VENDOR/NAME
   scripts/packagist.sh help
-
-Environment fallback:
+USAGE
+  print_blank
+  printf '%b\n' "${COLOR_BLUE}Environment${COLOR_RESET}"
+  cat <<'ENVVARS'
   PACKAGIST_USERNAME   Packagist username
   PACKAGIST_TOKEN      Packagist API token
-
-Examples:
+ENVVARS
+  print_blank
+  printf '%b\n' "${COLOR_BLUE}Examples${COLOR_RESET}"
+  cat <<'EXAMPLES'
   scripts/packagist.sh publish --repository https://github.com/you/bookstack-content-sync --package kugarocks/bookstack-content-sync
   scripts/packagist.sh create --repository https://github.com/you/bookstack-content-sync
   scripts/packagist.sh update --repository https://github.com/you/bookstack-content-sync
   scripts/packagist.sh check --package kugarocks/bookstack-content-sync
-USAGE
+EXAMPLES
+  print_blank
 }
 
 require_command() {
@@ -217,26 +230,33 @@ main() {
   done
 
   case "$command" in
-    help)
+    help|'')
       usage
       ;;
     check)
+      print_blank
       require_value '--package' "$package_name"
       check_package_page "$package_name"
+      print_blank
       ;;
     create)
+      print_blank
       require_value '--repository' "$repository"
       require_value 'PACKAGIST_USERNAME/--username' "$username"
       require_value 'PACKAGIST_TOKEN/--token' "$token"
       create_package "$repository" "$username" "$token"
+      print_blank
       ;;
     update)
+      print_blank
       require_value '--repository' "$repository"
       require_value 'PACKAGIST_USERNAME/--username' "$username"
       require_value 'PACKAGIST_TOKEN/--token' "$token"
       update_package "$repository" "$username" "$token"
+      print_blank
       ;;
     publish)
+      print_blank
       require_value '--repository' "$repository"
       require_value '--package' "$package_name"
       require_value 'PACKAGIST_USERNAME/--username' "$username"
@@ -244,7 +264,8 @@ main() {
       create_package "$repository" "$username" "$token"
       check_package_page "$package_name" || warn 'Package page is not reachable yet; update will still be requested'
       update_package "$repository" "$username" "$token"
-      warn "If the package page exists but the new version is still missing, wait a moment and run update again."
+      warn 'If the package page exists but the new version is still missing, wait a moment and run update again.'
+      print_blank
       ;;
     *)
       error "Unknown command: $command"
