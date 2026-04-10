@@ -3,7 +3,7 @@
 ## 当前状态
 
 - 项目状态：规划中
-- 当前阶段：Phase 3.3 - Push execute verified in no-change host scenario
+- 当前阶段：Phase 4.1 - Initial package tests migrated
 - 最后更新时间：2026-04-10
 
 ## 里程碑进度
@@ -15,7 +15,7 @@
 | 同步核心代码迁移 | 已完成 | Shared、Pull、Push 已全部迁移到扩展包 |
 | Provider 与命令接入 | 已完成 | Pull 与 Push 命令均已由扩展包真实实现接管 |
 | 宿主安装验证 | 已完成 | 已完成 path repository 安装、命令接管与最小 pull 实跑 |
-| 文档与发布准备 | 进行中 | README 与安装/兼容性说明已补充，发布整理未完成 |
+| 文档与发布准备 | 进行中 | README、安装文档与初始测试体系已补充，发布整理未完成 |
 
 ## 已完成
 

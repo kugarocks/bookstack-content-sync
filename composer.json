@@ -19,5 +19,13 @@
         "KugaRocks\\BookStackContentSync\\Providers\\ContentSyncServiceProvider"
       ]
     }
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^11.5"
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Tests\\": "tests/"
+    }
   }
 }
