@@ -23,6 +23,7 @@ class PullContentCommand extends Command
         $syncPath = rtrim($projectPath, '/') . '/sync.json';
 
         try {
+            $this->newLine();
             $this->renderStage('Starting pull', 'info');
             $result = $this->runner->run($projectPath, fn (string $message, string $tone = 'info') => $this->renderStage($message, $tone));
         } catch (Throwable $exception) {

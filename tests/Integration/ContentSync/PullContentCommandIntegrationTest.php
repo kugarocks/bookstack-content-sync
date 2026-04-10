@@ -77,6 +77,7 @@ class PullContentCommandIntegrationTest extends TestCase
             $exitCode = $tester->execute(['projectPath' => $projectRoot]);
 
             $this->assertSame(0, $exitCode);
+            $this->assertStringStartsWith("\n", $tester->getDisplay());
             $this->assertStringContainsString('Starting pull', $tester->getDisplay());
             $this->assertStringContainsString('Reading remote content tree', $tester->getDisplay());
             $this->assertStringContainsString('BOOK', $tester->getDisplay());

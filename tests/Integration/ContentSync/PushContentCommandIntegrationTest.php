@@ -113,6 +113,7 @@ MD);
         $exitCode = $tester->execute(['projectPath' => $root]);
 
         $this->assertSame(0, $exitCode);
+        $this->assertStringStartsWith("\n", $tester->getDisplay());
         $this->assertStringContainsString('Starting push plan', $tester->getDisplay());
         $this->assertStringContainsString('Loading local project state', $tester->getDisplay());
         $this->assertStringContainsString('Building push plan', $tester->getDisplay());
