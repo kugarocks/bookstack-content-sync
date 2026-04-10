@@ -29,6 +29,7 @@
 - 新增首份待确认方案文档：`todo/plans/01-package-name-and-namespace.md`
 - 新增第二份待确认方案文档：`todo/plans/02-composer-package-skeleton.md`
 - 新增第三份待确认方案文档：`todo/plans/03-code-migration-boundary.md`
+- 新增第四份待确认方案文档：`todo/plans/04-host-integration-verification.md`
 - 恢复第一轮真实 pull 代码迁移
 - 确定日志按执行轮次记录
 
