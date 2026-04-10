@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+DEFAULT_RELEASE_TAG="v0.1.2"
+
 if [[ -t 1 ]]; then
   COLOR_BLUE='\033[1;34m'
   COLOR_GREEN='\033[1;32m'
@@ -69,10 +71,10 @@ usage() {
   print_blank
 
   printf '%b\n' "${COLOR_BLUE}Examples${COLOR_RESET}"
-  printf '  %s %s %s\n' "$(fmt_cmd 'release.sh')" "$(fmt_cmd 'check')" "$(fmt_meta 'v0.1.0')"
-  printf '  %s %s %s\n' "$(fmt_cmd 'release.sh')" "$(fmt_cmd 'tag')" "$(fmt_meta 'v0.1.0')"
-  printf '  %s %s %s\n' "$(fmt_cmd 'release.sh')" "$(fmt_cmd 'push')" "$(fmt_meta 'v0.1.0')"
-  printf '  %s %s %s\n' "$(fmt_cmd 'release.sh')" "$(fmt_cmd 'all')" "$(fmt_meta 'v0.1.0')"
+  printf '  %s %s %s\n' "$(fmt_cmd 'release.sh')" "$(fmt_cmd 'check')" "$(fmt_meta "${DEFAULT_RELEASE_TAG}")"
+  printf '  %s %s %s\n' "$(fmt_cmd 'release.sh')" "$(fmt_cmd 'tag')" "$(fmt_meta "${DEFAULT_RELEASE_TAG}")"
+  printf '  %s %s %s\n' "$(fmt_cmd 'release.sh')" "$(fmt_cmd 'push')" "$(fmt_meta "${DEFAULT_RELEASE_TAG}")"
+  printf '  %s %s %s\n' "$(fmt_cmd 'release.sh')" "$(fmt_cmd 'all')" "$(fmt_meta "${DEFAULT_RELEASE_TAG}")"
   print_blank
 }
 
@@ -101,7 +103,7 @@ require_release_notes() {
 }
 
 run_checks() {
-  local tag="${1:-v0.1.0}"
+  local tag="${1:-$DEFAULT_RELEASE_TAG}"
   local notes_path
   notes_path="$(release_notes_path "$tag")"
 
@@ -163,7 +165,7 @@ main() {
   local command="${1:-}"
   case "${command}" in
     check)
-      run_checks "${2:-v0.1.0}"
+      run_checks "${2:-$DEFAULT_RELEASE_TAG}"
       ;;
     tag)
       [[ $# -eq 2 ]] || { usage; exit 1; }
