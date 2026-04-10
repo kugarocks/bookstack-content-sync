@@ -2,8 +2,8 @@
 
 ## 当前状态
 
-- 项目状态：规划中
-- 当前阶段：Phase 4.2 - Full related test suite migrated
+- 项目状态：功能迁移与测试已完成，进入发布前整理阶段
+- 当前阶段：Phase 10 - Release and polish preparation
 - 最后更新时间：2026-04-10
 
 ## 里程碑进度
@@ -15,7 +15,7 @@
 | 同步核心代码迁移 | 已完成 | Shared、Pull、Push 已全部迁移到扩展包 |
 | Provider 与命令接入 | 已完成 | Pull 与 Push 命令均已由扩展包真实实现接管 |
 | 宿主安装验证 | 已完成 | 已完成 path repository 安装、命令接管与最小 pull 实跑 |
-| 文档与发布准备 | 进行中 | README、安装文档与完整相关测试迁移已补充，发布整理未完成 |
+| 文档与发布准备 | 进行中 | README、安装说明、测试命令与完整相关测试已补充，CI 与发布清单待完善 |
 
 ## 已完成
 
@@ -37,15 +37,21 @@
 - 新增第九份待确认方案文档：`todo/plans/09-full-related-test-migration.md`
 - 恢复第一轮真实 pull 代码迁移
 - 确定日志按执行轮次记录
+- 完成 Push 核心实现迁移
+- 完成宿主 path repository 安装与命令接管验证
+- 完成最小 pull 实跑验证
+- 完成 push plan 与 no-change push execute 验证
+- 完成所有直接相关的单元测试与集成测试迁移
+- 增加 `composer test`、`composer test-unit`、`composer test-integration`、`composer test-pull`、`composer test-push`
 
 ## 下一步建议
 
-1. 决定是否进入 push execute 验证
-2. 补充扩展包 `composer.json` 的依赖声明
-3. 评估是否需要为宿主验证补自动化测试
-4. 整理安装说明与兼容性文档
+1. 增加基础 CI，自动运行包仓库测试
+2. 补发布前检查清单，明确 tag / Packagist / 宿主验证步骤
+3. 评估是否要增加一次受控的真实写入型 `push --execute` 宿主验证
+4. 视需要补充宿主侧集成说明或保留验证脚本
 
 ## 阻塞项
 
 - 暂无硬阻塞
-- 需要进一步确认包名与兼容范围
+- 发布前仍需进一步收敛兼容性承诺与版本策略
