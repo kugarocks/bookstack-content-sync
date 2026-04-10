@@ -84,14 +84,6 @@ This command creates the target directory if needed, writes `sync.json`, and rem
 
 ### Pull
 
-Initialize the content directory first if `sync.json` does not exist yet:
-
-```bash
-php artisan bookstack:init-content-dir /path/to/content
-```
-
-Then pull remote content into that directory:
-
 ```bash
 php artisan bookstack:pull-content /path/to/content
 ```
