@@ -316,6 +316,87 @@ YAML);
         $this->deleteDirectory($root);
     }
 
+    public function test_command_execute_with_remote_changes_does_not_repeat_planned_changes(): void
+    {
+        $root = sys_get_temp_dir() . '/push-content-command-execute-remote-' . bin2hex(random_bytes(8));
+        mkdir($root . '/content/01-guides', 0777, true);
+        file_put_contents($root . '/sync.json', json_encode([
+            'version' => 1,
+            'app_url' => 'https://docs.example.com',
+            'content_path' => 'content',
+            'env_vars' => [
+                'token_id' => 'BOOKSTACK_API_TOKEN_ID',
+                'token_secret' => 'BOOKSTACK_API_TOKEN_SECRET',
+            ],
+        ], JSON_PRETTY_PRINT));
+        file_put_contents($root . '/content/01-guides/_meta.yml', <<<YAML
+type: "shelf"
+title: "Guides"
+slug: "guides"
+desc: ""
+tags: []
+entity_id: 1
+YAML);
+        file_put_contents($root . '/snapshot.json', json_encode([
+            'version' => 2,
+            'nodes' => [[
+                'file' => '01-guides',
+                'type' => 'shelf',
+                'entity_id' => 1,
+                'position' => 1,
+                'slug' => 'guides',
+                'name' => 'Guides',
+                'content_hash' => 'hash-old-guides',
+            ]],
+        ], JSON_PRETTY_PRINT));
+
+        $http = new HttpRequestService();
+        $history = $http->mockClient([
+            new Response(200, ['Content-Type' => 'application/json'], json_encode(['id' => 1, 'slug' => 'guides'])),
+        ], false);
+
+        $command = new PushContentCommand($this->runner(), $this->pushRunner($http), new PushPlanSummary());
+        $command->setLaravel($this->consoleContainer());
+        $tester = new CommandTester($command);
+
+        $originalId = $_SERVER['BOOKSTACK_API_TOKEN_ID'] ?? getenv('BOOKSTACK_API_TOKEN_ID') ?: null;
+        $originalSecret = $_SERVER['BOOKSTACK_API_TOKEN_SECRET'] ?? getenv('BOOKSTACK_API_TOKEN_SECRET') ?: null;
+        $_SERVER['BOOKSTACK_API_TOKEN_ID'] = 'token-id';
+        $_SERVER['BOOKSTACK_API_TOKEN_SECRET'] = 'token-secret';
+        putenv('BOOKSTACK_API_TOKEN_ID=token-id');
+        putenv('BOOKSTACK_API_TOKEN_SECRET=token-secret');
+
+        try {
+            $exitCode = $tester->execute(['projectPath' => $root, '--execute' => true]);
+        } finally {
+            if ($originalId === null || $originalId === false) {
+                unset($_SERVER['BOOKSTACK_API_TOKEN_ID']);
+                putenv('BOOKSTACK_API_TOKEN_ID');
+            } else {
+                $_SERVER['BOOKSTACK_API_TOKEN_ID'] = $originalId;
+                putenv('BOOKSTACK_API_TOKEN_ID=' . $originalId);
+            }
+
+            if ($originalSecret === null || $originalSecret === false) {
+                unset($_SERVER['BOOKSTACK_API_TOKEN_SECRET']);
+                putenv('BOOKSTACK_API_TOKEN_SECRET');
+            } else {
+                $_SERVER['BOOKSTACK_API_TOKEN_SECRET'] = $originalSecret;
+                putenv('BOOKSTACK_API_TOKEN_SECRET=' . $originalSecret);
+            }
+        }
+
+        $this->assertSame(0, $exitCode);
+        $this->assertStringContainsString('Starting push', $tester->getDisplay());
+        $this->assertStringContainsString('Executing remote changes', $tester->getDisplay());
+        $this->assertStringContainsString('Push complete.', $tester->getDisplay());
+        $this->assertStringNotContainsString('Planned changes', $tester->getDisplay());
+        $this->assertMatchesRegularExpression('/\\|\\s+UPDATE\\s+\\|\\s+1\\s+\\|/', $tester->getDisplay());
+        $this->assertSame(1, $history->requestCount());
+
+        $this->deleteDirectory($root);
+    }
+
     public function test_command_reports_local_snapshot_updates_when_execute_has_no_remote_changes(): void
     {
         $root = sys_get_temp_dir() . '/push-content-command-execute-local-snapshot-' . bin2hex(random_bytes(8));

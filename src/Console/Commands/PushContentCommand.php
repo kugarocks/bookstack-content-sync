@@ -67,7 +67,9 @@ class PushContentCommand extends Command
             return self::SUCCESS;
         }
 
-        $this->renderPlannedOperations($plan);
+        if (!$execute) {
+            $this->renderPlannedOperations($plan);
+        }
         $summary = $this->buildDisplaySummary($plan);
         $this->renderSummaryTable(count($plan->items()), $summary);
         $this->newLine();
