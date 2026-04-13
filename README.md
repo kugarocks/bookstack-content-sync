@@ -55,7 +55,7 @@ php artisan bookstack:push-content /path/to/content
 php artisan bookstack:push-content /path/to/content --execute
 ```
 
-<img src="https://raw.githubusercontent.com/kugarocks/bookstack-content-sync/main/docs/images/push-execution.png" alt="push-execution" width="560" />
+<img src="https://raw.githubusercontent.com/kugarocks/bookstack-content-sync/main/docs/images/push-execution.png" alt="push-execution" width="580" />
 
 ## Slug Behavior
 
