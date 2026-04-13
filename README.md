@@ -17,7 +17,7 @@ Create a local content directory and starter `sync.json`:
 php artisan bookstack:init-content-dir /path/to/content
 ```
 
-<img src="https://raw.githubusercontent.com/kugarocks/bookstack-content-sync/main/docs/images/init-content-dir.png" alt="init-content-dir" width="720" />
+<img src="https://raw.githubusercontent.com/kugarocks/bookstack-content-sync/main/docs/images/init-content-dir.png" alt="init-content-dir" width="680" />
 
 This command creates the target directory if needed, writes `sync.json`, and reminds you which environment variables to export before running a pull.
 
@@ -39,7 +39,7 @@ This command creates the target directory if needed, writes `sync.json`, and rem
 php artisan bookstack:pull-content /path/to/content
 ```
 
-<img src="https://raw.githubusercontent.com/kugarocks/bookstack-content-sync/main/docs/images/pull-content.png" alt="pull-content" width="420" />
+<img src="https://raw.githubusercontent.com/kugarocks/bookstack-content-sync/main/docs/images/pull-content.png" alt="pull-content" width="400" />
 
 ### Push Plan
 
@@ -47,7 +47,7 @@ php artisan bookstack:pull-content /path/to/content
 php artisan bookstack:push-content /path/to/content
 ```
 
-<img src="https://raw.githubusercontent.com/kugarocks/bookstack-content-sync/main/docs/images/push-plan.png" alt="push-plan" width="520" />
+<img src="https://raw.githubusercontent.com/kugarocks/bookstack-content-sync/main/docs/images/push-plan.png" alt="push-plan" width="500" />
 
 ### Push Execution
 
