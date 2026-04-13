@@ -24,6 +24,7 @@ use Kugarocks\BookStackContentSync\ContentSync\Push\ProjectStructureValidator;
 use Kugarocks\BookStackContentSync\ContentSync\Push\PushContentRunner;
 use Kugarocks\BookStackContentSync\ContentSync\Push\PushPlanBuilder;
 use Kugarocks\BookStackContentSync\ContentSync\Push\PushPlanExecutor;
+use Kugarocks\BookStackContentSync\ContentSync\Push\PushPlanPreparer;
 use Kugarocks\BookStackContentSync\ContentSync\Push\PushProjectStateLoader;
 use Kugarocks\BookStackContentSync\ContentSync\Push\SnapshotFileLoader;
 use Kugarocks\BookStackContentSync\ContentSync\Push\SnapshotMatcher;
@@ -204,8 +205,7 @@ MD);
         [$stateLoader, $pushPlanBuilder, $localSnapshotProjector] = $this->pushComponents();
 
         return new PushContentRunner(
-            $stateLoader,
-            $pushPlanBuilder,
+            new PushPlanPreparer($stateLoader, $pushPlanBuilder),
             new PushPlanExecutor(
                 new PushBookStackApiClient($http),
                 new SyncConfigEnvCredentialResolver(),

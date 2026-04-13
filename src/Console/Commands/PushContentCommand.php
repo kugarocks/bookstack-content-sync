@@ -4,6 +4,8 @@ namespace Kugarocks\BookStackContentSync\Console\Commands;
 
 use Kugarocks\BookStackContentSync\ContentSync\Push\PlanAction;
 use Kugarocks\BookStackContentSync\ContentSync\Push\LocalSnapshotChange;
+use Kugarocks\BookStackContentSync\ContentSync\Push\PushProgressEvent;
+use Kugarocks\BookStackContentSync\ContentSync\Push\PushProgressStage;
 use Kugarocks\BookStackContentSync\ContentSync\Push\PushContentRunner;
 use Kugarocks\BookStackContentSync\ContentSync\Push\PushPlanRunner;
 use Kugarocks\BookStackContentSync\ContentSync\Push\PushRunResult;
@@ -28,12 +30,12 @@ class PushContentCommand extends Command
         $projectPath = (string) $this->argument('projectPath');
         $execute = (bool) $this->option('execute');
         $hasRemoteSemanticChanges = true;
-        $progressRenderer = function (string $message, string $tone = 'info') use (&$hasRemoteSemanticChanges): void {
-            if (!$hasRemoteSemanticChanges && in_array($message, ['Executing remote changes', 'Writing updated local metadata'], true)) {
+        $progressRenderer = function (PushProgressEvent $event) use (&$hasRemoteSemanticChanges): void {
+            if (!$hasRemoteSemanticChanges && in_array($event->stage, [PushProgressStage::ExecutingRemoteChanges, PushProgressStage::WritingUpdatedLocalMetadata], true)) {
                 return;
             }
 
-            $this->renderStage($message, $tone);
+            $this->renderProgressEvent($event);
         };
 
         try {
@@ -77,22 +79,37 @@ class PushContentCommand extends Command
         return self::SUCCESS;
     }
 
-    protected function renderStage(string $message, string $tone = 'info'): void
+    protected function renderProgressEvent(PushProgressEvent $event): void
     {
-        if (in_array($message, ['Executing remote changes', 'Writing updated local metadata'], true)) {
+        if (in_array($event->stage, [PushProgressStage::ExecutingRemoteChanges, PushProgressStage::WritingUpdatedLocalMetadata], true)) {
             $this->newLine();
         }
 
-        if ($tone === 'error') {
-            $this->newLine();
+        if (in_array($event->stage, [PushProgressStage::Create, PushProgressStage::Update, PushProgressStage::Trash], true)) {
+            $type = $event->type?->value ?? 'unknown';
+            $progress = "{$event->current}/{$event->total}";
+            $path = $event->path ?? 'unknown';
+            $action = $event->stage->value;
+            $actionLabel = strtoupper($this->displayActionLabel($action));
+
+            $this->line(sprintf(
+                '  <fg=%s;options=bold>%s</> <fg=%s;options=bold>%-' . $this->executionActionWidth() . 's</> <fg=cyan>%-' . $this->executionTypeWidth() . 's</> <fg=default>[%s]</> <fg=white>%s</>',
+                $this->summaryColor($action),
+                $this->actionSymbol($action),
+                $this->summaryColor($action),
+                $actionLabel,
+                'shelf',
+                $progress,
+                $path
+            ));
+
+            return;
         }
 
-        if (preg_match('/^(Creating|Updating|Trashing) ([a-z_]+) ([0-9]+\/[0-9]+): (.+)$/', $message, $matches)) {
-            $verb = $matches[1];
-            $type = $matches[2];
-            $progress = $matches[3];
-            $path = $matches[4];
-            $action = $this->verbToAction($verb);
+        if ($event->stage === PushProgressStage::SyncShelfMembership) {
+            $progress = "{$event->current}/{$event->total}";
+            $path = $event->path ?? 'unknown';
+            $action = 'sync_membership';
             $actionLabel = strtoupper($this->displayActionLabel($action));
 
             $this->line(sprintf(
@@ -109,24 +126,23 @@ class PushContentCommand extends Command
             return;
         }
 
-        if (preg_match('/^Syncing shelf membership ([0-9]+\/[0-9]+): (.+)$/', $message, $matches)) {
-            $progress = $matches[1];
-            $path = $matches[2];
-            $action = 'sync_membership';
-            $actionLabel = strtoupper($this->displayActionLabel($action));
+        $message = match ($event->stage) {
+            PushProgressStage::LoadingLocalProjectState => 'Loading local project state',
+            PushProgressStage::BuildingPushPlan => 'Building push plan',
+            PushProgressStage::ExecutingRemoteChanges => 'Executing remote changes',
+            PushProgressStage::WritingUpdatedLocalMetadata => 'Writing updated local metadata',
+            default => '',
+        };
 
-            $this->line(sprintf(
-                '  <fg=%s;options=bold>%s</> <fg=%s;options=bold>%-' . $this->executionActionWidth() . 's</> <fg=cyan>%-' . $this->executionTypeWidth() . 's</> <fg=default>[%s]</> <fg=white>%s</>',
-                $this->summaryColor($action),
-                $this->actionSymbol($action),
-                $this->summaryColor($action),
-                $actionLabel,
-                'shelf',
-                $progress,
-                $path
-            ));
+        if ($message !== '') {
+            $this->line(sprintf('<fg=cyan;options=bold>%s</> %s', '>', $message));
+        }
+    }
 
-            return;
+    protected function renderStage(string $message, string $tone = 'info'): void
+    {
+        if ($tone === 'error') {
+            $this->newLine();
         }
 
         [$icon, $color] = match ($tone) {

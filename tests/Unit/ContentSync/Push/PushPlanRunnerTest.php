@@ -4,6 +4,7 @@ namespace Tests\Unit\ContentSync\Push;
 
 use Kugarocks\BookStackContentSync\ContentSync\Push\PushPlan;
 use Kugarocks\BookStackContentSync\ContentSync\Push\PushPlanBuilder;
+use Kugarocks\BookStackContentSync\ContentSync\Push\PushPlanPreparer;
 use Kugarocks\BookStackContentSync\ContentSync\Push\PushPlanRunner;
 use Kugarocks\BookStackContentSync\ContentSync\Push\PushProjectState;
 use Kugarocks\BookStackContentSync\ContentSync\Push\PushProjectStateLoader;
@@ -31,8 +32,10 @@ class PushPlanRunnerTest extends TestCase
             ->willReturn($state);
 
         $runner = new PushPlanRunner(
-            $stateLoader,
-            new PushPlanBuilder(new SnapshotMatcher(), new StructureDiffer(), new ContentDiffer()),
+            new PushPlanPreparer(
+                $stateLoader,
+                new PushPlanBuilder(new SnapshotMatcher(), new StructureDiffer(), new ContentDiffer()),
+            ),
             new LocalSnapshotProjector(),
         );
 

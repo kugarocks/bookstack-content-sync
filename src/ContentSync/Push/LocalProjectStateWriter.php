@@ -47,7 +47,7 @@ class LocalProjectStateWriter
             file_put_contents($absolutePath, $contents);
         }
 
-        $snapshotNodes = $this->localSnapshotProjector->project($localNodes, $contentPath, $assignedEntityIdsByPath);
+        $snapshotNodes = $this->localSnapshotProjector->projectPersistedSnapshot($localNodes, $contentPath, $assignedEntityIdsByPath);
 
         file_put_contents(
             rtrim($projectRootPath, '/') . '/snapshot.json',

@@ -22,14 +22,7 @@ class PushPlanExecutor
     /**
      * @param LocalNode[] $localNodes
      * @param SnapshotNode[] $snapshotNodes
-     * @return array<int, array{
-     *     action: string,
-     *     type: NodeType,
-     *     entity_id: int,
-     *     path: string,
-     *     name: string,
-     *     fields: array<int, array{field: string, before: string, after: string}>
-     * }>
+     * @return LocalSnapshotChange[]
      */
     public function execute(string $projectRootPath, SyncConfig $config, array $localNodes, array $snapshotNodes, PushPlan $plan, ?callable $progress = null): array
     {
@@ -50,7 +43,7 @@ class PushPlanExecutor
             }
 
             if ($progress !== null) {
-                $progress('Creating ' . $localNode->type->value . ' ' . ($index + 1) . '/' . count($createItems) . ': ' . $localNode->path);
+                $progress(PushProgressEvent::create($localNode->type, $index + 1, count($createItems), $localNode->path));
             }
 
             $response = $this->client->create(
@@ -96,7 +89,7 @@ class PushPlanExecutor
             }
 
             if ($progress !== null) {
-                $progress('Updating ' . $localNode->type->value . ' ' . ($index + 1) . '/' . count($updateItems) . ': ' . $localNode->path);
+                $progress(PushProgressEvent::update($localNode->type, $index + 1, count($updateItems), $localNode->path));
             }
 
             $response = $this->client->update(
@@ -117,7 +110,7 @@ class PushPlanExecutor
             }
 
             if ($progress !== null) {
-                $progress('Syncing shelf membership ' . ($index + 1) . '/' . count($shelfItems) . ': ' . $shelfNode->path);
+                $progress(PushProgressEvent::syncShelfMembership($index + 1, count($shelfItems), $shelfNode->path));
             }
 
             $shelfId = $this->resolveEntityId($shelfNode, $assignedEntityIdsByPath);
@@ -144,7 +137,7 @@ class PushPlanExecutor
             }
 
             if ($progress !== null) {
-                $progress('Trashing ' . $snapshotNode->type->value . ' ' . ($index + 1) . '/' . count($trashItems) . ': ' . $snapshotNode->file);
+                $progress(PushProgressEvent::trash($snapshotNode->type, $index + 1, count($trashItems), $snapshotNode->file));
             }
 
             $this->client->delete(
@@ -156,7 +149,7 @@ class PushPlanExecutor
         }
 
         if ($progress !== null) {
-            $progress('Writing updated local metadata');
+            $progress(PushProgressEvent::stage(PushProgressStage::WritingUpdatedLocalMetadata));
         }
         $writtenSnapshotNodes = $this->stateWriter->write($projectRootPath, $config->contentPath, $localNodes, $assignedEntityIdsByPath);
 

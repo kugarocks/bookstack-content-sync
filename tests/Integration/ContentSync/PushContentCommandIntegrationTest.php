@@ -18,6 +18,7 @@ use Kugarocks\BookStackContentSync\ContentSync\Push\ProjectStructureValidator;
 use Kugarocks\BookStackContentSync\ContentSync\Push\PushContentRunner;
 use Kugarocks\BookStackContentSync\ContentSync\Push\PushPlanBuilder;
 use Kugarocks\BookStackContentSync\ContentSync\Push\PushPlanExecutor;
+use Kugarocks\BookStackContentSync\ContentSync\Push\PushPlanPreparer;
 use Kugarocks\BookStackContentSync\ContentSync\Push\PushPlanRunner;
 use Kugarocks\BookStackContentSync\ContentSync\Push\PushProjectStateLoader;
 use Kugarocks\BookStackContentSync\ContentSync\Push\SnapshotFileLoader;
@@ -551,7 +552,7 @@ YAML);
     {
         [$stateLoader, $pushPlanBuilder, $localSnapshotProjector] = $this->pushComponents();
 
-        return new PushPlanRunner($stateLoader, $pushPlanBuilder, $localSnapshotProjector);
+        return new PushPlanRunner(new PushPlanPreparer($stateLoader, $pushPlanBuilder), $localSnapshotProjector);
     }
 
     protected function pushRunner(HttpRequestService $http): PushContentRunner
@@ -559,8 +560,7 @@ YAML);
         [$stateLoader, $pushPlanBuilder, $localSnapshotProjector] = $this->pushComponents();
 
         return new PushContentRunner(
-            $stateLoader,
-            $pushPlanBuilder,
+            new PushPlanPreparer($stateLoader, $pushPlanBuilder),
             new PushPlanExecutor(
                 new BookStackApiClient($http),
                 new SyncConfigEnvCredentialResolver(),

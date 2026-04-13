@@ -10,6 +10,7 @@ use Kugarocks\BookStackContentSync\ContentSync\Push\LocalSnapshotProjector;
 use Kugarocks\BookStackContentSync\ContentSync\Push\PlanAction;
 use Kugarocks\BookStackContentSync\ContentSync\Push\ProjectStructureValidator;
 use Kugarocks\BookStackContentSync\ContentSync\Push\PushPlanBuilder;
+use Kugarocks\BookStackContentSync\ContentSync\Push\PushPlanPreparer;
 use Kugarocks\BookStackContentSync\ContentSync\Push\PushPlanRunner;
 use Kugarocks\BookStackContentSync\ContentSync\Push\PushProjectStateLoader;
 use Kugarocks\BookStackContentSync\ContentSync\Push\SnapshotFileLoader;
@@ -93,13 +94,15 @@ Body
 MD);
 
         $runner = new PushPlanRunner(
-            new PushProjectStateLoader(
-                new SyncConfigLoader(),
-                new SnapshotFileLoader(),
-                new LocalContentScanner(new LocalFileParser(new ContentHashBuilder(new TagNormalizer()))),
-                new ProjectStructureValidator(),
+            new PushPlanPreparer(
+                new PushProjectStateLoader(
+                    new SyncConfigLoader(),
+                    new SnapshotFileLoader(),
+                    new LocalContentScanner(new LocalFileParser(new ContentHashBuilder(new TagNormalizer()))),
+                    new ProjectStructureValidator(),
+                ),
+                new PushPlanBuilder(new SnapshotMatcher(), new StructureDiffer(), new ContentDiffer()),
             ),
-            new PushPlanBuilder(new SnapshotMatcher(), new StructureDiffer(), new ContentDiffer()),
             new LocalSnapshotProjector(),
         );
 
@@ -203,13 +206,15 @@ YAML);
         ], JSON_PRETTY_PRINT));
 
         $runner = new PushPlanRunner(
-            new PushProjectStateLoader(
-                new SyncConfigLoader(),
-                new SnapshotFileLoader(),
-                new LocalContentScanner(new LocalFileParser(new ContentHashBuilder(new TagNormalizer()))),
-                new ProjectStructureValidator(),
+            new PushPlanPreparer(
+                new PushProjectStateLoader(
+                    new SyncConfigLoader(),
+                    new SnapshotFileLoader(),
+                    new LocalContentScanner(new LocalFileParser(new ContentHashBuilder(new TagNormalizer()))),
+                    new ProjectStructureValidator(),
+                ),
+                new PushPlanBuilder(new SnapshotMatcher(), new StructureDiffer(), new ContentDiffer()),
             ),
-            new PushPlanBuilder(new SnapshotMatcher(), new StructureDiffer(), new ContentDiffer()),
             new LocalSnapshotProjector(),
         );
 

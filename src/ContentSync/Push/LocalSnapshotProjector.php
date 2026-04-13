@@ -13,7 +13,26 @@ class LocalSnapshotProjector
      * @param array<string, int> $assignedEntityIdsByPath
      * @return SnapshotNode[]
      */
-    public function project(array $localNodes, string $contentPath, array $assignedEntityIdsByPath = [], bool $skipMissingEntityIds = false): array
+    public function projectPersistedSnapshot(array $localNodes, string $contentPath, array $assignedEntityIdsByPath = []): array
+    {
+        return $this->projectNodes($localNodes, $contentPath, $assignedEntityIdsByPath, false);
+    }
+
+    /**
+     * @param LocalNode[] $localNodes
+     * @return SnapshotNode[]
+     */
+    public function projectPreviewSnapshot(array $localNodes, string $contentPath): array
+    {
+        return $this->projectNodes($localNodes, $contentPath, [], true);
+    }
+
+    /**
+     * @param LocalNode[] $localNodes
+     * @param array<string, int> $assignedEntityIdsByPath
+     * @return SnapshotNode[]
+     */
+    protected function projectNodes(array $localNodes, string $contentPath, array $assignedEntityIdsByPath, bool $allowPartialProjection): array
     {
         $localNodesByPath = [];
         foreach ($localNodes as $localNode) {
@@ -24,7 +43,7 @@ class LocalSnapshotProjector
         foreach ($localNodes as $localNode) {
             $entityId = $assignedEntityIdsByPath[$localNode->path] ?? $localNode->entityId;
             if ($entityId === null) {
-                if ($skipMissingEntityIds) {
+                if ($allowPartialProjection) {
                     continue;
                 }
 
@@ -34,7 +53,7 @@ class LocalSnapshotProjector
             $parentNode = $localNodesByPath[$localNode->parentPath()] ?? null;
             $parentEntityId = $parentNode === null ? null : ($assignedEntityIdsByPath[$parentNode->path] ?? $parentNode->entityId);
 
-            if ($parentNode !== null && $parentEntityId === null && $skipMissingEntityIds) {
+            if ($parentNode !== null && $parentEntityId === null && $allowPartialProjection) {
                 continue;
             }
 
