@@ -271,36 +271,8 @@ YAML);
             new Response(200, ['Content-Type' => 'application/json'], json_encode(['id' => 1, 'slug' => 'guides'])),
         ], false);
 
-        $command = new PushContentCommand($this->runner(), $this->pushRunner($http));
-        $command->setLaravel($this->consoleContainer());
-        $tester = new CommandTester($command);
-
-        $originalId = $_SERVER['BOOKSTACK_API_TOKEN_ID'] ?? getenv('BOOKSTACK_API_TOKEN_ID') ?: null;
-        $originalSecret = $_SERVER['BOOKSTACK_API_TOKEN_SECRET'] ?? getenv('BOOKSTACK_API_TOKEN_SECRET') ?: null;
-        $_SERVER['BOOKSTACK_API_TOKEN_ID'] = 'token-id';
-        $_SERVER['BOOKSTACK_API_TOKEN_SECRET'] = 'token-secret';
-        putenv('BOOKSTACK_API_TOKEN_ID=token-id');
-        putenv('BOOKSTACK_API_TOKEN_SECRET=token-secret');
-
-        try {
-            $exitCode = $tester->execute(['projectPath' => $root, '--execute' => true]);
-        } finally {
-            if ($originalId === null || $originalId === false) {
-                unset($_SERVER['BOOKSTACK_API_TOKEN_ID']);
-                putenv('BOOKSTACK_API_TOKEN_ID');
-            } else {
-                $_SERVER['BOOKSTACK_API_TOKEN_ID'] = $originalId;
-                putenv('BOOKSTACK_API_TOKEN_ID=' . $originalId);
-            }
-
-            if ($originalSecret === null || $originalSecret === false) {
-                unset($_SERVER['BOOKSTACK_API_TOKEN_SECRET']);
-                putenv('BOOKSTACK_API_TOKEN_SECRET');
-            } else {
-                $_SERVER['BOOKSTACK_API_TOKEN_SECRET'] = $originalSecret;
-                putenv('BOOKSTACK_API_TOKEN_SECRET=' . $originalSecret);
-            }
-        }
+        $tester = $this->commandTester($http);
+        $exitCode = $this->executeWithApiEnv($tester, ['projectPath' => $root, '--execute' => true]);
 
         $this->assertSame(0, $exitCode);
         $this->assertStringContainsString('Starting push', $tester->getDisplay());
@@ -354,36 +326,8 @@ YAML);
             new Response(200, ['Content-Type' => 'application/json'], json_encode(['id' => 1, 'slug' => 'guides'])),
         ], false);
 
-        $command = new PushContentCommand($this->runner(), $this->pushRunner($http));
-        $command->setLaravel($this->consoleContainer());
-        $tester = new CommandTester($command);
-
-        $originalId = $_SERVER['BOOKSTACK_API_TOKEN_ID'] ?? getenv('BOOKSTACK_API_TOKEN_ID') ?: null;
-        $originalSecret = $_SERVER['BOOKSTACK_API_TOKEN_SECRET'] ?? getenv('BOOKSTACK_API_TOKEN_SECRET') ?: null;
-        $_SERVER['BOOKSTACK_API_TOKEN_ID'] = 'token-id';
-        $_SERVER['BOOKSTACK_API_TOKEN_SECRET'] = 'token-secret';
-        putenv('BOOKSTACK_API_TOKEN_ID=token-id');
-        putenv('BOOKSTACK_API_TOKEN_SECRET=token-secret');
-
-        try {
-            $exitCode = $tester->execute(['projectPath' => $root, '--execute' => true]);
-        } finally {
-            if ($originalId === null || $originalId === false) {
-                unset($_SERVER['BOOKSTACK_API_TOKEN_ID']);
-                putenv('BOOKSTACK_API_TOKEN_ID');
-            } else {
-                $_SERVER['BOOKSTACK_API_TOKEN_ID'] = $originalId;
-                putenv('BOOKSTACK_API_TOKEN_ID=' . $originalId);
-            }
-
-            if ($originalSecret === null || $originalSecret === false) {
-                unset($_SERVER['BOOKSTACK_API_TOKEN_SECRET']);
-                putenv('BOOKSTACK_API_TOKEN_SECRET');
-            } else {
-                $_SERVER['BOOKSTACK_API_TOKEN_SECRET'] = $originalSecret;
-                putenv('BOOKSTACK_API_TOKEN_SECRET=' . $originalSecret);
-            }
-        }
+        $tester = $this->commandTester($http);
+        $exitCode = $this->executeWithApiEnv($tester, ['projectPath' => $root, '--execute' => true]);
 
         $this->assertSame(0, $exitCode);
         $this->assertStringContainsString('Starting push', $tester->getDisplay());
@@ -463,36 +407,8 @@ YAML);
         $http = new HttpRequestService();
         $history = $http->mockClient([], false);
 
-        $command = new PushContentCommand($this->runner(), $this->pushRunner($http));
-        $command->setLaravel($this->consoleContainer());
-        $tester = new CommandTester($command);
-
-        $originalId = $_SERVER['BOOKSTACK_API_TOKEN_ID'] ?? getenv('BOOKSTACK_API_TOKEN_ID') ?: null;
-        $originalSecret = $_SERVER['BOOKSTACK_API_TOKEN_SECRET'] ?? getenv('BOOKSTACK_API_TOKEN_SECRET') ?: null;
-        $_SERVER['BOOKSTACK_API_TOKEN_ID'] = 'token-id';
-        $_SERVER['BOOKSTACK_API_TOKEN_SECRET'] = 'token-secret';
-        putenv('BOOKSTACK_API_TOKEN_ID=token-id');
-        putenv('BOOKSTACK_API_TOKEN_SECRET=token-secret');
-
-        try {
-            $exitCode = $tester->execute(['projectPath' => $root, '--execute' => true]);
-        } finally {
-            if ($originalId === null || $originalId === false) {
-                unset($_SERVER['BOOKSTACK_API_TOKEN_ID']);
-                putenv('BOOKSTACK_API_TOKEN_ID');
-            } else {
-                $_SERVER['BOOKSTACK_API_TOKEN_ID'] = $originalId;
-                putenv('BOOKSTACK_API_TOKEN_ID=' . $originalId);
-            }
-
-            if ($originalSecret === null || $originalSecret === false) {
-                unset($_SERVER['BOOKSTACK_API_TOKEN_SECRET']);
-                putenv('BOOKSTACK_API_TOKEN_SECRET');
-            } else {
-                $_SERVER['BOOKSTACK_API_TOKEN_SECRET'] = $originalSecret;
-                putenv('BOOKSTACK_API_TOKEN_SECRET=' . $originalSecret);
-            }
-        }
+        $tester = $this->commandTester($http);
+        $exitCode = $this->executeWithApiEnv($tester, ['projectPath' => $root, '--execute' => true]);
 
         $this->assertSame(0, $exitCode);
         $this->assertStringContainsString('No remote API changes required', $tester->getDisplay());
@@ -559,36 +475,8 @@ YAML);
             ])),
         ], false);
 
-        $command = new PushContentCommand($this->runner(), $this->pushRunner($http));
-        $command->setLaravel($this->consoleContainer());
-        $tester = new CommandTester($command);
-
-        $originalId = $_SERVER['BOOKSTACK_API_TOKEN_ID'] ?? getenv('BOOKSTACK_API_TOKEN_ID') ?: null;
-        $originalSecret = $_SERVER['BOOKSTACK_API_TOKEN_SECRET'] ?? getenv('BOOKSTACK_API_TOKEN_SECRET') ?: null;
-        $_SERVER['BOOKSTACK_API_TOKEN_ID'] = 'token-id';
-        $_SERVER['BOOKSTACK_API_TOKEN_SECRET'] = 'token-secret';
-        putenv('BOOKSTACK_API_TOKEN_ID=token-id');
-        putenv('BOOKSTACK_API_TOKEN_SECRET=token-secret');
-
-        try {
-            $exitCode = $tester->execute(['projectPath' => $root, '--execute' => true]);
-        } finally {
-            if ($originalId === null || $originalId === false) {
-                unset($_SERVER['BOOKSTACK_API_TOKEN_ID']);
-                putenv('BOOKSTACK_API_TOKEN_ID');
-            } else {
-                $_SERVER['BOOKSTACK_API_TOKEN_ID'] = $originalId;
-                putenv('BOOKSTACK_API_TOKEN_ID=' . $originalId);
-            }
-
-            if ($originalSecret === null || $originalSecret === false) {
-                unset($_SERVER['BOOKSTACK_API_TOKEN_SECRET']);
-                putenv('BOOKSTACK_API_TOKEN_SECRET');
-            } else {
-                $_SERVER['BOOKSTACK_API_TOKEN_SECRET'] = $originalSecret;
-                putenv('BOOKSTACK_API_TOKEN_SECRET=' . $originalSecret);
-            }
-        }
+        $tester = $this->commandTester($http);
+        $exitCode = $this->executeWithApiEnv($tester, ['projectPath' => $root, '--execute' => true]);
 
         $this->assertSame(1, $exitCode);
         $this->assertStringContainsString('Push failed.', $tester->getDisplay());
@@ -647,10 +535,59 @@ YAML);
             ])),
         ], false);
 
+        $tester = $this->commandTester($http);
+        $exitCode = $this->executeWithApiEnv($tester, ['projectPath' => $root, '--execute' => true]);
+
+        $this->assertSame(1, $exitCode);
+        $this->assertStringContainsString('Push failed.', $tester->getDisplay());
+        $this->assertStringContainsString('Push slug validation failed', $tester->getDisplay());
+        $this->assertStringContainsString('laravel-local', $tester->getDisplay());
+        $this->assertStringContainsString('laravel-remote', $tester->getDisplay());
+
+        $this->deleteDirectory($root);
+    }
+
+    protected function runner(): PushPlanRunner
+    {
+        [$stateLoader, $pushPlanBuilder, $localSnapshotProjector] = $this->pushComponents();
+
+        return new PushPlanRunner($stateLoader, $pushPlanBuilder, $localSnapshotProjector);
+    }
+
+    protected function pushRunner(HttpRequestService $http): PushContentRunner
+    {
+        [$stateLoader, $pushPlanBuilder, $localSnapshotProjector] = $this->pushComponents();
+
+        return new PushContentRunner(
+            $stateLoader,
+            $pushPlanBuilder,
+            new PushPlanExecutor(
+                new BookStackApiClient($http),
+                new SyncConfigEnvCredentialResolver(),
+                new LocalProjectStateWriter(
+                    new MetaFileBuilder(new TagNormalizer()),
+                    new PageFileBuilder(new TagNormalizer()),
+                    new SnapshotJsonBuilder(),
+                    $localSnapshotProjector,
+                ),
+                $localSnapshotProjector,
+            ),
+        );
+    }
+
+    protected function commandTester(HttpRequestService $http): CommandTester
+    {
         $command = new PushContentCommand($this->runner(), $this->pushRunner($http));
         $command->setLaravel($this->consoleContainer());
-        $tester = new CommandTester($command);
 
+        return new CommandTester($command);
+    }
+
+    /**
+     * @param array<string, mixed> $arguments
+     */
+    protected function executeWithApiEnv(CommandTester $tester, array $arguments): int
+    {
         $originalId = $_SERVER['BOOKSTACK_API_TOKEN_ID'] ?? getenv('BOOKSTACK_API_TOKEN_ID') ?: null;
         $originalSecret = $_SERVER['BOOKSTACK_API_TOKEN_SECRET'] ?? getenv('BOOKSTACK_API_TOKEN_SECRET') ?: null;
         $_SERVER['BOOKSTACK_API_TOKEN_ID'] = 'token-id';
@@ -659,7 +596,7 @@ YAML);
         putenv('BOOKSTACK_API_TOKEN_SECRET=token-secret');
 
         try {
-            $exitCode = $tester->execute(['projectPath' => $root, '--execute' => true]);
+            return $tester->execute($arguments);
         } finally {
             if ($originalId === null || $originalId === false) {
                 unset($_SERVER['BOOKSTACK_API_TOKEN_ID']);
@@ -677,52 +614,26 @@ YAML);
                 putenv('BOOKSTACK_API_TOKEN_SECRET=' . $originalSecret);
             }
         }
-
-        $this->assertSame(1, $exitCode);
-        $this->assertStringContainsString('Push failed.', $tester->getDisplay());
-        $this->assertStringContainsString('Push slug validation failed', $tester->getDisplay());
-        $this->assertStringContainsString('laravel-local', $tester->getDisplay());
-        $this->assertStringContainsString('laravel-remote', $tester->getDisplay());
-
-        $this->deleteDirectory($root);
     }
 
-    protected function runner(): PushPlanRunner
+    /**
+     * @return array{PushProjectStateLoader, PushPlanBuilder, LocalSnapshotProjector}
+     */
+    protected function pushComponents(): array
     {
-        return new PushPlanRunner(
+        $tagNormalizer = new TagNormalizer();
+        $localSnapshotProjector = new LocalSnapshotProjector();
+
+        return [
             new PushProjectStateLoader(
                 new SyncConfigLoader(),
                 new SnapshotFileLoader(),
-                new LocalContentScanner(new LocalFileParser(new ContentHashBuilder(new TagNormalizer()))),
+                new LocalContentScanner(new LocalFileParser(new ContentHashBuilder($tagNormalizer))),
                 new ProjectStructureValidator(),
             ),
             new PushPlanBuilder(new SnapshotMatcher(), new StructureDiffer(), new ContentDiffer()),
-            new LocalSnapshotProjector(),
-        );
-    }
-
-    protected function pushRunner(HttpRequestService $http): PushContentRunner
-    {
-        return new PushContentRunner(
-            new PushProjectStateLoader(
-                new SyncConfigLoader(),
-                new SnapshotFileLoader(),
-                new LocalContentScanner(new LocalFileParser(new ContentHashBuilder(new TagNormalizer()))),
-                new ProjectStructureValidator(),
-            ),
-            new PushPlanBuilder(new SnapshotMatcher(), new StructureDiffer(), new ContentDiffer()),
-            new PushPlanExecutor(
-                new BookStackApiClient($http),
-                new SyncConfigEnvCredentialResolver(),
-                new LocalProjectStateWriter(
-                    new MetaFileBuilder(new TagNormalizer()),
-                    new PageFileBuilder(new TagNormalizer()),
-                    new SnapshotJsonBuilder(),
-                    new LocalSnapshotProjector(),
-                ),
-                new LocalSnapshotProjector(),
-            ),
-        );
+            $localSnapshotProjector,
+        ];
     }
 
     protected function consoleContainer(): Container

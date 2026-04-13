@@ -614,14 +614,11 @@ YAML);
 
     protected function runner(HttpRequestService $http): PushContentRunner
     {
+        [$stateLoader, $pushPlanBuilder, $localSnapshotProjector] = $this->pushComponents();
+
         return new PushContentRunner(
-            new PushProjectStateLoader(
-                new SyncConfigLoader(),
-                new SnapshotFileLoader(),
-                $this->scanner(),
-                new ProjectStructureValidator(),
-            ),
-            new PushPlanBuilder(new SnapshotMatcher(), new StructureDiffer(), new ContentDiffer()),
+            $stateLoader,
+            $pushPlanBuilder,
             new PushPlanExecutor(
                 new BookStackApiClient($http),
                 new SyncConfigEnvCredentialResolver(),
@@ -629,9 +626,9 @@ YAML);
                     new MetaFileBuilder(new TagNormalizer()),
                     new PageFileBuilder(new TagNormalizer()),
                     new SnapshotJsonBuilder(),
-                    new LocalSnapshotProjector(),
+                    $localSnapshotProjector,
                 ),
-                new LocalSnapshotProjector(),
+                $localSnapshotProjector,
             ),
         );
     }
@@ -639,6 +636,26 @@ YAML);
     protected function scanner(): LocalContentScanner
     {
         return new LocalContentScanner(new LocalFileParser(new ContentHashBuilder(new TagNormalizer())));
+    }
+
+    /**
+     * @return array{PushProjectStateLoader, PushPlanBuilder, LocalSnapshotProjector}
+     */
+    protected function pushComponents(): array
+    {
+        $tagNormalizer = new TagNormalizer();
+        $localSnapshotProjector = new LocalSnapshotProjector();
+
+        return [
+            new PushProjectStateLoader(
+                new SyncConfigLoader(),
+                new SnapshotFileLoader(),
+                new LocalContentScanner(new LocalFileParser(new ContentHashBuilder($tagNormalizer))),
+                new ProjectStructureValidator(),
+            ),
+            new PushPlanBuilder(new SnapshotMatcher(), new StructureDiffer(), new ContentDiffer()),
+            $localSnapshotProjector,
+        ];
     }
 
     protected function writeSyncConfig(string $root): void
