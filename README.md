@@ -7,6 +7,56 @@ Pulling BookStack content into a local directory, making changes, and pushing it
 - PHP `>=8.2`
 - BookStack `>=26.03`
 
+## Quick Start
+
+### Initialize Directory
+
+Create a local content directory and starter `sync.json`:
+
+```bash
+php artisan bookstack:init-content-dir /path/to/content
+```
+
+![init-content-dir](https://raw.githubusercontent.com/kugarocks/bookstack-content-sync/main/docs/images/init-content-dir.png)
+
+This command creates the target directory if needed, writes `sync.json`, and reminds you which environment variables to export before running a pull.
+
+```json
+{
+    "version": 1,
+    "app_url": "http://localhost:8080",
+    "content_path": "content",
+    "env_vars": {
+        "token_id": "BOOKSTACK_API_TOKEN_ID",
+        "token_secret": "BOOKSTACK_API_TOKEN_SECRET"
+    }
+}
+```
+
+### Pull Content
+
+```bash
+php artisan bookstack:pull-content /path/to/content
+```
+
+![pull-content](https://raw.githubusercontent.com/kugarocks/bookstack-content-sync/main/docs/images/pull-content.png)
+
+### Push Plan
+
+```bash
+php artisan bookstack:push-content /path/to/content
+```
+
+![push-plan](https://raw.githubusercontent.com/kugarocks/bookstack-content-sync/main/docs/images/push-plan.png)
+
+### Push Execution
+
+```bash
+php artisan bookstack:push-content /path/to/content --execute
+```
+
+![push-execution](https://raw.githubusercontent.com/kugarocks/bookstack-content-sync/main/docs/images/push-execution.png)
+
 ## Slug Behavior
 
 - Official BookStack does not support custom slug preservation for content entities when they are created or updated through the API.
@@ -47,36 +97,6 @@ composer require kugarocks/bookstack-content-sync:*@dev
 ```
 
 The `@dev` suffix is only needed for local path installation while the package is resolved as `dev-main`.
-
-## Quick Start
-
-### Initialize Directory
-
-Create a local content directory and starter `sync.json`:
-
-```bash
-php artisan bookstack:init-content-dir /path/to/content
-```
-
-This command creates the target directory if needed, writes `sync.json`, and reminds you which environment variables to export before running a pull.
-
-### Pull Content
-
-```bash
-php artisan bookstack:pull-content /path/to/content
-```
-
-### Push Plan
-
-```bash
-php artisan bookstack:push-content /path/to/content
-```
-
-### Push Execution
-
-```bash
-php artisan bookstack:push-content /path/to/content --execute
-```
 
 ## Testing
 
