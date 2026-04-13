@@ -6,7 +6,6 @@ use Kugarocks\BookStackContentSync\ContentSync\Push\PlanAction;
 use Kugarocks\BookStackContentSync\ContentSync\Push\LocalSnapshotChange;
 use Kugarocks\BookStackContentSync\ContentSync\Push\PushContentRunner;
 use Kugarocks\BookStackContentSync\ContentSync\Push\PushPlanRunner;
-use Kugarocks\BookStackContentSync\ContentSync\Push\PushPlanSummary;
 use Kugarocks\BookStackContentSync\ContentSync\Push\PushRunResult;
 use Kugarocks\BookStackContentSync\ContentSync\Shared\NodeType;
 use Illuminate\Console\Command;
@@ -20,7 +19,6 @@ class PushContentCommand extends Command
     public function __construct(
         protected PushPlanRunner $runner,
         protected PushContentRunner $pushContentRunner,
-        protected PushPlanSummary $summaryBuilder,
     ) {
         parent::__construct();
     }

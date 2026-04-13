@@ -19,7 +19,6 @@ use Kugarocks\BookStackContentSync\ContentSync\Push\PushContentRunner;
 use Kugarocks\BookStackContentSync\ContentSync\Push\PushPlanBuilder;
 use Kugarocks\BookStackContentSync\ContentSync\Push\PushPlanExecutor;
 use Kugarocks\BookStackContentSync\ContentSync\Push\PushPlanRunner;
-use Kugarocks\BookStackContentSync\ContentSync\Push\PushPlanSummary;
 use Kugarocks\BookStackContentSync\ContentSync\Push\PushProjectStateLoader;
 use Kugarocks\BookStackContentSync\ContentSync\Push\SnapshotFileLoader;
 use Kugarocks\BookStackContentSync\ContentSync\Push\SnapshotMatcher;
@@ -107,7 +106,7 @@ tags: []
 Body
 MD);
 
-        $command = new PushContentCommand($this->runner(), $this->pushRunner(new HttpRequestService()), new PushPlanSummary());
+        $command = new PushContentCommand($this->runner(), $this->pushRunner(new HttpRequestService()));
         $command->setLaravel($this->consoleContainer());
         $tester = new CommandTester($command);
 
@@ -138,7 +137,7 @@ MD);
         $root = sys_get_temp_dir() . '/push-content-command-invalid-' . bin2hex(random_bytes(8));
         mkdir($root, 0777, true);
 
-        $command = new PushContentCommand($this->runner(), $this->pushRunner(new HttpRequestService()), new PushPlanSummary());
+        $command = new PushContentCommand($this->runner(), $this->pushRunner(new HttpRequestService()));
         $command->setLaravel($this->consoleContainer());
         $tester = new CommandTester($command);
 
@@ -214,7 +213,7 @@ YAML);
             ],
         ], JSON_PRETTY_PRINT));
 
-        $command = new PushContentCommand($this->runner(), $this->pushRunner(new HttpRequestService()), new PushPlanSummary());
+        $command = new PushContentCommand($this->runner(), $this->pushRunner(new HttpRequestService()));
         $command->setLaravel($this->consoleContainer());
         $tester = new CommandTester($command);
 
@@ -272,7 +271,7 @@ YAML);
             new Response(200, ['Content-Type' => 'application/json'], json_encode(['id' => 1, 'slug' => 'guides'])),
         ], false);
 
-        $command = new PushContentCommand($this->runner(), $this->pushRunner($http), new PushPlanSummary());
+        $command = new PushContentCommand($this->runner(), $this->pushRunner($http));
         $command->setLaravel($this->consoleContainer());
         $tester = new CommandTester($command);
 
@@ -355,7 +354,7 @@ YAML);
             new Response(200, ['Content-Type' => 'application/json'], json_encode(['id' => 1, 'slug' => 'guides'])),
         ], false);
 
-        $command = new PushContentCommand($this->runner(), $this->pushRunner($http), new PushPlanSummary());
+        $command = new PushContentCommand($this->runner(), $this->pushRunner($http));
         $command->setLaravel($this->consoleContainer());
         $tester = new CommandTester($command);
 
@@ -464,7 +463,7 @@ YAML);
         $http = new HttpRequestService();
         $history = $http->mockClient([], false);
 
-        $command = new PushContentCommand($this->runner(), $this->pushRunner($http), new PushPlanSummary());
+        $command = new PushContentCommand($this->runner(), $this->pushRunner($http));
         $command->setLaravel($this->consoleContainer());
         $tester = new CommandTester($command);
 
@@ -560,7 +559,7 @@ YAML);
             ])),
         ], false);
 
-        $command = new PushContentCommand($this->runner(), $this->pushRunner($http), new PushPlanSummary());
+        $command = new PushContentCommand($this->runner(), $this->pushRunner($http));
         $command->setLaravel($this->consoleContainer());
         $tester = new CommandTester($command);
 
@@ -648,7 +647,7 @@ YAML);
             ])),
         ], false);
 
-        $command = new PushContentCommand($this->runner(), $this->pushRunner($http), new PushPlanSummary());
+        $command = new PushContentCommand($this->runner(), $this->pushRunner($http));
         $command->setLaravel($this->consoleContainer());
         $tester = new CommandTester($command);
 
