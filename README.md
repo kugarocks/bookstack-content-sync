@@ -29,6 +29,12 @@ Verified in a local BookStack host environment:
 - A BookStack host application running Laravel 12
 - A host environment that provides BookStack internal services such as `BookStack\Http\HttpRequestService`
 
+BookStack slug behavior:
+
+- Some BookStack hosts do not preserve requested slugs when entities are created or updated through the API.
+- In that case, `bookstack:push-content --execute` treats the remote slug as the source of truth.
+- The command prints a warning, then rewrites the local file slug and `snapshot.json` slug to the remote value returned by BookStack.
+
 ## Installation
 
 ### Packagist installation

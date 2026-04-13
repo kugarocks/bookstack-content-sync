@@ -38,12 +38,19 @@ class LocalProjectStateWriter
             return $localNode->withSlug($resolvedSlug, $this->contentHashBuilder);
         }, $localNodes);
 
-        foreach ($effectiveLocalNodes as $localNode) {
-            if (!isset($assignedEntityIdsByPath[$localNode->path])) {
+        foreach ($effectiveLocalNodes as $index => $localNode) {
+            $originalLocalNode = $localNodes[$index];
+            $hasAssignedEntityId = isset($assignedEntityIdsByPath[$localNode->path]);
+            $slugChanged = $localNode->slug !== $originalLocalNode->slug;
+
+            if (!$hasAssignedEntityId && !$slugChanged) {
                 continue;
             }
 
-            $entityId = $assignedEntityIdsByPath[$localNode->path];
+            $entityId = $assignedEntityIdsByPath[$localNode->path] ?? $localNode->entityId;
+            if ($entityId === null) {
+                throw new InvalidArgumentException("Cannot rewrite local node [{$localNode->path}] without entity_id");
+            }
             $absolutePath = rtrim($projectRootPath, '/') . '/' . $localNode->path;
             $contents = $localNode->type === NodeType::Page
                 ? $this->pageFileBuilder->build($this->toRemoteNode($localNode, $entityId))
