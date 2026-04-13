@@ -2,54 +2,27 @@
 
 Pulling BookStack content into a local directory, making changes, and pushing it back.
 
-## Current status
-
-This package currently provides a working host-integrated implementation for:
-
-- `bookstack:init-content-dir`
-- `bookstack:pull-content`
-- `bookstack:push-content`
-
-Verified in a local BookStack host environment:
-
-- package installation via Composer path repository
-- Laravel package discovery
-- command ownership takeover for pull and push
-- successful pull execution
-- successful push plan execution
-- successful no-change push execute execution
-- successful controlled write-path push execute execution with post-check stabilization
-
-`push --execute` has been verified in both a controlled no-change scenario and a minimal real write-path scenario in the local BookStack host workflow.
-
 ## Requirements
 
+- PHP `>=8.2`
 - BookStack `>=26.03`
 
 ## Slug Behavior
 
-- Official BookStack does not currently guarantee custom slug preservation for content entities when they are created or updated through the API.
+- Official BookStack does not support custom slug preservation for content entities when they are created or updated through the API.
 - A host that includes [the BookStack custom slug support change](https://github.com/kugarocks/BookStack/commit/e6c75b4d13dab676424461c210b14f730c2a6ad3) adds custom slug support for those content entity APIs.
 - When the host still does not preserve the requested slug, `bookstack:push-content --execute` treats the remote slug as the source of truth.
 - The command prints a warning, then rewrites the local file slug and `snapshot.json` slug to the remote value returned by BookStack.
 
 ## Installation
 
-### Packagist installation
-
-Once the package is available on Packagist, install it in the BookStack host with:
+### Packagist
 
 ```bash
-composer require kugarocks/bookstack-content-sync:^0.2
+composer require kugarocks/bookstack-content-sync
 ```
 
-If you want to pin exactly the first public release instead:
-
-```bash
-composer require kugarocks/bookstack-content-sync:0.2.0
-```
-
-### Local development installation
+### Local Development
 
 For local development against an unpublished working tree, add the local repository to the BookStack host `composer.json`:
 
@@ -75,9 +48,9 @@ composer require kugarocks/bookstack-content-sync:*@dev
 
 The `@dev` suffix is only needed for local path installation while the package is resolved as `dev-main`.
 
-## Commands
+## Quick Start
 
-### Initialize content
+### Initialize Directory
 
 Create a local content directory and starter `sync.json`:
 
@@ -87,51 +60,25 @@ php artisan bookstack:init-content-dir /path/to/content
 
 This command creates the target directory if needed, writes `sync.json`, and reminds you which environment variables to export before running a pull.
 
-### Pull
+### Pull Content
 
 ```bash
 php artisan bookstack:pull-content /path/to/content
 ```
 
-### Push plan
+### Push Plan
 
 ```bash
 php artisan bookstack:push-content /path/to/content
 ```
 
-### Push execute
+### Push Execution
 
 ```bash
 php artisan bookstack:push-content /path/to/content --execute
 ```
 
-## Compatibility notes
-
-This package is intentionally coupled to a BookStack host runtime.
-
-Current assumptions:
-
-- the host already contains Laravel framework dependencies
-- the host provides BookStack internal services used by the sync implementation
-- command names can be overridden by the package provider during registration
-
-Because of that, compatibility should be treated as BookStack-version-sensitive rather than generic-Laravel-package-compatible.
-
-This package performs a runtime host-version check during service provider registration and refuses to load on BookStack versions below `26.03`.
-
-## Verification summary
-
-Local verification completed so far:
-
-- install by path repository in the BookStack `slug` branch host
-- `bookstack:pull-content --help`
-- command ownership check for pull
-- successful minimal pull run to `/tmp/bookstack-content-sync-smoke`
-- `bookstack:push-content --help`
-- command ownership check for push
-- successful push plan run with `No remote changes required`
-
-## Running tests
+## Testing
 
 Install dependencies and run the full package test suite:
 
@@ -145,7 +92,6 @@ Test boundaries:
 - Unit tests validate isolated sync logic.
 - Integration tests execute real local file reads and writes in temporary directories.
 - Integration tests do not call a real BookStack server; HTTP is mocked through the package test shim.
-- Host verification is still required to confirm package discovery and real command takeover inside BookStack.
 
 Run only unit tests:
 
@@ -171,20 +117,3 @@ Run push-focused tests:
 composer test-push
 ```
 
-You can still run PHPUnit directly if needed:
-
-```bash
-vendor/bin/phpunit tests
-```
-
-## Next steps
-
-- decide whether the host-side verification setup should be preserved as-is or cleaned up before release
-- tighten package dependency declarations as needed after more host validation
-- publish the first public tag when ready
-
-## Release prep
-
-Before tagging or publishing a version, use `docs/release/guide.md` for the release checklist, command order, and versioning guidance.
-
-For the current first-release draft text, see `docs/release/notes-v0.2.0.md`.
