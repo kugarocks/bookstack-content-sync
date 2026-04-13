@@ -39,7 +39,7 @@ This command creates the target directory if needed, writes `sync.json`, and rem
 php artisan bookstack:pull-content /path/to/content
 ```
 
-<img src="https://raw.githubusercontent.com/kugarocks/bookstack-content-sync/main/docs/images/pull-content.png" alt="pull-content" width="480" />
+<img src="https://raw.githubusercontent.com/kugarocks/bookstack-content-sync/main/docs/images/pull-content.png" alt="pull-content" width="420" />
 
 ### Push Plan
 
@@ -47,7 +47,7 @@ php artisan bookstack:pull-content /path/to/content
 php artisan bookstack:push-content /path/to/content
 ```
 
-<img src="https://raw.githubusercontent.com/kugarocks/bookstack-content-sync/main/docs/images/push-plan.png" alt="push-plan" width="480" />
+<img src="https://raw.githubusercontent.com/kugarocks/bookstack-content-sync/main/docs/images/push-plan.png" alt="push-plan" width="520" />
 
 ### Push Execution
 
@@ -55,7 +55,7 @@ php artisan bookstack:push-content /path/to/content
 php artisan bookstack:push-content /path/to/content --execute
 ```
 
-<img src="https://raw.githubusercontent.com/kugarocks/bookstack-content-sync/main/docs/images/push-execution.png" alt="push-execution" width="480" />
+<img src="https://raw.githubusercontent.com/kugarocks/bookstack-content-sync/main/docs/images/push-execution.png" alt="push-execution" width="560" />
 
 ## Slug Behavior
 
