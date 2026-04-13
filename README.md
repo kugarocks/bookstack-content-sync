@@ -1,6 +1,6 @@
 # bookstack-content-sync
 
-BookStack content sync workflow for pulling content into a local directory, making local changes, and pushing those changes back to BookStack.
+Pulling BookStack content into a local directory, making changes, and pushing it back.
 
 ## Current status
 
