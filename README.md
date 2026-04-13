@@ -31,8 +31,9 @@ Verified in a local BookStack host environment:
 
 BookStack slug behavior:
 
-- Some BookStack hosts do not preserve requested slugs when entities are created or updated through the API.
-- In that case, `bookstack:push-content --execute` treats the remote slug as the source of truth.
+- Official BookStack does not currently guarantee custom slug preservation for content entities when they are created or updated through the API.
+- A host that includes commit `e6c75b4d13dab676424461c210b14f730c2a6ad3` adds custom slug support for those content entity APIs.
+- When the host still does not preserve the requested slug, `bookstack:push-content --execute` treats the remote slug as the source of truth.
 - The command prints a warning, then rewrites the local file slug and `snapshot.json` slug to the remote value returned by BookStack.
 
 ## Installation
