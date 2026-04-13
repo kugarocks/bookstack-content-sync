@@ -85,7 +85,18 @@ class PushContentCommand extends Command
         }
 
         if ($event->stage === PushProgressStage::Warning) {
-            $this->line(sprintf('<fg=yellow;options=bold>%s</> %s', '!', $event->message ?? 'Warning'));
+            $this->newLine();
+            $message = $event->message ?? 'Warning';
+            $lines = preg_split('/\r?\n/', $message) ?: ['Warning'];
+
+            $this->line('<fg=yellow;options=bold>WARNINGS</>');
+            foreach ($lines as $line) {
+                if ($line === '') {
+                    continue;
+                }
+
+                $this->line(sprintf('  <fg=yellow>%s</>', $line));
+            }
 
             return;
         }

@@ -387,7 +387,7 @@ class PushPlanExecutor
         }
 
         $progress(PushProgressEvent::warning(sprintf(
-            'BookStack did not preserve requested slug for [%s]. Requested [%s], remote returned [%s]. This host likely does not support slug updates via API; local files were updated to match the remote slug.',
+            "BookStack did not preserve the requested slug.\nPath: [%s]\nRequested: [%s]\nRemote: [%s]\nThis host likely does not support slug updates via API.\nLocal files were updated to match the remote slug.",
             $localNode->path,
             $localNode->slug,
             $responseSlug

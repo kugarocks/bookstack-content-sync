@@ -547,7 +547,9 @@ YAML);
         $exitCode = $this->executeWithApiEnv($tester, ['projectPath' => $root, '--execute' => true]);
 
         $this->assertSame(0, $exitCode);
-        $this->assertStringContainsString('BookStack did not preserve requested slug', $tester->getDisplay());
+        $this->assertStringContainsString('WARNINGS', $tester->getDisplay());
+        $this->assertStringContainsString('BookStack did not preserve the requested slug.', $tester->getDisplay());
+        $this->assertStringContainsString('Path: [content/01-guides/01-laravel]', $tester->getDisplay());
         $this->assertStringContainsString('does not support slug updates via API', $tester->getDisplay());
         $this->assertStringContainsString('Push complete.', $tester->getDisplay());
         $this->assertStringNotContainsString('Push failed.', $tester->getDisplay());
