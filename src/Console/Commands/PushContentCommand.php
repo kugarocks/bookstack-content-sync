@@ -39,7 +39,6 @@ class PushContentCommand extends Command
         };
 
         try {
-            $this->newLine();
             $this->renderStage($execute ? 'Starting push' : 'Starting push plan', 'info');
             $result = $execute
                 ? $this->pushContentRunner->run(
@@ -98,7 +97,7 @@ class PushContentCommand extends Command
                 $this->actionSymbol($action),
                 $this->summaryColor($action),
                 $actionLabel,
-                'shelf',
+                $type,
                 $progress,
                 $path
             ));
@@ -118,7 +117,7 @@ class PushContentCommand extends Command
                 $this->actionSymbol($action),
                 $this->summaryColor($action),
                 $actionLabel,
-                $type,
+                'shelf',
                 $progress,
                 $path
             ));
