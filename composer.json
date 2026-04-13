@@ -1,6 +1,6 @@
 {
   "name": "kugarocks/bookstack-content-sync",
-  "description": "External Composer extension that adds content sync commands to a BookStack host application.",
+  "description": "Pulling BookStack content into a local directory, making changes, and pushing it back.",
   "type": "library",
   "license": "MIT",
   "require": {
