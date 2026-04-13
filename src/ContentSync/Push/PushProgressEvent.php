@@ -12,12 +12,18 @@ final readonly class PushProgressEvent
         public ?int $current = null,
         public ?int $total = null,
         public ?string $path = null,
+        public ?string $message = null,
     ) {
     }
 
     public static function stage(PushProgressStage $stage): self
     {
         return new self($stage);
+    }
+
+    public static function warning(string $message): self
+    {
+        return new self(PushProgressStage::Warning, message: $message);
     }
 
     public static function create(NodeType $type, int $current, int $total, string $path): self

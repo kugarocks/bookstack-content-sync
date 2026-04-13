@@ -8,6 +8,7 @@ enum PushProgressStage: string
     case BuildingPushPlan = 'building_push_plan';
     case ExecutingRemoteChanges = 'executing_remote_changes';
     case WritingUpdatedLocalMetadata = 'writing_updated_local_metadata';
+    case Warning = 'warning';
     case Create = 'create';
     case Update = 'update';
     case SyncShelfMembership = 'sync_shelf_membership';

@@ -2,6 +2,8 @@
 
 namespace Kugarocks\BookStackContentSync\ContentSync\Push;
 
+use Kugarocks\BookStackContentSync\ContentSync\Shared\ContentHashBuilder;
+use Kugarocks\BookStackContentSync\ContentSync\Shared\ContentHashData;
 use Kugarocks\BookStackContentSync\ContentSync\Shared\NodeType;
 use InvalidArgumentException;
 
@@ -53,6 +55,33 @@ readonly class LocalNode
         }
 
         return ltrim($this->path, '/');
+    }
+
+    public function withSlug(string $slug, ContentHashBuilder $contentHashBuilder): self
+    {
+        if ($slug === $this->slug) {
+            return $this;
+        }
+
+        return new self(
+            type: $this->type,
+            path: $this->path,
+            entityId: $this->entityId,
+            order: $this->order,
+            contentHash: $contentHashBuilder->build(new ContentHashData(
+                type: $this->type,
+                name: $this->name,
+                slug: $slug,
+                description: $this->description,
+                markdown: $this->markdown,
+                tags: $this->tags,
+            )),
+            name: $this->name,
+            slug: $slug,
+            description: $this->description,
+            markdown: $this->markdown,
+            tags: $this->tags,
+        );
     }
 
 }

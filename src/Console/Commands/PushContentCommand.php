@@ -84,6 +84,12 @@ class PushContentCommand extends Command
             $this->newLine();
         }
 
+        if ($event->stage === PushProgressStage::Warning) {
+            $this->line(sprintf('<fg=yellow;options=bold>%s</> %s', '!', $event->message ?? 'Warning'));
+
+            return;
+        }
+
         if (in_array($event->stage, [PushProgressStage::Create, PushProgressStage::Update, PushProgressStage::Trash], true)) {
             $type = $event->type?->value ?? 'unknown';
             $progress = "{$event->current}/{$event->total}";

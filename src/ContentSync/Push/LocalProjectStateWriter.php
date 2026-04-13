@@ -7,6 +7,7 @@ use Kugarocks\BookStackContentSync\ContentSync\Pull\PageFileBuilder;
 use Kugarocks\BookStackContentSync\ContentSync\Pull\RemoteNode;
 use Kugarocks\BookStackContentSync\ContentSync\Pull\RemoteTag;
 use Kugarocks\BookStackContentSync\ContentSync\Pull\SnapshotJsonBuilder;
+use Kugarocks\BookStackContentSync\ContentSync\Shared\ContentHashBuilder;
 use Kugarocks\BookStackContentSync\ContentSync\Shared\NodeType;
 use Kugarocks\BookStackContentSync\ContentSync\Shared\SnapshotParent;
 use Kugarocks\BookStackContentSync\ContentSync\Shared\SnapshotNode;
@@ -19,17 +20,25 @@ class LocalProjectStateWriter
         protected PageFileBuilder $pageFileBuilder,
         protected SnapshotJsonBuilder $snapshotJsonBuilder,
         protected LocalSnapshotProjector $localSnapshotProjector,
+        protected ContentHashBuilder $contentHashBuilder,
     ) {
     }
 
     /**
      * @param LocalNode[] $localNodes
      * @param array<string, int> $assignedEntityIdsByPath
+     * @param array<string, string> $resolvedSlugsByPath
      * @return SnapshotNode[]
      */
-    public function write(string $projectRootPath, string $contentPath, array $localNodes, array $assignedEntityIdsByPath): array
+    public function write(string $projectRootPath, string $contentPath, array $localNodes, array $assignedEntityIdsByPath, array $resolvedSlugsByPath = []): array
     {
-        foreach ($localNodes as $localNode) {
+        $effectiveLocalNodes = array_map(function (LocalNode $localNode) use ($resolvedSlugsByPath): LocalNode {
+            $resolvedSlug = $resolvedSlugsByPath[$localNode->path] ?? $localNode->slug;
+
+            return $localNode->withSlug($resolvedSlug, $this->contentHashBuilder);
+        }, $localNodes);
+
+        foreach ($effectiveLocalNodes as $localNode) {
             if (!isset($assignedEntityIdsByPath[$localNode->path])) {
                 continue;
             }
@@ -47,7 +56,7 @@ class LocalProjectStateWriter
             file_put_contents($absolutePath, $contents);
         }
 
-        $snapshotNodes = $this->localSnapshotProjector->projectPersistedSnapshot($localNodes, $contentPath, $assignedEntityIdsByPath);
+        $snapshotNodes = $this->localSnapshotProjector->projectPersistedSnapshot($effectiveLocalNodes, $contentPath, $assignedEntityIdsByPath);
 
         file_put_contents(
             rtrim($projectRootPath, '/') . '/snapshot.json',

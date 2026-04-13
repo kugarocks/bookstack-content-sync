@@ -214,6 +214,7 @@ MD);
                     new PageFileBuilder(new TagNormalizer()),
                     new SnapshotJsonBuilder(),
                     $localSnapshotProjector,
+                    new ContentHashBuilder(new TagNormalizer()),
                 ),
                 $localSnapshotProjector,
             ),

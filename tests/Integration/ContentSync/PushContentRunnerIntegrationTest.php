@@ -547,7 +547,7 @@ MD);
         $this->deleteDirectory($root);
     }
 
-    public function test_runner_aborts_when_bookstack_returns_different_slug_than_local_value(): void
+    public function test_runner_accepts_slug_mismatch_and_preserves_local_slug(): void
     {
         $root = $this->createTempDirectory();
         $this->writeSyncConfig($root);
@@ -581,14 +581,19 @@ YAML);
             ]],
         ], JSON_PRETTY_PRINT));
 
-        $originalBookMeta = file_get_contents($root . '/content/01-guides/01-laravel/_meta.yml');
-        $originalSnapshot = file_get_contents($root . '/snapshot.json');
-
         $http = new HttpRequestService();
         $history = $http->mockClient([
             new Response(200, ['Content-Type' => 'application/json'], json_encode([
                 'id' => 9,
                 'slug' => 'laravel-remote',
+            ])),
+            new Response(200, ['Content-Type' => 'application/json'], json_encode([
+                'id' => 1,
+                'slug' => 'guides',
+            ])),
+            new Response(200, ['Content-Type' => 'application/json'], json_encode([
+                'id' => 1,
+                'slug' => 'guides',
             ])),
         ], false);
 
@@ -597,17 +602,21 @@ YAML);
         $this->runWithEnv([
             'BOOKSTACK_API_TOKEN_ID' => 'token-id',
             'BOOKSTACK_API_TOKEN_SECRET' => 'token-secret',
-        ], function () use ($runner, $root, $history, $originalBookMeta, $originalSnapshot): void {
-            $this->expectException(\InvalidArgumentException::class);
-            $this->expectExceptionMessage('Push slug validation failed');
+        ], function () use ($runner, $root, $history): void {
+            $result = $runner->run($root);
 
-            try {
-                $runner->run($root);
-            } finally {
-                $this->assertSame('/api/books', $history->requestAt(0)?->getUri()->getPath());
-                $this->assertSame($originalBookMeta, file_get_contents($root . '/content/01-guides/01-laravel/_meta.yml'));
-                $this->assertSame($originalSnapshot, file_get_contents($root . '/snapshot.json'));
-            }
+            $this->assertCount(2, $result->plan->items());
+            $this->assertSame('/api/books', $history->requestAt(0)?->getUri()->getPath());
+
+            $updatedBookMeta = file_get_contents($root . '/content/01-guides/01-laravel/_meta.yml');
+            $this->assertNotFalse($updatedBookMeta);
+            $this->assertStringContainsString('slug: "laravel-remote"', $updatedBookMeta);
+            $this->assertStringContainsString('entity_id: 9', $updatedBookMeta);
+            $this->assertStringNotContainsString('slug: "laravel-local"', $updatedBookMeta);
+
+            $snapshot = json_decode(file_get_contents($root . '/snapshot.json'), true, 512, JSON_THROW_ON_ERROR);
+            $this->assertCount(2, $snapshot['nodes']);
+            $this->assertSame('laravel-remote', $snapshot['nodes'][1]['slug']);
         });
 
         $this->deleteDirectory($root);
@@ -627,6 +636,7 @@ YAML);
                     new PageFileBuilder(new TagNormalizer()),
                     new SnapshotJsonBuilder(),
                     $localSnapshotProjector,
+                    new ContentHashBuilder(new TagNormalizer()),
                 ),
                 $localSnapshotProjector,
             ),

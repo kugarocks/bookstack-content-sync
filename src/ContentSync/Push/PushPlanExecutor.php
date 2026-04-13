@@ -34,6 +34,7 @@ class PushPlanExecutor
         }
 
         $assignedEntityIdsByPath = [];
+        $resolvedSlugsByPath = [];
 
         $createItems = $this->sortCreateItems($plan->itemsForAction(PlanAction::Create));
         foreach ($createItems as $index => $item) {
@@ -53,7 +54,9 @@ class PushPlanExecutor
                 $tokenSecret,
                 $this->buildCreatePayload($localNode, $localNodesByPath, $assignedEntityIdsByPath),
             );
-            $this->assertResponseMatchesLocalNode($response, $localNode);
+            $responseSlug = $this->requireResponseSlug($response, $localNode);
+            $resolvedSlugsByPath[$localNode->path] = $responseSlug;
+            $this->reportSlugMismatch($localNode, $responseSlug, $progress);
 
             $assignedEntityIdsByPath[$localNode->path] = $this->requireResponseId($response, $localNode->path);
         }
@@ -99,7 +102,9 @@ class PushPlanExecutor
                 $tokenSecret,
                 $payload,
             );
-            $this->assertResponseMatchesLocalNode($response, $localNode);
+            $responseSlug = $this->requireResponseSlug($response, $localNode);
+            $resolvedSlugsByPath[$localNode->path] = $responseSlug;
+            $this->reportSlugMismatch($localNode, $responseSlug, $progress);
         }
 
         $shelfItems = $this->sortShelfSyncItems($plan->itemsForAction(PlanAction::SyncMembership));
@@ -151,7 +156,7 @@ class PushPlanExecutor
         if ($progress !== null) {
             $progress(PushProgressEvent::stage(PushProgressStage::WritingUpdatedLocalMetadata));
         }
-        $writtenSnapshotNodes = $this->stateWriter->write($projectRootPath, $config->contentPath, $localNodes, $assignedEntityIdsByPath);
+        $writtenSnapshotNodes = $this->stateWriter->write($projectRootPath, $config->contentPath, $localNodes, $assignedEntityIdsByPath, $resolvedSlugsByPath);
 
         return $this->localSnapshotProjector->diff($snapshotNodes, $writtenSnapshotNodes);
     }
@@ -365,18 +370,28 @@ class PushPlanExecutor
         return $id;
     }
 
-    protected function assertResponseMatchesLocalNode(array $response, LocalNode $localNode): void
+    protected function requireResponseSlug(array $response, LocalNode $localNode): string
     {
         $responseSlug = Arr::get($response, 'slug');
         if (!is_string($responseSlug) || trim($responseSlug) === '') {
             throw new InvalidArgumentException("BookStack API response for [{$localNode->path}] is missing string [slug]");
         }
 
-        if ($responseSlug !== $localNode->slug) {
-            throw new InvalidArgumentException(
-                "Push slug validation failed for [{$localNode->path}]: expected [{$localNode->slug}] but BookStack returned [{$responseSlug}]"
-            );
+        return $responseSlug;
+    }
+
+    protected function reportSlugMismatch(LocalNode $localNode, string $responseSlug, ?callable $progress): void
+    {
+        if ($responseSlug === $localNode->slug || $progress === null) {
+            return;
         }
+
+        $progress(PushProgressEvent::warning(sprintf(
+            'BookStack did not preserve requested slug for [%s]. Requested [%s], remote returned [%s]. This host likely does not support slug updates via API; local files were updated to match the remote slug.',
+            $localNode->path,
+            $localNode->slug,
+            $responseSlug
+        )));
     }
 
     /**

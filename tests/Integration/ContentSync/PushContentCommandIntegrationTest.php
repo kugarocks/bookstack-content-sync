@@ -486,7 +486,7 @@ YAML);
         $this->deleteDirectory($root);
     }
 
-    public function test_command_reports_slug_validation_failure_during_execute(): void
+    public function test_command_accepts_slug_mismatch_during_execute(): void
     {
         $root = sys_get_temp_dir() . '/push-content-command-execute-slug-mismatch-' . bin2hex(random_bytes(8));
         mkdir($root . '/content/01-guides/01-laravel', 0777, true);
@@ -533,16 +533,30 @@ YAML);
                 'id' => 9,
                 'slug' => 'laravel-remote',
             ])),
+            new Response(200, ['Content-Type' => 'application/json'], json_encode([
+                'id' => 1,
+                'slug' => 'guides',
+            ])),
+            new Response(200, ['Content-Type' => 'application/json'], json_encode([
+                'id' => 1,
+                'slug' => 'guides',
+            ])),
         ], false);
 
         $tester = $this->commandTester($http);
         $exitCode = $this->executeWithApiEnv($tester, ['projectPath' => $root, '--execute' => true]);
 
-        $this->assertSame(1, $exitCode);
-        $this->assertStringContainsString('Push failed.', $tester->getDisplay());
-        $this->assertStringContainsString('Push slug validation failed', $tester->getDisplay());
-        $this->assertStringContainsString('laravel-local', $tester->getDisplay());
-        $this->assertStringContainsString('laravel-remote', $tester->getDisplay());
+        $this->assertSame(0, $exitCode);
+        $this->assertStringContainsString('BookStack did not preserve requested slug', $tester->getDisplay());
+        $this->assertStringContainsString('does not support slug updates via API', $tester->getDisplay());
+        $this->assertStringContainsString('Push complete.', $tester->getDisplay());
+        $this->assertStringNotContainsString('Push failed.', $tester->getDisplay());
+        $this->assertStringNotContainsString('Push slug validation failed', $tester->getDisplay());
+
+        $updatedBookMeta = file_get_contents($root . '/content/01-guides/01-laravel/_meta.yml');
+        $this->assertNotFalse($updatedBookMeta);
+        $this->assertStringContainsString('slug: "laravel-remote"', $updatedBookMeta);
+        $this->assertStringNotContainsString('slug: "laravel-local"', $updatedBookMeta);
 
         $this->deleteDirectory($root);
     }
@@ -568,6 +582,7 @@ YAML);
                     new PageFileBuilder(new TagNormalizer()),
                     new SnapshotJsonBuilder(),
                     $localSnapshotProjector,
+                    new ContentHashBuilder(new TagNormalizer()),
                 ),
                 $localSnapshotProjector,
             ),
