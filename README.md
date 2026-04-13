@@ -24,11 +24,9 @@ Verified in a local BookStack host environment:
 
 ## Requirements
 
-- PHP 8.2+
-- BookStack 26.03+
-- A BookStack host application running Laravel 12
+- BookStack `>=26.03`
 
-BookStack slug behavior:
+## Slug Behavior
 
 - Official BookStack does not currently guarantee custom slug preservation for content entities when they are created or updated through the API.
 - A host that includes [the BookStack custom slug support change](https://github.com/kugarocks/BookStack/commit/e6c75b4d13dab676424461c210b14f730c2a6ad3) adds custom slug support for those content entity APIs.
