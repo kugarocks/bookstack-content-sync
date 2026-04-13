@@ -1,6 +1,6 @@
 # bookstack-content-sync
 
-External Composer extension for running BookStack content sync commands from a BookStack host application.
+External Composer extension for a pull-edit-push BookStack content workflow: pull content from a BookStack host application into a local directory, make local changes, then push those changes back to BookStack.
 
 ## Current status
 
