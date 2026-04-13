@@ -8,13 +8,73 @@ use RuntimeException;
 
 class HostVersionGuardTest extends TestCase
 {
-    public function test_accepts_supported_release_versions(): void
+    public function test_prefers_bookstack_app_version_when_available(): void
     {
         $guard = new class extends HostVersionGuard
         {
-            public function detectVersion(): ?string
+            protected function detectAppVersion(): ?string
             {
                 return 'v26.03.1';
+            }
+
+            protected function detectVersionFileVersion(): ?string
+            {
+                return 'v26.02.9';
+            }
+
+            protected function detectComposerRootVersion(): ?string
+            {
+                return 'dev-sync';
+            }
+        };
+
+        $guard->ensureSupportedVersion();
+
+        $this->addToAssertionCount(1);
+    }
+
+    public function test_uses_version_file_when_app_version_is_unavailable(): void
+    {
+        $guard = new class extends HostVersionGuard
+        {
+            protected function detectAppVersion(): ?string
+            {
+                return null;
+            }
+
+            protected function detectVersionFileVersion(): ?string
+            {
+                return 'v26.03.3';
+            }
+
+            protected function detectComposerRootVersion(): ?string
+            {
+                return 'dev-sync';
+            }
+        };
+
+        $guard->ensureSupportedVersion();
+
+        $this->addToAssertionCount(1);
+    }
+
+    public function test_falls_back_to_composer_root_version_when_other_sources_are_unavailable(): void
+    {
+        $guard = new class extends HostVersionGuard
+        {
+            protected function detectAppVersion(): ?string
+            {
+                return null;
+            }
+
+            protected function detectVersionFileVersion(): ?string
+            {
+                return null;
+            }
+
+            protected function detectComposerRootVersion(): ?string
+            {
+                return 'v26.03.2';
             }
         };
 

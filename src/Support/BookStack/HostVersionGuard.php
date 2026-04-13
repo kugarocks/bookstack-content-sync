@@ -31,19 +31,17 @@ class HostVersionGuard
 
     public function detectVersion(): ?string
     {
-        if (!class_exists(InstalledVersions::class)) {
-            return null;
+        $appVersion = $this->detectAppVersion();
+        if ($appVersion !== null) {
+            return $appVersion;
         }
 
-        $rootPackage = InstalledVersions::getRootPackage();
-
-        if (($rootPackage['name'] ?? null) !== 'bookstackapp/bookstack') {
-            return null;
+        $versionFileVersion = $this->detectVersionFileVersion();
+        if ($versionFileVersion !== null) {
+            return $versionFileVersion;
         }
 
-        $version = $rootPackage['pretty_version'] ?? $rootPackage['version'] ?? null;
-
-        return is_string($version) && $version !== '' ? $version : null;
+        return $this->detectComposerRootVersion();
     }
 
     public function isSupported(string $version): bool
@@ -65,5 +63,54 @@ class HostVersionGuard
         }
 
         return $version;
+    }
+
+    protected function detectAppVersion(): ?string
+    {
+        if (!class_exists(\BookStack\App\AppVersion::class)) {
+            return null;
+        }
+
+        $version = \BookStack\App\AppVersion::get();
+
+        return is_string($version) && trim($version) !== '' ? trim($version) : null;
+    }
+
+    protected function detectVersionFileVersion(): ?string
+    {
+        $versionFile = $this->resolveVersionFilePath();
+        if ($versionFile === null || !is_file($versionFile) || !is_readable($versionFile)) {
+            return null;
+        }
+
+        $version = trim((string) file_get_contents($versionFile));
+
+        return $version !== '' ? $version : null;
+    }
+
+    protected function resolveVersionFilePath(): ?string
+    {
+        if (function_exists('base_path')) {
+            return base_path('version');
+        }
+
+        return null;
+    }
+
+    protected function detectComposerRootVersion(): ?string
+    {
+        if (!class_exists(InstalledVersions::class)) {
+            return null;
+        }
+
+        $rootPackage = InstalledVersions::getRootPackage();
+
+        if (($rootPackage['name'] ?? null) !== 'bookstackapp/bookstack') {
+            return null;
+        }
+
+        $version = $rootPackage['pretty_version'] ?? $rootPackage['version'] ?? null;
+
+        return is_string($version) && $version !== '' ? $version : null;
     }
 }
