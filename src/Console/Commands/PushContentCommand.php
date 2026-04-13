@@ -3,9 +3,11 @@
 namespace Kugarocks\BookStackContentSync\Console\Commands;
 
 use Kugarocks\BookStackContentSync\ContentSync\Push\PlanAction;
+use Kugarocks\BookStackContentSync\ContentSync\Push\LocalSnapshotChange;
 use Kugarocks\BookStackContentSync\ContentSync\Push\PushContentRunner;
 use Kugarocks\BookStackContentSync\ContentSync\Push\PushPlanRunner;
 use Kugarocks\BookStackContentSync\ContentSync\Push\PushPlanSummary;
+use Kugarocks\BookStackContentSync\ContentSync\Push\PushRunResult;
 use Kugarocks\BookStackContentSync\ContentSync\Shared\NodeType;
 use Illuminate\Console\Command;
 use Throwable;
@@ -39,15 +41,12 @@ class PushContentCommand extends Command
         try {
             $this->newLine();
             $this->renderStage($execute ? 'Starting push' : 'Starting push plan', 'info');
-            $plan = $execute
+            $result = $execute
                 ? $this->pushContentRunner->run(
                     $projectPath,
                     $progressRenderer,
-                    function ($builtPlan) use (&$hasRemoteSemanticChanges, $execute): void {
-                        $hasRemoteSemanticChanges = $this->hasRemoteSemanticChanges($builtPlan);
-                        if (!$execute || !$hasRemoteSemanticChanges) {
-                            $this->renderPlannedOperations($builtPlan);
-                        }
+                    function ($plan) use (&$hasRemoteSemanticChanges): void {
+                        $hasRemoteSemanticChanges = $this->hasRemoteSemanticChanges($plan);
                     },
                 )
                 : $this->runner->run($projectPath, $progressRenderer);
@@ -59,16 +58,16 @@ class PushContentCommand extends Command
             return self::FAILURE;
         }
 
-        if (!$execute) {
-            $hasRemoteSemanticChanges = $this->hasRemoteSemanticChanges($plan);
-            $this->renderPlannedOperations($plan);
-        }
+        $plan = $result->plan;
+        $hasRemoteSemanticChanges = $this->hasRemoteSemanticChanges($plan);
 
         if (!$hasRemoteSemanticChanges) {
+            $this->renderNoRemoteChangesResult($result);
             $this->finishOutput();
             return self::SUCCESS;
         }
 
+        $this->renderPlannedOperations($plan);
         $summary = $this->buildDisplaySummary($plan);
         $this->renderSummaryTable(count($plan->items()), $summary);
         $this->newLine();
@@ -231,6 +230,56 @@ class PushContentCommand extends Command
                     $type,
                     $path,
                     $name
+                ));
+            }
+        }
+    }
+
+    /**
+     */
+    protected function renderNoRemoteChangesResult(PushRunResult $result): void
+    {
+        $this->newLine();
+
+        if ($result->localSnapshotChanges === []) {
+            $this->line('<fg=green>No changes required</>');
+            return;
+        }
+
+        $this->line('<fg=green>No remote API changes required</>');
+        $this->renderLocalSnapshotChanges($result->localSnapshotChanges);
+    }
+
+    /**
+     * @param LocalSnapshotChange[] $localSnapshotChanges
+     */
+    protected function renderLocalSnapshotChanges(array $localSnapshotChanges): void
+    {
+        usort($localSnapshotChanges, fn (LocalSnapshotChange $a, LocalSnapshotChange $b): int => $a->path <=> $b->path);
+
+        $this->newLine();
+        $this->line('<fg=white;options=bold>Local Snapshot Updates</>');
+
+        foreach ($localSnapshotChanges as $change) {
+            $action = $change->action;
+            $actionColor = $this->summaryColor($action === 'delete' ? 'trash' : ($action === 'create' ? 'create' : 'update'));
+            $actionSymbol = $action === 'delete' ? 'x' : ($action === 'create' ? '+' : '~');
+
+            $this->line(sprintf(
+                '  <fg=%s;options=bold>%s</> <fg=cyan>%-' . $this->plannedTypeWidth() . 's</> <fg=white>%s</> <fg=default>(%s)</>',
+                $actionColor,
+                $actionSymbol,
+                $change->type->value,
+                $change->path,
+                $change->name
+            ));
+
+            foreach ($change->fields as $fieldChange) {
+                $this->line(sprintf(
+                    '    <fg=default>%s:</> <fg=red>%s</> <fg=default>-></> <fg=green>%s</>',
+                    $fieldChange->field,
+                    $fieldChange->before,
+                    $fieldChange->after
                 ));
             }
         }

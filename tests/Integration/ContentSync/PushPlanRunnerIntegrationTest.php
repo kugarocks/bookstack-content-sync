@@ -6,6 +6,7 @@ use Kugarocks\BookStackContentSync\ContentSync\Pull\SyncConfigLoader;
 use Kugarocks\BookStackContentSync\ContentSync\Push\ContentDiffer;
 use Kugarocks\BookStackContentSync\ContentSync\Push\LocalContentScanner;
 use Kugarocks\BookStackContentSync\ContentSync\Push\LocalFileParser;
+use Kugarocks\BookStackContentSync\ContentSync\Push\LocalSnapshotProjector;
 use Kugarocks\BookStackContentSync\ContentSync\Push\PlanAction;
 use Kugarocks\BookStackContentSync\ContentSync\Push\ProjectStructureValidator;
 use Kugarocks\BookStackContentSync\ContentSync\Push\PushPlanBuilder;
@@ -99,9 +100,10 @@ MD);
                 new ProjectStructureValidator(),
             ),
             new PushPlanBuilder(new SnapshotMatcher(), new StructureDiffer(), new ContentDiffer()),
+            new LocalSnapshotProjector(),
         );
 
-        $plan = $runner->run($root);
+        $plan = $runner->run($root)->plan;
 
         $this->assertCount(4, $plan->items());
         $this->assertCount(1, $plan->itemsForAction(PlanAction::Create));
@@ -208,9 +210,10 @@ YAML);
                 new ProjectStructureValidator(),
             ),
             new PushPlanBuilder(new SnapshotMatcher(), new StructureDiffer(), new ContentDiffer()),
+            new LocalSnapshotProjector(),
         );
 
-        $plan = $runner->run($root);
+        $plan = $runner->run($root)->plan;
 
         $this->assertCount(2, $plan->itemsForAction(PlanAction::SyncMembership));
         $this->assertCount(1, $plan->itemsForAction(PlanAction::Create));

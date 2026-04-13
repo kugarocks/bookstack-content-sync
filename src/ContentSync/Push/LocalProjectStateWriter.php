@@ -18,14 +18,16 @@ class LocalProjectStateWriter
         protected MetaFileBuilder $metaFileBuilder,
         protected PageFileBuilder $pageFileBuilder,
         protected SnapshotJsonBuilder $snapshotJsonBuilder,
+        protected LocalSnapshotProjector $localSnapshotProjector,
     ) {
     }
 
     /**
      * @param LocalNode[] $localNodes
      * @param array<string, int> $assignedEntityIdsByPath
+     * @return SnapshotNode[]
      */
-    public function write(string $projectRootPath, string $contentPath, array $localNodes, array $assignedEntityIdsByPath): void
+    public function write(string $projectRootPath, string $contentPath, array $localNodes, array $assignedEntityIdsByPath): array
     {
         foreach ($localNodes as $localNode) {
             if (!isset($assignedEntityIdsByPath[$localNode->path])) {
@@ -45,36 +47,14 @@ class LocalProjectStateWriter
             file_put_contents($absolutePath, $contents);
         }
 
-        $localNodesByPath = [];
-        foreach ($localNodes as $localNode) {
-            $localNodesByPath[$localNode->path] = $localNode;
-        }
-
-        $snapshotNodes = array_map(function (LocalNode $localNode) use ($assignedEntityIdsByPath, $localNodesByPath, $contentPath): SnapshotNode {
-            $entityId = $assignedEntityIdsByPath[$localNode->path] ?? $localNode->entityId;
-            if ($entityId === null) {
-                throw new InvalidArgumentException("Cannot write snapshot for local node [{$localNode->path}] without entity_id");
-            }
-
-            $parentNode = $localNodesByPath[$localNode->parentPath()] ?? null;
-            $parentEntityId = $parentNode === null ? null : ($assignedEntityIdsByPath[$parentNode->path] ?? $parentNode->entityId);
-
-            return new SnapshotNode(
-                type: $localNode->type,
-                entityId: $entityId,
-                file: $localNode->relativePath($contentPath),
-                position: $localNode->order,
-                contentHash: $localNode->contentHash,
-                parent: $parentNode === null || $parentEntityId === null ? null : new SnapshotParent($parentNode->type, $parentEntityId),
-                slug: $localNode->slug,
-                name: $localNode->name,
-            );
-        }, $localNodes);
+        $snapshotNodes = $this->localSnapshotProjector->project($localNodes, $contentPath, $assignedEntityIdsByPath);
 
         file_put_contents(
             rtrim($projectRootPath, '/') . '/snapshot.json',
             $this->snapshotJsonBuilder->build($snapshotNodes),
         );
+
+        return $snapshotNodes;
     }
 
     protected function toRemoteNode(LocalNode $localNode, int $entityId): RemoteNode

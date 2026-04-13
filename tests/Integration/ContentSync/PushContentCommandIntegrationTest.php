@@ -13,6 +13,7 @@ use Kugarocks\BookStackContentSync\ContentSync\Push\BookStackApiClient;
 use Kugarocks\BookStackContentSync\ContentSync\Push\LocalContentScanner;
 use Kugarocks\BookStackContentSync\ContentSync\Push\LocalFileParser;
 use Kugarocks\BookStackContentSync\ContentSync\Push\LocalProjectStateWriter;
+use Kugarocks\BookStackContentSync\ContentSync\Push\LocalSnapshotProjector;
 use Kugarocks\BookStackContentSync\ContentSync\Push\ProjectStructureValidator;
 use Kugarocks\BookStackContentSync\ContentSync\Push\PushContentRunner;
 use Kugarocks\BookStackContentSync\ContentSync\Push\PushPlanBuilder;
@@ -220,10 +221,10 @@ YAML);
         $exitCode = $tester->execute(['projectPath' => $root]);
 
         $this->assertSame(0, $exitCode);
-        $this->assertStringContainsString('No remote changes required', $tester->getDisplay());
-        $this->assertStringNotContainsString('Planned changes', $tester->getDisplay());
-        $this->assertStringNotContainsString('RENAME', $tester->getDisplay());
-        $this->assertStringNotContainsString('UPDATE', $tester->getDisplay());
+        $this->assertStringContainsString('No remote API changes required', $tester->getDisplay());
+        $this->assertStringContainsString('Local Snapshot Updates', $tester->getDisplay());
+        $this->assertStringContainsString('01-shelf-b', $tester->getDisplay());
+        $this->assertStringContainsString('02-shelf-b', $tester->getDisplay());
         $this->assertStringNotContainsString('| ACTION | COUNT |', $tester->getDisplay());
 
         $this->deleteDirectory($root);
@@ -304,12 +305,128 @@ YAML);
 
         $this->assertSame(0, $exitCode);
         $this->assertStringContainsString('Starting push', $tester->getDisplay());
-        $this->assertStringContainsString('No remote changes required', $tester->getDisplay());
+        $this->assertStringContainsString('No changes required', $tester->getDisplay());
         $this->assertStringNotContainsString('Executing remote changes', $tester->getDisplay());
         $this->assertStringNotContainsString('Syncing shelf membership', $tester->getDisplay());
         $this->assertStringNotContainsString('Writing updated local metadata', $tester->getDisplay());
+        $this->assertStringNotContainsString('Local Snapshot Updates', $tester->getDisplay());
         $this->assertStringNotContainsString('Push complete.', $tester->getDisplay());
         $this->assertSame(0, $history->requestCount());
+
+        $this->deleteDirectory($root);
+    }
+
+    public function test_command_reports_local_snapshot_updates_when_execute_has_no_remote_changes(): void
+    {
+        $root = sys_get_temp_dir() . '/push-content-command-execute-local-snapshot-' . bin2hex(random_bytes(8));
+        mkdir($root . '/content/02-shelf-b/01-book-b1', 0777, true);
+        file_put_contents($root . '/sync.json', json_encode([
+            'version' => 1,
+            'app_url' => 'https://docs.example.com',
+            'content_path' => 'content',
+            'env_vars' => [
+                'token_id' => 'BOOKSTACK_API_TOKEN_ID',
+                'token_secret' => 'BOOKSTACK_API_TOKEN_SECRET',
+            ],
+        ], JSON_PRETTY_PRINT));
+        file_put_contents($root . '/content/02-shelf-b/_meta.yml', <<<YAML
+type: "shelf"
+title: "Shelf B"
+slug: "shelf-b"
+desc: ""
+tags: []
+entity_id: 2
+YAML);
+        file_put_contents($root . '/content/02-shelf-b/01-book-b1/_meta.yml', <<<YAML
+type: "book"
+title: "Book B1"
+slug: "book-b1"
+desc: ""
+tags: []
+entity_id: 5
+YAML);
+
+        $scanner = new LocalContentScanner(new LocalFileParser(new ContentHashBuilder(new TagNormalizer())));
+        $localNodes = $scanner->scan($root, 'content');
+        $hashes = [];
+        foreach ($localNodes as $localNode) {
+            $hashes[$localNode->path] = $localNode->contentHash;
+        }
+        file_put_contents($root . '/snapshot.json', json_encode([
+            'version' => 2,
+            'nodes' => [
+                [
+                    'file' => '01-shelf-b',
+                    'type' => 'shelf',
+                    'entity_id' => 2,
+                    'position' => 1,
+                    'slug' => 'shelf-b',
+                    'name' => 'Shelf B',
+                    'content_hash' => $hashes['content/02-shelf-b'],
+                ],
+                [
+                    'file' => '01-shelf-b/01-book-b1',
+                    'type' => 'book',
+                    'entity_id' => 5,
+                    'position' => 1,
+                    'slug' => 'book-b1',
+                    'name' => 'Book B1',
+                    'content_hash' => $hashes['content/02-shelf-b/01-book-b1'],
+                    'parent' => [
+                        'entity_id' => 2,
+                        'type' => 'shelf',
+                    ],
+                ],
+            ],
+        ], JSON_PRETTY_PRINT));
+
+        $http = new HttpRequestService();
+        $history = $http->mockClient([], false);
+
+        $command = new PushContentCommand($this->runner(), $this->pushRunner($http), new PushPlanSummary());
+        $command->setLaravel($this->consoleContainer());
+        $tester = new CommandTester($command);
+
+        $originalId = $_SERVER['BOOKSTACK_API_TOKEN_ID'] ?? getenv('BOOKSTACK_API_TOKEN_ID') ?: null;
+        $originalSecret = $_SERVER['BOOKSTACK_API_TOKEN_SECRET'] ?? getenv('BOOKSTACK_API_TOKEN_SECRET') ?: null;
+        $_SERVER['BOOKSTACK_API_TOKEN_ID'] = 'token-id';
+        $_SERVER['BOOKSTACK_API_TOKEN_SECRET'] = 'token-secret';
+        putenv('BOOKSTACK_API_TOKEN_ID=token-id');
+        putenv('BOOKSTACK_API_TOKEN_SECRET=token-secret');
+
+        try {
+            $exitCode = $tester->execute(['projectPath' => $root, '--execute' => true]);
+        } finally {
+            if ($originalId === null || $originalId === false) {
+                unset($_SERVER['BOOKSTACK_API_TOKEN_ID']);
+                putenv('BOOKSTACK_API_TOKEN_ID');
+            } else {
+                $_SERVER['BOOKSTACK_API_TOKEN_ID'] = $originalId;
+                putenv('BOOKSTACK_API_TOKEN_ID=' . $originalId);
+            }
+
+            if ($originalSecret === null || $originalSecret === false) {
+                unset($_SERVER['BOOKSTACK_API_TOKEN_SECRET']);
+                putenv('BOOKSTACK_API_TOKEN_SECRET');
+            } else {
+                $_SERVER['BOOKSTACK_API_TOKEN_SECRET'] = $originalSecret;
+                putenv('BOOKSTACK_API_TOKEN_SECRET=' . $originalSecret);
+            }
+        }
+
+        $this->assertSame(0, $exitCode);
+        $this->assertStringContainsString('No remote API changes required', $tester->getDisplay());
+        $this->assertStringContainsString('Local Snapshot Updates', $tester->getDisplay());
+        $this->assertMatchesRegularExpression('/shelf\\s+02-shelf-b \\(Shelf B\\)/', $tester->getDisplay());
+        $this->assertMatchesRegularExpression('/book\\s+02-shelf-b\\/01-book-b1 \\(Book B1\\)/', $tester->getDisplay());
+        $this->assertStringContainsString('file:', $tester->getDisplay());
+        $this->assertStringContainsString('01-shelf-b', $tester->getDisplay());
+        $this->assertStringContainsString('02-shelf-b', $tester->getDisplay());
+        $this->assertSame(0, $history->requestCount());
+
+        $snapshot = json_decode(file_get_contents($root . '/snapshot.json'), true, 512, JSON_THROW_ON_ERROR);
+        $this->assertSame('02-shelf-b', $snapshot['nodes'][0]['file']);
+        $this->assertSame('02-shelf-b/01-book-b1', $snapshot['nodes'][1]['file']);
 
         $this->deleteDirectory($root);
     }
@@ -500,6 +617,7 @@ YAML);
                 new ProjectStructureValidator(),
             ),
             new PushPlanBuilder(new SnapshotMatcher(), new StructureDiffer(), new ContentDiffer()),
+            new LocalSnapshotProjector(),
         );
     }
 
@@ -520,7 +638,9 @@ YAML);
                     new MetaFileBuilder(new TagNormalizer()),
                     new PageFileBuilder(new TagNormalizer()),
                     new SnapshotJsonBuilder(),
+                    new LocalSnapshotProjector(),
                 ),
+                new LocalSnapshotProjector(),
             ),
         );
     }

@@ -11,7 +11,7 @@ class PushContentRunner
     ) {
     }
 
-    public function run(string $projectRootPath, ?callable $progress = null, ?callable $onPlanBuilt = null): PushPlan
+    public function run(string $projectRootPath, ?callable $progress = null, ?callable $onPlanBuilt = null): PushRunResult
     {
         if ($progress !== null) {
             $progress('Loading local project state');
@@ -27,8 +27,14 @@ class PushContentRunner
         if ($progress !== null) {
             $progress('Executing remote changes');
         }
-        $this->executor->execute($projectRootPath, $state->config, $state->localNodes, $plan, $progress);
-
-        return $plan;
+        $localSnapshotChanges = $this->executor->execute(
+            $projectRootPath,
+            $state->config,
+            $state->localNodes,
+            $state->snapshotNodes,
+            $plan,
+            $progress,
+        );
+        return new PushRunResult($plan, $localSnapshotChanges);
     }
 }

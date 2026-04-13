@@ -15,13 +15,23 @@ class PushPlanExecutor
         protected BookStackApiClient $client,
         protected SyncConfigEnvCredentialResolver $credentialResolver,
         protected LocalProjectStateWriter $stateWriter,
+        protected LocalSnapshotProjector $localSnapshotProjector,
     ) {
     }
 
     /**
      * @param LocalNode[] $localNodes
+     * @param SnapshotNode[] $snapshotNodes
+     * @return array<int, array{
+     *     action: string,
+     *     type: NodeType,
+     *     entity_id: int,
+     *     path: string,
+     *     name: string,
+     *     fields: array<int, array{field: string, before: string, after: string}>
+     * }>
      */
-    public function execute(string $projectRootPath, SyncConfig $config, array $localNodes, PushPlan $plan, ?callable $progress = null): void
+    public function execute(string $projectRootPath, SyncConfig $config, array $localNodes, array $snapshotNodes, PushPlan $plan, ?callable $progress = null): array
     {
         ['tokenId' => $tokenId, 'tokenSecret' => $tokenSecret] = $this->credentialResolver->resolve($config);
 
@@ -148,7 +158,9 @@ class PushPlanExecutor
         if ($progress !== null) {
             $progress('Writing updated local metadata');
         }
-        $this->stateWriter->write($projectRootPath, $config->contentPath, $localNodes, $assignedEntityIdsByPath);
+        $writtenSnapshotNodes = $this->stateWriter->write($projectRootPath, $config->contentPath, $localNodes, $assignedEntityIdsByPath);
+
+        return $this->localSnapshotProjector->diff($snapshotNodes, $writtenSnapshotNodes);
     }
 
     /**

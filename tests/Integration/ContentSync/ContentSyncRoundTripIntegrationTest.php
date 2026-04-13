@@ -19,6 +19,7 @@ use Kugarocks\BookStackContentSync\ContentSync\Push\ContentDiffer;
 use Kugarocks\BookStackContentSync\ContentSync\Push\LocalContentScanner;
 use Kugarocks\BookStackContentSync\ContentSync\Push\LocalFileParser;
 use Kugarocks\BookStackContentSync\ContentSync\Push\LocalProjectStateWriter;
+use Kugarocks\BookStackContentSync\ContentSync\Push\LocalSnapshotProjector;
 use Kugarocks\BookStackContentSync\ContentSync\Push\ProjectStructureValidator;
 use Kugarocks\BookStackContentSync\ContentSync\Push\PushContentRunner;
 use Kugarocks\BookStackContentSync\ContentSync\Push\PushPlanBuilder;
@@ -215,7 +216,9 @@ MD);
                     new MetaFileBuilder(new TagNormalizer()),
                     new PageFileBuilder(new TagNormalizer()),
                     new SnapshotJsonBuilder(),
+                    new LocalSnapshotProjector(),
                 ),
+                new LocalSnapshotProjector(),
             ),
         );
     }

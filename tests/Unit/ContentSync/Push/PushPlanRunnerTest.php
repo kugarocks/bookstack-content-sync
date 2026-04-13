@@ -7,6 +7,7 @@ use Kugarocks\BookStackContentSync\ContentSync\Push\PushPlanBuilder;
 use Kugarocks\BookStackContentSync\ContentSync\Push\PushPlanRunner;
 use Kugarocks\BookStackContentSync\ContentSync\Push\PushProjectState;
 use Kugarocks\BookStackContentSync\ContentSync\Push\PushProjectStateLoader;
+use Kugarocks\BookStackContentSync\ContentSync\Push\LocalSnapshotProjector;
 use Kugarocks\BookStackContentSync\ContentSync\Push\SnapshotMatcher;
 use Kugarocks\BookStackContentSync\ContentSync\Push\StructureDiffer;
 use Kugarocks\BookStackContentSync\ContentSync\Push\ContentDiffer;
@@ -32,11 +33,12 @@ class PushPlanRunnerTest extends TestCase
         $runner = new PushPlanRunner(
             $stateLoader,
             new PushPlanBuilder(new SnapshotMatcher(), new StructureDiffer(), new ContentDiffer()),
+            new LocalSnapshotProjector(),
         );
 
-        $plan = $runner->run('/tmp/project');
+        $result = $runner->run('/tmp/project');
 
-        $this->assertInstanceOf(PushPlan::class, $plan);
-        $this->assertCount(1, $plan->items());
+        $this->assertInstanceOf(PushPlan::class, $result->plan);
+        $this->assertCount(1, $result->plan->items());
     }
 }

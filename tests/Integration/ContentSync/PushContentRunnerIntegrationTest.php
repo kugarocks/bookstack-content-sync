@@ -12,6 +12,7 @@ use Kugarocks\BookStackContentSync\ContentSync\Push\ContentDiffer;
 use Kugarocks\BookStackContentSync\ContentSync\Push\LocalContentScanner;
 use Kugarocks\BookStackContentSync\ContentSync\Push\LocalFileParser;
 use Kugarocks\BookStackContentSync\ContentSync\Push\LocalProjectStateWriter;
+use Kugarocks\BookStackContentSync\ContentSync\Push\LocalSnapshotProjector;
 use Kugarocks\BookStackContentSync\ContentSync\Push\ProjectStructureValidator;
 use Kugarocks\BookStackContentSync\ContentSync\Push\PushContentRunner;
 use Kugarocks\BookStackContentSync\ContentSync\Push\PushPlanBuilder;
@@ -144,7 +145,7 @@ MD);
             'BOOKSTACK_API_TOKEN_ID' => 'token-id',
             'BOOKSTACK_API_TOKEN_SECRET' => 'token-secret',
         ], function () use ($runner, $root, $history): void {
-            $plan = $runner->run($root);
+            $plan = $runner->run($root)->plan;
 
             $this->assertCount(6, $plan->items());
             $this->assertSame('/api/chapters', $history->requestAt(0)?->getUri()->getPath());
@@ -628,7 +629,9 @@ YAML);
                     new MetaFileBuilder(new TagNormalizer()),
                     new PageFileBuilder(new TagNormalizer()),
                     new SnapshotJsonBuilder(),
+                    new LocalSnapshotProjector(),
                 ),
+                new LocalSnapshotProjector(),
             ),
         );
     }
