@@ -39,6 +39,7 @@ class PushContentCommand extends Command
         };
 
         try {
+            $this->newLine();
             $this->renderStage($execute ? 'Starting push' : 'Starting push plan', 'info');
             $result = $execute
                 ? $this->pushContentRunner->run(
