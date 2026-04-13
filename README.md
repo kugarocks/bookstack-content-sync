@@ -42,13 +42,13 @@ BookStack slug behavior:
 Once the package is available on Packagist, install it in the BookStack host with:
 
 ```bash
-composer require kugarocks/bookstack-content-sync:^0.1
+composer require kugarocks/bookstack-content-sync:^0.2
 ```
 
 If you want to pin exactly the first public release instead:
 
 ```bash
-composer require kugarocks/bookstack-content-sync:0.1.0
+composer require kugarocks/bookstack-content-sync:0.2.0
 ```
 
 ### Local development installation
@@ -189,4 +189,4 @@ vendor/bin/phpunit tests
 
 Before tagging or publishing a version, use `docs/release/guide.md` for the release checklist, command order, and versioning guidance.
 
-For the current first-release draft text, see `docs/release/notes-v0.1.0.md`.
+For the current first-release draft text, see `docs/release/notes-v0.2.0.md`.
