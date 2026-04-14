@@ -57,6 +57,13 @@ php artisan bookstack:push-content /path/to/content --execute
 
 <img src="https://raw.githubusercontent.com/kugarocks/bookstack-content-sync/main/docs/images/push-execution.png" alt="push-execution" width="580" />
 
+## Snapshot.json
+
+- Sync is one-way: local content is the source of truth for push.
+- `bookstack:push-content` builds the current local state and compares it with the previous `snapshot.json` to determine which remote actions are needed.
+- Renaming a local directory or page file only changes the `file` value stored in `snapshot.json`; it does not change remote identity by itself.
+- A book can belong to only one shelf at a time.
+
 ## Slug Behavior
 
 - Official BookStack does not support custom slug preservation for content entities when they are created or updated through the API.
