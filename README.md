@@ -61,29 +61,22 @@ php artisan bookstack:push-content /path/to/content --execute
 
 This system performs a one-way sync from local content to BookStack by computing state differences and applying them to the remote.
 
-### Sync Model
-
-- Local content is the source of truth; sync is one-way.
-
 ### Push Mechanism
 
+- Sync is one-way: local content is the source of truth.
 - `bookstack:push-content` builds the current local state.
 - It compares this state with the previous `snapshot.json`.
 - Based on the diff, it determines and executes the required remote actions.
 
-### Data Model Constraints
+### Behavior & Constraints
 
-- A book can belong to only one shelf at a time.
-
-### Naming & Ordering
-
-- Prefixes such as `01-xxx`, `02-xxx` are used to define ordering.
-- Items are sorted lexicographically based on these prefixes.
-
-### Renaming Behavior
-
-- Renaming local files or directories only updates the `file` field in `snapshot.json`.
-- It does not affect the identity of the corresponding remote entity.
+- **Data constraint**
+  - A book can belong to only one shelf at a time.
+- **Naming & ordering**
+  - Prefixes such as `01-xxx`, `02-xxx` are used to define ordering.
+  - Items are sorted lexicographically based on these prefixes.
+- **Renaming behavior**
+  - Renaming local files or directories only updates the `file` field in `snapsh
 
 ### Slug Behavior
 
