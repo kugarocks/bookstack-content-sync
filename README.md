@@ -83,7 +83,7 @@ This system performs a one-way sync from local content to BookStack by computing
 
 - Official BookStack does not preserve custom slugs for content entities via the API.
 - Hosts with [custom slug support](https://github.com/kugarocks/BookStack/commit/e6c75b4d13dab676424461c210b14f730c2a6ad3) enable this behavior.
-- If the requested slug is not preserved, `bookstack:push-content --execute` treats the remote slug as the source of truth.
+- If the requested slug is not preserved, `push-content` treats the remote slug as the source of truth.
 - The command emits a warning and rewrites both the local file slug and the `snapshot.json` slug to match the remote value.
 
 ## Installation
