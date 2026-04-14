@@ -57,19 +57,40 @@ php artisan bookstack:push-content /path/to/content --execute
 
 <img src="https://raw.githubusercontent.com/kugarocks/bookstack-content-sync/main/docs/images/push-execution.png" alt="push-execution" width="580" />
 
-## Snapshot.json
+## How it Works
 
-- `bookstack:push-content` builds the current local state and compares it with the previous `snapshot.json` to determine the required remote actions.
-- Sync is one-way: local content is the source of truth for push operations.
+This system performs a one-way sync from local content to BookStack by computing state differences and applying them to the remote.
+
+### Sync Model
+
+- Local content is the source of truth; sync is one-way.
+
+### Push Mechanism
+
+- `bookstack:push-content` builds the current local state.
+- It compares this state with the previous `snapshot.json`.
+- Based on the diff, it determines and executes the required remote actions.
+
+### Data Model Constraints
+
 - A book can belong to only one shelf at a time.
-- Renaming a local directory or page file only updates the `file` field in `snapshot.json`; it does not affect the remote identity.
 
-## Slug Behavior
+### Naming & Ordering
 
-- Official BookStack does not support custom slug preservation for content entities when they are created or updated through the API.
-- A host that includes [the BookStack custom slug support change](https://github.com/kugarocks/BookStack/commit/e6c75b4d13dab676424461c210b14f730c2a6ad3) adds custom slug support for those content entity APIs.
-- When the host still does not preserve the requested slug, `bookstack:push-content --execute` treats the remote slug as the source of truth.
-- The command prints a warning, then rewrites the local file slug and `snapshot.json` slug to the remote value returned by BookStack.
+- Prefixes such as `01-xxx`, `02-xxx` are used to define ordering.
+- Items are sorted lexicographically based on these prefixes.
+
+### Renaming Behavior
+
+- Renaming local files or directories only updates the `file` field in `snapshot.json`.
+- It does not affect the identity of the corresponding remote entity.
+
+### Slug Behavior
+
+- Official BookStack does not preserve custom slugs for content entities when using the API.
+- A host that includes [custom slug support](https://github.com/kugarocks/BookStack/commit/e6c75b4d13dab676424461c210b14f730c2a6ad3) enables this behavior.
+- If the host does not preserve the requested slug, `bookstack:push-content --execute` treats the remote slug as the source of truth.
+- The command prints a warning, then rewrites the local file slug and the `snapshot.json` slug to match the remote value returned by BookStack.
 
 ## Installation
 
