@@ -59,10 +59,10 @@ php artisan bookstack:push-content /path/to/content --execute
 
 ## Snapshot.json
 
-- Sync is one-way: local content is the source of truth for push.
-- `bookstack:push-content` builds the current local state and compares it with the previous `snapshot.json` to determine which remote actions are needed.
-- Renaming a local directory or page file only changes the `file` value stored in `snapshot.json`; it does not change remote identity by itself.
+- `bookstack:push-content` builds the current local state and compares it with the previous `snapshot.json` to determine the required remote actions.
+- Sync is one-way: local content is the source of truth for push operations.
 - A book can belong to only one shelf at a time.
+- Renaming a local directory or page file only updates the `file` field in `snapshot.json`; it does not affect the remote identity.
 
 ## Slug Behavior
 
