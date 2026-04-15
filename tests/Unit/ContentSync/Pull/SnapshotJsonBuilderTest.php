@@ -39,4 +39,24 @@ class SnapshotJsonBuilderTest extends TestCase
         $this->assertSame('01-2026/01-quick-start.md', $data['nodes'][1]['file']);
         $this->assertSame('hash-page', $data['nodes'][1]['content_hash']);
     }
+
+    public function test_preserves_unicode_characters_in_snapshot_json()
+    {
+        $builder = new SnapshotJsonBuilder();
+        $nodes = [
+            PullNodeFactory::snapshotNode(NodeType::Shelf, [
+                'file' => '01-instrument',
+                'entityId' => 1,
+                'position' => 1,
+                'slug' => 'instrument',
+                'name' => '乐器',
+                'contentHash' => 'hash-shelf',
+            ]),
+        ];
+
+        $json = $builder->build($nodes);
+
+        $this->assertStringContainsString('"name": "乐器"', $json);
+        $this->assertStringNotContainsString('\u4e50\u5668', $json);
+    }
 }
