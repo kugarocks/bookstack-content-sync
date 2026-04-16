@@ -8,17 +8,19 @@ SYNC_JSON="sync.json"
 
 usage() {
     local cyan='\033[0;36m'
-    local yellow='\033[0;33m'
+    local yellow='\033[1;33m'
+    local green='\033[0;32m'
     local reset='\033[0m'
 
     printf >&2 "\n"
-    printf >&2 "Usage: bookstack-sync ${cyan}<command>${reset} [options]\n"
+    printf >&2 "${yellow}Usage:${reset}\n"
+    printf >&2 "  ${green}bookstack-sync${reset} ${cyan}<command>${reset} ${green}[options]${reset}\n"
     printf >&2 "\n"
-    printf >&2 "Commands:\n"
+    printf >&2 "${yellow}Commands:${reset}\n"
     printf >&2 "  ${cyan}pull${reset}                             Pull content from BookStack\n"
-    printf >&2 "  ${cyan}push${reset} ${yellow}[--execute]${reset}                 Generate or execute push plan\n"
-    printf >&2 "  ${cyan}init${reset} ${yellow}<content-path>${reset} [options]    Initialize content directory\n"
-    printf >&2 "  ${cyan}config set-bookstack-path${reset} ${yellow}<path>${reset} Persist global BookStack path\n"
+    printf >&2 "  ${cyan}push${reset} ${green}[--execute]${reset}                 Generate or execute push plan\n"
+    printf >&2 "  ${cyan}init${reset} ${green}<content-path>${reset} ${green}[options]${reset}    Initialize content directory\n"
+    printf >&2 "  ${cyan}config set-bookstack-path${reset} ${green}<path>${reset} Persist global BookStack path\n"
     printf >&2 "\n"
 }
 
