@@ -51,9 +51,8 @@ This release has been verified with the following checks:
 ### Push Workflow
 
 - Push plan output may now report `Local Snapshot Updates` even when no remote API changes are required
-- Because the BookStack API does not support empty page content, empty page content now uses a reserved remote transport placeholder:
+- Because the BookStack API does not support empty page content, remote sync uses a reserved transport placeholder while the local empty-page semantic remains `""`:
   `<!-- bookstack-content-sync:empty-page:v1 -->`
-- Local page semantics remain unchanged: an empty page is still `""`
 - Pull decodes that reserved placeholder back to `""` before writing local page files
 - Hashing, diffing, and `snapshot.json` all use the decoded semantic value, so an empty page is treated as an empty string throughout local state
 - If the BookStack host does not preserve requested slugs through the API, push execution now treats the remote slug as the source of truth

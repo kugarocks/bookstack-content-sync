@@ -89,8 +89,7 @@ This system performs a one-way sync from local content to BookStack by computing
 
 ### Empty Page Behavior
 
-- BookStack API does not support empty page content, so empty pages use a reserved transport placeholder during remote sync.
-- Local empty pages remain `""`.
+- Because the BookStack API does not support empty page content, remote sync uses a reserved transport placeholder while local empty pages remain `""`.
 - When pushing an empty page, the remote transport uses the reserved placeholder `<!-- bookstack-content-sync:empty-page:v1 -->`.
 - When pulling, that placeholder is decoded back to `""`, and `snapshot.json` plus content hashing continue to use the decoded empty-string value.
 
