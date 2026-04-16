@@ -18,8 +18,8 @@ class PageFileBuilderTest extends TestCase
             'slug' => 'quick-start',
             'markdown' => "# Heading\n\nBody",
             'tags' => [
-                PullNodeFactory::tag('2026'),
                 PullNodeFactory::tag('series', 'neovim'),
+                PullNodeFactory::tag('2026'),
             ],
         ]);
 
@@ -28,8 +28,7 @@ class PageFileBuilderTest extends TestCase
         $this->assertStringContainsString("---\ntitle: \"Quick Start\"\nslug: \"quick-start\"\n", $contents);
         $this->assertStringNotContainsString('type: "page"', $contents);
         $this->assertStringContainsString('entity_id: 99', $contents);
-        $this->assertStringContainsString('- "2026"', $contents);
-        $this->assertStringContainsString('- "series:neovim"', $contents);
+        $this->assertStringContainsString("tags: \n  - \"series:neovim\"\n  - \"2026\"\n", $contents);
         $this->assertStringContainsString("---\n\n# Heading", $contents);
     }
 

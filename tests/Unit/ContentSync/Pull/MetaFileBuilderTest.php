@@ -18,8 +18,8 @@ class MetaFileBuilderTest extends TestCase
             'slug' => '2026',
             'description' => '',
             'tags' => [
-                PullNodeFactory::tag('2026'),
                 PullNodeFactory::tag('series', 'neovim'),
+                PullNodeFactory::tag('2026'),
             ],
         ]);
 
@@ -30,8 +30,7 @@ class MetaFileBuilderTest extends TestCase
         $this->assertStringContainsString('slug: "2026"', $contents);
         $this->assertStringContainsString('desc: ""', $contents);
         $this->assertStringContainsString('entity_id: 12', $contents);
-        $this->assertStringContainsString('- "2026"', $contents);
-        $this->assertStringContainsString('- "series:neovim"', $contents);
+        $this->assertStringContainsString("tags: \n  - \"series:neovim\"\n  - \"2026\"\n", $contents);
     }
 
     public function test_outputs_empty_tags_as_array()

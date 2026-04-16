@@ -76,6 +76,8 @@ This system performs a one-way sync from local content to BookStack by computing
 - **Naming & ordering**
   - Prefixes such as `01-xxx`, `02-xxx` are used to define ordering.
   - Items are sorted lexicographically based on these prefixes.
+- **Tag ordering**
+  - Tag order is preserved in local files and treated as part of content changes.
 - **Renaming behavior**
   - Renaming local files or directories only updates the `file` field in `snapshot.json`.
   - It does not affect the identity of the corresponding remote entity.

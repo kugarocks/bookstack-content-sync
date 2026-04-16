@@ -70,14 +70,18 @@ title: "Setup"
 slug: "setup"
 desc: "Setup steps"
 tags:
+  - "z-last"
   - "topic:install"
+  - "a-first"
 YAML);
         file_put_contents($root . '/content/01-guides/01-laravel/02-new-chapter/01-first-run.md', <<<MD
 ---
 title: "First Run"
 slug: "first-run"
 tags:
+  - "quick-start"
   - "quickstart"
+  - "blog"
 ---
 
 Boot the app
@@ -170,6 +174,16 @@ MD);
             $this->assertSame('Intro Updated', $updateBody['name']);
             $this->assertSame('intro', $updateBody['slug']);
             $this->assertSame([2], $shelfBody['books']);
+            $this->assertSame([
+                ['name' => 'z-last', 'value' => ''],
+                ['name' => 'topic', 'value' => 'install'],
+                ['name' => 'a-first', 'value' => ''],
+            ], $chapterBody['tags']);
+            $this->assertSame([
+                ['name' => 'quick-start', 'value' => ''],
+                ['name' => 'quickstart', 'value' => ''],
+                ['name' => 'blog', 'value' => ''],
+            ], $pageBody['tags']);
 
             $chapterMeta = file_get_contents($root . '/content/01-guides/01-laravel/02-new-chapter/_meta.yml');
             $pageFile = file_get_contents($root . '/content/01-guides/01-laravel/02-new-chapter/01-first-run.md');
@@ -177,6 +191,8 @@ MD);
 
             $this->assertStringContainsString('entity_id: 30', $chapterMeta);
             $this->assertStringContainsString('entity_id: 31', $pageFile);
+            $this->assertStringContainsString("tags: \n  - \"z-last\"\n  - \"topic:install\"\n  - \"a-first\"\nentity_id: 30", $chapterMeta);
+            $this->assertStringContainsString("tags: \n  - \"quick-start\"\n  - \"quickstart\"\n  - \"blog\"\nentity_id: 31", $pageFile);
             $this->assertCount(5, $snapshot['nodes']);
             $this->assertSame(30, $snapshot['nodes'][3]['entity_id']);
             $this->assertSame(31, $snapshot['nodes'][4]['entity_id']);

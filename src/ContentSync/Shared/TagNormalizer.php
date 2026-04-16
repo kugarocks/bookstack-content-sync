@@ -10,10 +10,6 @@ class TagNormalizer
      */
     public function normalize(array $tags): array
     {
-        usort($tags, function (array $a, array $b): int {
-            return [$a['name'], $a['value']] <=> [$b['name'], $b['value']];
-        });
-
         return $tags;
     }
 }

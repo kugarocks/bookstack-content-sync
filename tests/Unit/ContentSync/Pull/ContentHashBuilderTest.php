@@ -42,4 +42,31 @@ class ContentHashBuilderTest extends TestCase
 
         $this->assertSame($builder->build($empty), $builder->build($placeholder));
     }
+
+    public function test_generates_different_hashes_for_tag_order_changes()
+    {
+        $builder = new ContentHashBuilder(new TagNormalizer());
+        $before = new ContentHashData(
+            type: NodeType::Page,
+            name: 'Quick Start',
+            slug: 'quick-start',
+            markdown: 'Body',
+            tags: [
+                ['name' => 'blog', 'value' => ''],
+                ['name' => '2026', 'value' => ''],
+            ],
+        );
+        $after = new ContentHashData(
+            type: NodeType::Page,
+            name: 'Quick Start',
+            slug: 'quick-start',
+            markdown: 'Body',
+            tags: [
+                ['name' => '2026', 'value' => ''],
+                ['name' => 'blog', 'value' => ''],
+            ],
+        );
+
+        $this->assertNotSame($builder->build($before), $builder->build($after));
+    }
 }
