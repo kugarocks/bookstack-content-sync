@@ -4,20 +4,24 @@ namespace Kugarocks\BookStackContentSync\ContentSync\Push;
 
 use Kugarocks\BookStackContentSync\ContentSync\Pull\SyncConfig;
 use Kugarocks\BookStackContentSync\ContentSync\Pull\SyncConfigEnvCredentialResolver;
-use Kugarocks\BookStackContentSync\ContentSync\Pull\PageFileBuilder;
 use Kugarocks\BookStackContentSync\ContentSync\Shared\NodeType;
+use Kugarocks\BookStackContentSync\ContentSync\Shared\PageMarkdownCodec;
 use Kugarocks\BookStackContentSync\ContentSync\Shared\SnapshotNode;
 use Illuminate\Support\Arr;
 use InvalidArgumentException;
 
 class PushPlanExecutor
 {
+    protected PageMarkdownCodec $pageMarkdownCodec;
+
     public function __construct(
         protected BookStackApiClient $client,
         protected SyncConfigEnvCredentialResolver $credentialResolver,
         protected LocalProjectStateWriter $stateWriter,
         protected LocalSnapshotProjector $localSnapshotProjector,
+        ?PageMarkdownCodec $pageMarkdownCodec = null,
     ) {
+        $this->pageMarkdownCodec = $pageMarkdownCodec ?? new PageMarkdownCodec();
     }
 
     /**
@@ -281,7 +285,7 @@ class PushPlanExecutor
         return [
             'name' => $localNode->name,
             'slug' => $localNode->slug,
-            'markdown' => trim($localNode->markdown) === '' ? PageFileBuilder::EMPTY_PAGE_MARKDOWN_PLACEHOLDER : $localNode->markdown,
+            'markdown' => $this->pageMarkdownCodec->encodeForRemote($localNode->markdown),
             'tags' => $this->mapTags($localNode),
             'priority' => $localNode->order,
         ];

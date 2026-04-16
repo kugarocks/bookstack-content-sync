@@ -6,6 +6,7 @@ use Kugarocks\BookStackContentSync\ContentSync\Pull\SnapshotBuilder;
 use Kugarocks\BookStackContentSync\ContentSync\Shared\ContentHashBuilder;
 use Kugarocks\BookStackContentSync\ContentSync\Shared\ContentHashData;
 use Kugarocks\BookStackContentSync\ContentSync\Shared\NodeType;
+use Kugarocks\BookStackContentSync\ContentSync\Shared\PageMarkdownCodec;
 use Kugarocks\BookStackContentSync\ContentSync\Shared\TagNormalizer;
 use PHPUnit\Framework\TestCase;
 
@@ -49,6 +50,29 @@ class SnapshotBuilderTest extends TestCase
             name: 'Quick Start',
             slug: 'quick-start',
             markdown: "Line 1\nLine 2\nLine 3\n",
+            tags: [],
+        ));
+
+        $this->assertSame($expectedHash, $snapshotNode->contentHash);
+    }
+
+    public function test_decodes_reserved_empty_page_placeholder_when_building_hash(): void
+    {
+        $hashBuilder = new ContentHashBuilder(new TagNormalizer());
+        $builder = new SnapshotBuilder($hashBuilder);
+        $node = PullNodeFactory::node(NodeType::Page, [
+            'entityId' => 12,
+            'name' => 'Quick Start',
+            'slug' => 'quick-start',
+            'markdown' => PageMarkdownCodec::EMPTY_PAGE_REMOTE_PLACEHOLDER,
+        ]);
+
+        $snapshotNode = $builder->build($node, 'content/01-blog/01-2026/01-quick-start.md', 1);
+        $expectedHash = $hashBuilder->build(new ContentHashData(
+            type: NodeType::Page,
+            name: 'Quick Start',
+            slug: 'quick-start',
+            markdown: '',
             tags: [],
         ));
 

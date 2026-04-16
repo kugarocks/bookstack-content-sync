@@ -6,6 +6,7 @@ use Kugarocks\BookStackContentSync\ContentSync\Pull\BookStackApiClient;
 use Kugarocks\BookStackContentSync\ContentSync\Pull\BookStackApiRemoteTreeReader;
 use Kugarocks\BookStackContentSync\ContentSync\Pull\SyncConfigEnvCredentialResolver;
 use Kugarocks\BookStackContentSync\ContentSync\Shared\NodeType;
+use Kugarocks\BookStackContentSync\ContentSync\Shared\PageMarkdownCodec;
 use PHPUnit\Framework\TestCase;
 
 class BookStackApiRemoteTreeReaderTest extends TestCase
@@ -90,7 +91,7 @@ class BookStackApiRemoteTreeReaderTest extends TestCase
                     'name' => 'Loose Page',
                     'slug' => 'loose-page',
                     'priority' => 4,
-                    'markdown' => "Loose body\n",
+                    'markdown' => PageMarkdownCodec::EMPTY_PAGE_REMOTE_PLACEHOLDER . "\n",
                     'tags' => [],
                 ]],
             ]);
@@ -117,7 +118,7 @@ class BookStackApiRemoteTreeReaderTest extends TestCase
 
             $this->assertSame(NodeType::Book, $roots[1]->type);
             $this->assertSame('Loose Book', $roots[1]->name);
-            $this->assertSame('Loose body' . "\n", $roots[1]->children[0]->markdown);
+            $this->assertSame('', $roots[1]->children[0]->markdown);
             $this->assertContains('Pulling shelf: Blog', $messages);
             $this->assertContains('Pulling book: 2026', $messages);
             $this->assertContains('Pulling chapter: Neovim', $messages);

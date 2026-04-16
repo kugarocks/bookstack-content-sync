@@ -2,15 +2,18 @@
 
 namespace Kugarocks\BookStackContentSync\ContentSync\Pull;
 
+use Kugarocks\BookStackContentSync\ContentSync\Shared\PageMarkdownCodec;
 use Kugarocks\BookStackContentSync\ContentSync\Shared\TagNormalizer;
 
 class PageFileBuilder
 {
-    public const EMPTY_PAGE_MARKDOWN_PLACEHOLDER = "---\n";
+    protected PageMarkdownCodec $pageMarkdownCodec;
 
     public function __construct(
         protected TagNormalizer $tagNormalizer,
+        ?PageMarkdownCodec $pageMarkdownCodec = null,
     ) {
+        $this->pageMarkdownCodec = $pageMarkdownCodec ?? new PageMarkdownCodec();
     }
 
     public function build(RemoteNode $node): string
@@ -78,8 +81,6 @@ class PageFileBuilder
 
     protected function normalizeMarkdown(string $value): string
     {
-        $normalized = str_replace(["\r\n", "\r"], "\n", $value);
-
-        return trim($normalized) === '' ? self::EMPTY_PAGE_MARKDOWN_PLACEHOLDER : $normalized;
+        return $this->pageMarkdownCodec->decodeFromRemote($value);
     }
 }

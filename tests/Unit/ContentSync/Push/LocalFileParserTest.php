@@ -4,6 +4,7 @@ namespace Tests\Unit\ContentSync\Push;
 
 use Kugarocks\BookStackContentSync\ContentSync\Push\LocalFileParser;
 use Kugarocks\BookStackContentSync\ContentSync\Shared\ContentHashBuilder;
+use Kugarocks\BookStackContentSync\ContentSync\Shared\PageMarkdownCodec;
 use Kugarocks\BookStackContentSync\ContentSync\Shared\TagNormalizer;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
@@ -191,6 +192,27 @@ tags: []
 
 Body
 MD, 'content/01-book/page.md');
+    }
+
+    public function test_parse_page_rejects_reserved_empty_page_placeholder(): void
+    {
+        $parser = $this->parser();
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage(sprintf(
+            'Page file [content/01-book/01-page.md] uses reserved empty-page placeholder [%s]',
+            PageMarkdownCodec::EMPTY_PAGE_REMOTE_PLACEHOLDER
+        ));
+
+        $parser->parsePage(<<<MD
+---
+title: "Page"
+slug: "page"
+tags: []
+---
+
+<!-- bookstack-content-sync:empty-page:v1 -->
+MD, 'content/01-book/01-page.md');
     }
 
     protected function parser(): LocalFileParser

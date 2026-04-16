@@ -5,13 +5,18 @@ namespace Kugarocks\BookStackContentSync\ContentSync\Push;
 use Kugarocks\BookStackContentSync\ContentSync\Shared\ContentHashBuilder;
 use Kugarocks\BookStackContentSync\ContentSync\Shared\ContentHashData;
 use Kugarocks\BookStackContentSync\ContentSync\Shared\NodeType;
+use Kugarocks\BookStackContentSync\ContentSync\Shared\PageMarkdownCodec;
 use InvalidArgumentException;
 
 class LocalFileParser
 {
+    protected PageMarkdownCodec $pageMarkdownCodec;
+
     public function __construct(
         protected ContentHashBuilder $contentHashBuilder,
+        ?PageMarkdownCodec $pageMarkdownCodec = null,
     ) {
+        $this->pageMarkdownCodec = $pageMarkdownCodec ?? new PageMarkdownCodec();
     }
 
     public function parseMeta(string $contents, string $path): LocalNode
@@ -56,7 +61,15 @@ class LocalFileParser
 
         $context = "page file [{$path}]";
         $data = $this->parseSimpleYaml($matches[1] . "\n", $context);
-        $markdown = $matches[2];
+        $markdown = $this->pageMarkdownCodec->normalizeLineEndings($matches[2]);
+
+        if ($this->pageMarkdownCodec->isEncodedEmptyPlaceholder($markdown)) {
+            throw new InvalidArgumentException(sprintf(
+                'Page file [%s] uses reserved empty-page placeholder [%s]',
+                $path,
+                PageMarkdownCodec::EMPTY_PAGE_REMOTE_PLACEHOLDER
+            ));
+        }
 
         return new LocalNode(
             type: NodeType::Page,

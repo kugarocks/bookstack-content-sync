@@ -23,6 +23,7 @@ use Kugarocks\BookStackContentSync\ContentSync\Push\SnapshotFileLoader;
 use Kugarocks\BookStackContentSync\ContentSync\Push\SnapshotMatcher;
 use Kugarocks\BookStackContentSync\ContentSync\Push\StructureDiffer;
 use Kugarocks\BookStackContentSync\ContentSync\Shared\ContentHashBuilder;
+use Kugarocks\BookStackContentSync\ContentSync\Shared\PageMarkdownCodec;
 use Kugarocks\BookStackContentSync\ContentSync\Shared\TagNormalizer;
 use Kugarocks\BookStackContentSync\Support\BookStack\Http\HttpClientHistory;
 use Kugarocks\BookStackContentSync\Support\BookStack\Http\HttpRequestService;
@@ -298,7 +299,7 @@ YAML);
         $this->deleteDirectory($root);
     }
 
-    public function test_runner_uses_separator_placeholder_for_empty_page_content(): void
+    public function test_runner_uses_remote_placeholder_for_empty_page_content_and_preserves_empty_local_file(): void
     {
         $root = $this->createTempDirectory();
         $this->writeSyncConfig($root);
@@ -350,8 +351,9 @@ MD);
             $pageBody = $this->decodeRequestBody($history, 2);
             $pageFile = file_get_contents($root . '/content/01-work/01-oschina/01-empty.md');
 
-            $this->assertSame(PageFileBuilder::EMPTY_PAGE_MARKDOWN_PLACEHOLDER, $pageBody['markdown']);
-            $this->assertStringEndsWith(PageFileBuilder::EMPTY_PAGE_MARKDOWN_PLACEHOLDER, $pageFile);
+            $this->assertSame(PageMarkdownCodec::EMPTY_PAGE_REMOTE_PLACEHOLDER, $pageBody['markdown']);
+            $this->assertStringEndsWith("---\n\n", $pageFile);
+            $this->assertStringNotContainsString('bookstack-content-sync:empty-page', $pageFile);
             $this->assertStringContainsString('entity_id: 3', $pageFile);
         });
 

@@ -4,14 +4,19 @@ namespace Kugarocks\BookStackContentSync\ContentSync\Pull;
 
 use Kugarocks\BookStackContentSync\ContentSync\Shared\ContentHashBuilder;
 use Kugarocks\BookStackContentSync\ContentSync\Shared\ContentHashData;
+use Kugarocks\BookStackContentSync\ContentSync\Shared\PageMarkdownCodec;
 use Kugarocks\BookStackContentSync\ContentSync\Shared\SnapshotParent;
 use Kugarocks\BookStackContentSync\ContentSync\Shared\SnapshotNode;
 
 class SnapshotBuilder
 {
+    protected PageMarkdownCodec $pageMarkdownCodec;
+
     public function __construct(
         protected ContentHashBuilder $contentHashBuilder,
+        ?PageMarkdownCodec $pageMarkdownCodec = null,
     ) {
+        $this->pageMarkdownCodec = $pageMarkdownCodec ?? new PageMarkdownCodec();
     }
 
     public function build(RemoteNode $node, string $file, int $position, ?SnapshotParent $parent = null): SnapshotNode
@@ -44,6 +49,6 @@ class SnapshotBuilder
 
     protected function normalizeMarkdown(string $value): string
     {
-        return str_replace(["\r\n", "\r"], "\n", $value);
+        return $this->pageMarkdownCodec->decodeFromRemote($value);
     }
 }

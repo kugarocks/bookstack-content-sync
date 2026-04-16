@@ -3,6 +3,7 @@
 namespace Kugarocks\BookStackContentSync\ContentSync\Pull;
 
 use Kugarocks\BookStackContentSync\ContentSync\Shared\NodeType;
+use Kugarocks\BookStackContentSync\ContentSync\Shared\PageMarkdownCodec;
 use InvalidArgumentException;
 
 class BookStackApiRemoteTreeReader implements PullRemoteTreeReader
@@ -26,11 +27,14 @@ class BookStackApiRemoteTreeReader implements PullRemoteTreeReader
      */
     protected array $pageDetails = [];
     protected $progressCallback = null;
+    protected PageMarkdownCodec $pageMarkdownCodec;
 
     public function __construct(
         protected BookStackApiClient $client,
         protected SyncConfigEnvCredentialResolver $credentialResolver,
+        ?PageMarkdownCodec $pageMarkdownCodec = null,
     ) {
+        $this->pageMarkdownCodec = $pageMarkdownCodec ?? new PageMarkdownCodec();
     }
 
     public function setProgressCallback(?callable $progressCallback): void
@@ -135,7 +139,9 @@ class BookStackApiRemoteTreeReader implements PullRemoteTreeReader
             name: $this->requireString($detail, 'name'),
             slug: $this->requireString($detail, 'slug'),
             description: '',
-            markdown: isset($detail['markdown']) && is_string($detail['markdown']) ? $detail['markdown'] : '',
+            markdown: isset($detail['markdown']) && is_string($detail['markdown'])
+                ? $this->pageMarkdownCodec->decodeFromRemote($detail['markdown'])
+                : '',
             tags: $this->mapTags($detail['tags'] ?? []),
             priority: $this->resolvePriority($summary, $position),
             children: [],

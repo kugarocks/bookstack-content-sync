@@ -4,9 +4,13 @@ namespace Kugarocks\BookStackContentSync\ContentSync\Shared;
 
 class ContentHashBuilder
 {
+    protected PageMarkdownCodec $pageMarkdownCodec;
+
     public function __construct(
         protected TagNormalizer $tagNormalizer,
+        ?PageMarkdownCodec $pageMarkdownCodec = null,
     ) {
+        $this->pageMarkdownCodec = $pageMarkdownCodec ?? new PageMarkdownCodec();
     }
 
     public function build(ContentHashData $data): string
@@ -19,7 +23,7 @@ class ContentHashBuilder
         ];
 
         if ($data->type === NodeType::Page) {
-            $payload['markdown'] = $data->markdown;
+            $payload['markdown'] = $this->pageMarkdownCodec->canonicalizeForHash($data->markdown);
         } else {
             $payload['description'] = $data->description;
         }

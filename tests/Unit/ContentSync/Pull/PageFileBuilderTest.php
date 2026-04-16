@@ -56,7 +56,7 @@ class PageFileBuilderTest extends TestCase
         $this->assertStringNotContainsString("\r", $contents);
     }
 
-    public function test_writes_separator_for_empty_page_body()
+    public function test_writes_empty_page_body_without_remote_placeholder()
     {
         $builder = new PageFileBuilder(new TagNormalizer());
         $node = PullNodeFactory::node(NodeType::Page, [
@@ -65,7 +65,8 @@ class PageFileBuilderTest extends TestCase
 
         $contents = $builder->build($node);
 
-        $this->assertStringEndsWith("---\n", $contents);
-        $this->assertStringContainsString("entity_id: 1\n---\n\n---\n", $contents);
+        $this->assertStringEndsWith("---\n\n", $contents);
+        $this->assertStringContainsString("entity_id: 1\n---\n\n", $contents);
+        $this->assertStringNotContainsString('bookstack-content-sync:empty-page', $contents);
     }
 }

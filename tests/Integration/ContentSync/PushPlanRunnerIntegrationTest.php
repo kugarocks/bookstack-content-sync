@@ -17,6 +17,9 @@ use Kugarocks\BookStackContentSync\ContentSync\Push\SnapshotFileLoader;
 use Kugarocks\BookStackContentSync\ContentSync\Push\SnapshotMatcher;
 use Kugarocks\BookStackContentSync\ContentSync\Push\StructureDiffer;
 use Kugarocks\BookStackContentSync\ContentSync\Shared\ContentHashBuilder;
+use Kugarocks\BookStackContentSync\ContentSync\Shared\ContentHashData;
+use Kugarocks\BookStackContentSync\ContentSync\Shared\NodeType;
+use Kugarocks\BookStackContentSync\ContentSync\Shared\PageMarkdownCodec;
 use Kugarocks\BookStackContentSync\ContentSync\Shared\TagNormalizer;
 use PHPUnit\Framework\TestCase;
 
@@ -223,6 +226,126 @@ YAML);
         $this->assertCount(2, $plan->itemsForAction(PlanAction::SyncMembership));
         $this->assertCount(1, $plan->itemsForAction(PlanAction::Create));
         $this->assertCount(1, $plan->itemsForAction(PlanAction::Move));
+
+        $this->deleteDirectory($root);
+    }
+
+    public function test_runner_treats_remote_empty_page_placeholder_as_noop_for_local_empty_page(): void
+    {
+        $root = sys_get_temp_dir() . '/push-plan-runner-empty-page-' . bin2hex(random_bytes(8));
+        mkdir($root . '/content/01-work/01-oschina', 0777, true);
+        file_put_contents($root . '/sync.json', json_encode([
+            'version' => 1,
+            'app_url' => 'https://docs.example.com',
+            'content_path' => 'content',
+            'env_vars' => [
+                'token_id' => 'BOOKSTACK_API_TOKEN_ID',
+                'token_secret' => 'BOOKSTACK_API_TOKEN_SECRET',
+            ],
+        ], JSON_PRETTY_PRINT));
+        file_put_contents($root . '/content/01-work/_meta.yml', <<<YAML
+type: "shelf"
+title: "Work"
+slug: "work"
+desc: ""
+tags: []
+entity_id: 1
+YAML);
+        file_put_contents($root . '/content/01-work/01-oschina/_meta.yml', <<<YAML
+type: "book"
+title: "OSChina"
+slug: "oschina"
+desc: ""
+tags: []
+entity_id: 2
+YAML);
+        file_put_contents($root . '/content/01-work/01-oschina/01-empty.md', <<<MD
+---
+title: "Empty Page"
+slug: "empty-page"
+tags: []
+entity_id: 3
+---
+
+MD);
+
+        $hashBuilder = new ContentHashBuilder(new TagNormalizer());
+        file_put_contents($root . '/snapshot.json', json_encode([
+            'version' => 2,
+            'nodes' => [
+                [
+                    'file' => '01-work',
+                    'type' => 'shelf',
+                    'entity_id' => 1,
+                    'position' => 1,
+                    'slug' => 'work',
+                    'name' => 'Work',
+                    'content_hash' => $hashBuilder->build(new ContentHashData(
+                        type: NodeType::Shelf,
+                        name: 'Work',
+                        slug: 'work',
+                        description: '',
+                        tags: [],
+                    )),
+                ],
+                [
+                    'file' => '01-work/01-oschina',
+                    'type' => 'book',
+                    'entity_id' => 2,
+                    'position' => 1,
+                    'slug' => 'oschina',
+                    'name' => 'OSChina',
+                    'content_hash' => $hashBuilder->build(new ContentHashData(
+                        type: NodeType::Book,
+                        name: 'OSChina',
+                        slug: 'oschina',
+                        description: '',
+                        tags: [],
+                    )),
+                    'parent' => [
+                        'entity_id' => 1,
+                        'type' => 'shelf',
+                    ],
+                ],
+                [
+                    'file' => '01-work/01-oschina/01-empty.md',
+                    'type' => 'page',
+                    'entity_id' => 3,
+                    'position' => 1,
+                    'slug' => 'empty-page',
+                    'name' => 'Empty Page',
+                    'content_hash' => $hashBuilder->build(new ContentHashData(
+                        type: NodeType::Page,
+                        name: 'Empty Page',
+                        slug: 'empty-page',
+                        markdown: PageMarkdownCodec::EMPTY_PAGE_REMOTE_PLACEHOLDER,
+                        tags: [],
+                    )),
+                    'parent' => [
+                        'entity_id' => 2,
+                        'type' => 'book',
+                    ],
+                ],
+            ],
+        ], JSON_PRETTY_PRINT));
+
+        $runner = new PushPlanRunner(
+            new PushPlanPreparer(
+                new PushProjectStateLoader(
+                    new SyncConfigLoader(),
+                    new SnapshotFileLoader(),
+                    new LocalContentScanner(new LocalFileParser(new ContentHashBuilder(new TagNormalizer()))),
+                    new ProjectStructureValidator(),
+                ),
+                new PushPlanBuilder(new SnapshotMatcher(), new StructureDiffer(), new ContentDiffer()),
+            ),
+            new LocalSnapshotProjector(),
+        );
+
+        $result = $runner->run($root);
+
+        $this->assertCount(0, $result->plan->itemsForAction(PlanAction::Update));
+        $this->assertSame([], $result->localSnapshotChanges);
 
         $this->deleteDirectory($root);
     }
