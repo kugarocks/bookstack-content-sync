@@ -18,7 +18,7 @@ class MetaFileBuilder
             'title: ' . $this->quote($node->name),
             'slug: ' . $this->quote($node->slug),
             'desc: ' . $this->quote($node->description),
-            'tags: ' . $this->renderTags($node->tags),
+            $this->renderTagsLine($node->tags),
             'entity_id: ' . $node->entityId,
         ];
 
@@ -41,6 +41,20 @@ class MetaFileBuilder
         }
 
         return implode("\n", $lines);
+    }
+
+    /**
+     * @param RemoteTag[] $tags
+     */
+    protected function renderTagsLine(array $tags): string
+    {
+        $renderedTags = $this->renderTags($tags);
+
+        if ($renderedTags === '[]') {
+            return 'tags: []';
+        }
+
+        return 'tags:' . $renderedTags;
     }
 
     /**

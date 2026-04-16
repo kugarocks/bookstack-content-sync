@@ -28,7 +28,8 @@ class PageFileBuilderTest extends TestCase
         $this->assertStringContainsString("---\ntitle: \"Quick Start\"\nslug: \"quick-start\"\n", $contents);
         $this->assertStringNotContainsString('type: "page"', $contents);
         $this->assertStringContainsString('entity_id: 99', $contents);
-        $this->assertStringContainsString("tags: \n  - \"series:neovim\"\n  - \"2026\"\n", $contents);
+        $this->assertStringContainsString("tags:\n  - \"series:neovim\"\n  - \"2026\"\n", $contents);
+        $this->assertStringNotContainsString("tags: \n", $contents);
         $this->assertStringContainsString("---\n\n# Heading", $contents);
     }
 

@@ -191,8 +191,8 @@ MD);
 
             $this->assertStringContainsString('entity_id: 30', $chapterMeta);
             $this->assertStringContainsString('entity_id: 31', $pageFile);
-            $this->assertStringContainsString("tags: \n  - \"z-last\"\n  - \"topic:install\"\n  - \"a-first\"\nentity_id: 30", $chapterMeta);
-            $this->assertStringContainsString("tags: \n  - \"quick-start\"\n  - \"quickstart\"\n  - \"blog\"\nentity_id: 31", $pageFile);
+            $this->assertStringContainsString("tags:\n  - \"z-last\"\n  - \"topic:install\"\n  - \"a-first\"\nentity_id: 30", $chapterMeta);
+            $this->assertStringContainsString("tags:\n  - \"quick-start\"\n  - \"quickstart\"\n  - \"blog\"\nentity_id: 31", $pageFile);
             $this->assertCount(5, $snapshot['nodes']);
             $this->assertSame(30, $snapshot['nodes'][3]['entity_id']);
             $this->assertSame(31, $snapshot['nodes'][4]['entity_id']);

@@ -22,7 +22,7 @@ class PageFileBuilder
             '---',
             'title: ' . $this->quote($node->name),
             'slug: ' . $this->quote($node->slug),
-            'tags: ' . $this->renderTags($node->tags),
+            $this->renderTagsLine($node->tags),
             'entity_id: ' . $node->entityId,
             '---',
         ];
@@ -46,6 +46,20 @@ class PageFileBuilder
         }
 
         return implode("\n", $lines);
+    }
+
+    /**
+     * @param RemoteTag[] $tags
+     */
+    protected function renderTagsLine(array $tags): string
+    {
+        $renderedTags = $this->renderTags($tags);
+
+        if ($renderedTags === '[]') {
+            return 'tags: []';
+        }
+
+        return 'tags:' . $renderedTags;
     }
 
     /**

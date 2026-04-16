@@ -30,7 +30,8 @@ class MetaFileBuilderTest extends TestCase
         $this->assertStringContainsString('slug: "2026"', $contents);
         $this->assertStringContainsString('desc: ""', $contents);
         $this->assertStringContainsString('entity_id: 12', $contents);
-        $this->assertStringContainsString("tags: \n  - \"series:neovim\"\n  - \"2026\"\n", $contents);
+        $this->assertStringContainsString("tags:\n  - \"series:neovim\"\n  - \"2026\"\n", $contents);
+        $this->assertStringNotContainsString("tags: \n", $contents);
     }
 
     public function test_outputs_empty_tags_as_array()
