@@ -1,11 +1,13 @@
 {
   "permissions": {
     "allow": [
-      "Bash(chmod:*)",
+      "Bash(chmod +x:*)",
       "Bash(php:*)",
       "Bash(bash:*)",
-      "Bash(git:*)",
-      "Bash(ls:*)"
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(ls /Users/kuga/github/kugarocks/bookstack-content-sync/*)",
+      "Bash(git checkout:*)"
     ]
   }
 }

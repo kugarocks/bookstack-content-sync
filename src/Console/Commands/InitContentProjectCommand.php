@@ -55,11 +55,26 @@ class InitContentProjectCommand extends Command
             return self::FAILURE;
         }
 
+        $editorConfigPath = $projectPath . '/.editorconfig';
+        $editorConfig = <<<'EDITORCONFIG'
+root = true
+
+[*.json]
+indent_style = space
+indent_size = 4
+
+[*.jsonc]
+indent_style = space
+indent_size = 4
+EDITORCONFIG;
+
         file_put_contents($syncPath, $json . PHP_EOL);
+        file_put_contents($editorConfigPath, $editorConfig . PHP_EOL);
 
         $this->newLine();
         $this->info("Initialized content sync project at [{$projectPath}]");
         $this->line("Created <fg=white>{$syncPath}</>");
+        $this->line("Created <fg=white>{$editorConfigPath}</>");
         $this->newLine();
         $this->line('<fg=cyan;options=bold>Next steps</>');
         $this->line("  1. Review <fg=white>{$syncPath}</> and update <fg=white>app_url</> if needed.");
