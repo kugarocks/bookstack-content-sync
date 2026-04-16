@@ -13,6 +13,8 @@
 - Structured push progress events instead of command rendering logic coupled to raw progress strings
 - Internal push-plan preparation extracted into shared preparation classes
 - Local snapshot projection split into explicit persisted and preview projection flows
+- Reserved empty-page transport placeholder for remote page markdown:
+  `<!-- bookstack-content-sync:empty-page:v1 -->`
 - Remote slug normalization handling that warns the user, updates local files, and updates `snapshot.json`
 - README clarification for host slug support expectations and compatibility behavior
 
@@ -49,6 +51,11 @@ This release has been verified with the following checks:
 ### Push Workflow
 
 - Push plan output may now report `Local Snapshot Updates` even when no remote API changes are required
+- Empty page content now uses a reserved remote transport placeholder:
+  `<!-- bookstack-content-sync:empty-page:v1 -->`
+- Local page semantics remain unchanged: an empty page is still `""`
+- Pull decodes that reserved placeholder back to `""` before writing local page files
+- Hashing, diffing, and `snapshot.json` all use the decoded semantic value, so an empty page is treated as an empty string throughout local state
 - If the BookStack host does not preserve requested slugs through the API, push execution now treats the remote slug as the source of truth
 - In that slug-normalization case, the command warns, then rewrites the local file slug and `snapshot.json` slug to the remote value
 - A host that includes [the BookStack custom slug support change](https://github.com/kugarocks/BookStack/commit/e6c75b4d13dab676424461c210b14f730c2a6ad3) supports custom slugs for those content entity APIs
@@ -63,4 +70,4 @@ This release has been verified with the following checks:
 
 ## Suggested short release text
 
-Push workflow refinement with local snapshot previews, cleaner execute output, remote slug normalization, global wrapper script for running commands from any directory, and `.editorconfig` generation for consistent JSON formatting.
+Push workflow refinement with local snapshot previews, reserved empty-page remote transport handling, cleaner execute output, remote slug normalization, global wrapper script for running commands from any directory, and `.editorconfig` generation for consistent JSON formatting.
