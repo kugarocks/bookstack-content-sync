@@ -87,6 +87,12 @@ This system performs a one-way sync from local content to BookStack by computing
 - If the requested slug is not preserved, `push-content` treats the remote slug as the source of truth.
 - The command emits a warning and rewrites both the local file slug and the `snapshot.json` slug to match the remote value.
 
+### Empty Page Behavior
+
+- Local empty pages remain `""`.
+- When pushing an empty page, the remote transport uses the reserved placeholder `<!-- bookstack-content-sync:empty-page:v1 -->`.
+- When pulling, that placeholder is decoded back to `""`, and `snapshot.json` plus content hashing continue to use the decoded empty-string value.
+
 ## Installation
 
 ### Packagist
