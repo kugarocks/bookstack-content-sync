@@ -12,7 +12,7 @@ class SnapshotJsonBuilder
     public function build(array $nodes): string
     {
         $data = [
-            'version' => 2,
+            'version' => 1,
             'nodes' => array_map(function (SnapshotNode $node): array {
                 return [
                     'entity_id' => $node->entityId,
