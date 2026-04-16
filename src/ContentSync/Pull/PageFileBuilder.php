@@ -6,6 +6,8 @@ use Kugarocks\BookStackContentSync\ContentSync\Shared\TagNormalizer;
 
 class PageFileBuilder
 {
+    public const EMPTY_PAGE_MARKDOWN_PLACEHOLDER = "---\n";
+
     public function __construct(
         protected TagNormalizer $tagNormalizer,
     ) {
@@ -22,7 +24,7 @@ class PageFileBuilder
             '---',
         ];
 
-        return implode("\n", $lines) . "\n\n" . $this->normalizeLineEndings($node->markdown);
+        return implode("\n", $lines) . "\n\n" . $this->normalizeMarkdown($node->markdown);
     }
 
     /**
@@ -74,8 +76,10 @@ class PageFileBuilder
         return '"' . str_replace('"', '\"', $value) . '"';
     }
 
-    protected function normalizeLineEndings(string $value): string
+    protected function normalizeMarkdown(string $value): string
     {
-        return str_replace(["\r\n", "\r"], "\n", $value);
+        $normalized = str_replace(["\r\n", "\r"], "\n", $value);
+
+        return trim($normalized) === '' ? self::EMPTY_PAGE_MARKDOWN_PLACEHOLDER : $normalized;
     }
 }

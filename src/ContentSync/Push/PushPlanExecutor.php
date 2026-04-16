@@ -4,6 +4,7 @@ namespace Kugarocks\BookStackContentSync\ContentSync\Push;
 
 use Kugarocks\BookStackContentSync\ContentSync\Pull\SyncConfig;
 use Kugarocks\BookStackContentSync\ContentSync\Pull\SyncConfigEnvCredentialResolver;
+use Kugarocks\BookStackContentSync\ContentSync\Pull\PageFileBuilder;
 use Kugarocks\BookStackContentSync\ContentSync\Shared\NodeType;
 use Kugarocks\BookStackContentSync\ContentSync\Shared\SnapshotNode;
 use Illuminate\Support\Arr;
@@ -280,7 +281,7 @@ class PushPlanExecutor
         return [
             'name' => $localNode->name,
             'slug' => $localNode->slug,
-            'markdown' => $localNode->markdown,
+            'markdown' => trim($localNode->markdown) === '' ? PageFileBuilder::EMPTY_PAGE_MARKDOWN_PLACEHOLDER : $localNode->markdown,
             'tags' => $this->mapTags($localNode),
             'priority' => $localNode->order,
         ];

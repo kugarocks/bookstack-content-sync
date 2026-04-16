@@ -55,4 +55,17 @@ class PageFileBuilderTest extends TestCase
         $this->assertStringContainsString("Line 1\n\nLine 2\nLine 3\n", $contents);
         $this->assertStringNotContainsString("\r", $contents);
     }
+
+    public function test_writes_separator_for_empty_page_body()
+    {
+        $builder = new PageFileBuilder(new TagNormalizer());
+        $node = PullNodeFactory::node(NodeType::Page, [
+            'markdown' => '',
+        ]);
+
+        $contents = $builder->build($node);
+
+        $this->assertStringEndsWith("---\n", $contents);
+        $this->assertStringContainsString("entity_id: 1\n---\n\n---\n", $contents);
+    }
 }

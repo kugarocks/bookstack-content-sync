@@ -298,6 +298,66 @@ YAML);
         $this->deleteDirectory($root);
     }
 
+    public function test_runner_uses_separator_placeholder_for_empty_page_content(): void
+    {
+        $root = $this->createTempDirectory();
+        $this->writeSyncConfig($root);
+
+        mkdir($root . '/content/01-work/01-oschina', 0777, true);
+        file_put_contents($root . '/content/01-work/_meta.yml', <<<YAML
+type: "shelf"
+title: "Work"
+slug: "work"
+desc: ""
+tags: []
+YAML);
+        file_put_contents($root . '/content/01-work/01-oschina/_meta.yml', <<<YAML
+type: "book"
+title: "OSChina"
+slug: "oschina"
+desc: ""
+tags: []
+YAML);
+        file_put_contents($root . '/content/01-work/01-oschina/01-empty.md', <<<MD
+---
+title: "Empty Page"
+slug: "empty-page"
+tags: []
+---
+
+MD);
+        file_put_contents($root . '/snapshot.json', json_encode([
+            'version' => 1,
+            'nodes' => [],
+        ], JSON_PRETTY_PRINT));
+
+        $http = new HttpRequestService();
+        $history = $http->mockClient([
+            new Response(200, ['Content-Type' => 'application/json'], json_encode(['id' => 1, 'slug' => 'work'])),
+            new Response(200, ['Content-Type' => 'application/json'], json_encode(['id' => 2, 'slug' => 'oschina'])),
+            new Response(200, ['Content-Type' => 'application/json'], json_encode(['id' => 3, 'slug' => 'empty-page'])),
+            new Response(200, ['Content-Type' => 'application/json'], json_encode(['id' => 1, 'slug' => 'work'])),
+        ], false);
+
+        $runner = $this->runner($http);
+
+        $this->runWithEnv([
+            'BOOKSTACK_API_TOKEN_ID' => 'token-id',
+            'BOOKSTACK_API_TOKEN_SECRET' => 'token-secret',
+        ], function () use ($runner, $root, $history): void {
+            $runner->run($root);
+
+            $pageBody = $this->decodeRequestBody($history, 2);
+            $pageFile = file_get_contents($root . '/content/01-work/01-oschina/01-empty.md');
+
+            $this->assertSame(PageFileBuilder::EMPTY_PAGE_MARKDOWN_PLACEHOLDER, $pageBody['markdown']);
+            $this->assertStringEndsWith(PageFileBuilder::EMPTY_PAGE_MARKDOWN_PLACEHOLDER, $pageFile);
+            $this->assertStringContainsString('entity_id: 3', $pageFile);
+        });
+
+        $this->deleteDirectory($root);
+    }
+
     public function test_runner_applies_rename_and_move_updates_for_existing_chapter_and_page(): void
     {
         $root = $this->createTempDirectory();
