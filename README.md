@@ -25,6 +25,7 @@ This command creates the target directory if needed, writes `sync.json`, and rem
 {
     "version": 1,
     "app_url": "http://localhost:8080",
+    "bookstack_path": "/path/to/bookstack",
     "content_path": "content",
     "env_vars": {
         "token_id": "BOOKSTACK_API_TOKEN_ID",
@@ -119,6 +120,52 @@ composer require kugarocks/bookstack-content-sync:*@dev
 ```
 
 The `@dev` suffix is only needed for local path installation while the package is resolved as `dev-main`.
+
+## Global Wrapper
+
+Create a global command that can be run from any content directory:
+
+```bash
+# From a BookStack installation
+ln -sf /path/to/bookstack/vendor/kugarocks/bookstack-content-sync/bin/bookstack-sync /usr/local/bin/bookstack-sync
+
+# From this repository
+ln -sf /path/to/bookstack-content-sync/bin/bookstack-sync /usr/local/bin/bookstack-sync
+```
+
+The wrapper reads `sync.json` in your current directory and runs the matching BookStack artisan command using `bookstack_path`.
+
+### Usage
+
+```bash
+# Pull content
+bookstack-sync pull
+
+# Generate push plan
+bookstack-sync push
+
+# Execute push
+bookstack-sync push --execute
+```
+
+### Configuration
+
+The wrapper requires `bookstack_path` in your `sync.json`:
+
+```json
+{
+    "version": 1,
+    "app_url": "http://localhost:8080",
+    "bookstack_path": "/path/to/bookstack",
+    "content_path": "content",
+    "env_vars": {
+        "token_id": "BOOKSTACK_API_TOKEN_ID",
+        "token_secret": "BOOKSTACK_API_TOKEN_SECRET"
+    }
+}
+```
+
+When running `php artisan bookstack:init-content-dir`, the `bookstack_path` is automatically set to the current directory (where BookStack is installed). You can override it with `--bookstack-path=/custom/path`.
 
 ## Testing
 

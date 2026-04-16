@@ -7,7 +7,7 @@ use JsonException;
 
 class InitContentProjectCommand extends Command
 {
-    protected $signature = 'bookstack:init-content-dir {projectPath} {--app-url=https://docs.example.com} {--content-path=content} {--token-id-env=BOOKSTACK_API_TOKEN_ID} {--token-secret-env=BOOKSTACK_API_TOKEN_SECRET}';
+    protected $signature = 'bookstack:init-content-dir {projectPath} {--app-url=https://docs.example.com} {--content-path=content} {--token-id-env=BOOKSTACK_API_TOKEN_ID} {--token-secret-env=BOOKSTACK_API_TOKEN_SECRET} {--bookstack-path=}';
     protected $description = 'Initialize a local content project directory for BookStack sync';
 
     public function handle(): int
@@ -30,11 +30,17 @@ class InitContentProjectCommand extends Command
         $contentPath = trim((string) $this->option('content-path'), '/');
         $tokenIdEnv = trim((string) $this->option('token-id-env'));
         $tokenSecretEnv = trim((string) $this->option('token-secret-env'));
+        $bookstackPath = trim((string) $this->option('bookstack-path'));
+
+        if ($bookstackPath === '') {
+            $bookstackPath = getcwd() ?: '';
+        }
 
         try {
             $json = json_encode([
                 'version' => 1,
                 'app_url' => (string) $this->option('app-url'),
+                'bookstack_path' => $bookstackPath,
                 'content_path' => $contentPath,
                 'env_vars' => [
                     'token_id' => $tokenIdEnv,

@@ -1,0 +1,69 @@
+#!/usr/bin/env bash
+
+set -e
+
+SYNC_JSON="sync.json"
+
+if [[ ! -f "$SYNC_JSON" ]]; then
+    echo "Error: sync.json not found in current directory" >&2
+    echo "Please run this command from a BookStack content directory" >&2
+    exit 1
+fi
+
+BOOKSTACK_PATH=$(php -r "
+    \$data = json_decode(file_get_contents('$SYNC_JSON'), true);
+    if (!isset(\$data['bookstack_path'])) {
+        fwrite(STDERR, \"Error: bookstack_path not found in sync.json\n\");
+        exit(1);
+    }
+    echo \$data['bookstack_path'];
+")
+
+if [[ $? -ne 0 ]]; then
+    exit 1
+fi
+
+if [[ ! -d "$BOOKSTACK_PATH" ]]; then
+    echo "Error: BookStack directory not found at [$BOOKSTACK_PATH]" >&2
+    exit 1
+fi
+
+ARTISAN="$BOOKSTACK_PATH/artisan"
+
+if [[ ! -f "$ARTISAN" ]]; then
+    echo "Error: artisan not found at [$ARTISAN]" >&2
+    exit 1
+fi
+
+COMMAND=""
+CONTENT_PATH="."
+
+case "${1:-}" in
+    pull)
+        COMMAND="bookstack:pull-content"
+        shift
+        ;;
+    push)
+        COMMAND="bookstack:push-content"
+        shift
+        ;;
+    init)
+        echo "Error: init command must be run from BookStack directory using php artisan" >&2
+        exit 1
+        ;;
+    "")
+        echo "Usage: bookstack-sync <command> [options]" >&2
+        echo "" >&2
+        echo "Commands:" >&2
+        echo "  pull              Pull content from BookStack" >&2
+        echo "  push              Generate push plan (dry-run)" >&2
+        echo "  push --execute    Execute push plan" >&2
+        exit 1
+        ;;
+    *)
+        echo "Error: unknown command [$1]" >&2
+        exit 1
+        ;;
+esac
+
+php "$ARTISAN" "$COMMAND" "$CONTENT_PATH" "$@"
