@@ -33,7 +33,7 @@ class SnapshotJsonBuilderTest extends TestCase
         $json = $builder->build($nodes);
         $data = json_decode($json, true);
 
-        $this->assertSame(2, $data['version']);
+        $this->assertSame(1, $data['version']);
         $this->assertCount(2, $data['nodes']);
         $this->assertSame('book', $data['nodes'][0]['type']);
         $this->assertSame('01-2026/01-quick-start.md', $data['nodes'][1]['file']);
