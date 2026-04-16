@@ -7,15 +7,19 @@ CONFIG_FILE="$CONFIG_DIR/config.json"
 SYNC_JSON="sync.json"
 
 usage() {
-    cat >&2 <<'EOF'
-Usage: bookstack-sync <command> [options]
+    local cyan='\033[0;36m'
+    local yellow='\033[0;33m'
+    local reset='\033[0m'
 
-Commands:
-  pull                             Pull content from BookStack
-  push [--execute]                 Generate or execute push plan
-  init <content-path> [options]    Initialize content directory
-  config set-bookstack-path <path> Persist global BookStack path
-EOF
+    printf >&2 "\n"
+    printf >&2 "Usage: bookstack-sync ${cyan}<command>${reset} [options]\n"
+    printf >&2 "\n"
+    printf >&2 "Commands:\n"
+    printf >&2 "  ${cyan}pull${reset}                             Pull content from BookStack\n"
+    printf >&2 "  ${cyan}push${reset} ${yellow}[--execute]${reset}                 Generate or execute push plan\n"
+    printf >&2 "  ${cyan}init${reset} ${yellow}<content-path>${reset} [options]    Initialize content directory\n"
+    printf >&2 "  ${cyan}config set-bookstack-path${reset} ${yellow}<path>${reset} Persist global BookStack path\n"
+    printf >&2 "\n"
 }
 
 error() {
