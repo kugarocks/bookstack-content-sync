@@ -1,69 +1,161 @@
 #!/usr/bin/env bash
 
-set -e
+set -euo pipefail
 
+CONFIG_DIR="$HOME/.config/bookstack-content-sync"
+CONFIG_FILE="$CONFIG_DIR/config.json"
 SYNC_JSON="sync.json"
 
-if [[ ! -f "$SYNC_JSON" ]]; then
-    echo "Error: sync.json not found in current directory" >&2
-    echo "Please run this command from a BookStack content directory" >&2
+usage() {
+    cat >&2 <<'EOF'
+Usage: bookstack-sync <command> [options]
+
+Commands:
+  pull                             Pull content from BookStack
+  push [--execute]                 Generate or execute push plan
+  init <content-path> [options]    Initialize content directory
+  config set-bookstack-path <path> Persist global BookStack path
+EOF
+}
+
+error() {
+    echo "Error: $1" >&2
     exit 1
-fi
+}
 
-BOOKSTACK_PATH=$(php -r "
-    \$data = json_decode(file_get_contents('$SYNC_JSON'), true);
-    if (!isset(\$data['bookstack_path'])) {
-        fwrite(STDERR, \"Error: bookstack_path not found in sync.json\n\");
-        exit(1);
-    }
-    echo \$data['bookstack_path'];
-")
+read_sync_bookstack_path() {
+    if [[ ! -f "$SYNC_JSON" ]]; then
+        return 0
+    fi
 
-if [[ $? -ne 0 ]]; then
-    exit 1
-fi
+    php -r "
+        \$data = json_decode(file_get_contents('$SYNC_JSON'), true);
+        if (!is_array(\$data)) {
+            fwrite(STDERR, 'Error: invalid JSON in sync.json' . PHP_EOL);
+            exit(1);
+        }
+        if (!isset(\$data['bookstack_path'])) {
+            exit(0);
+        }
+        if (!is_string(\$data['bookstack_path']) || trim(\$data['bookstack_path']) === '') {
+            fwrite(STDERR, 'Error: sync.json field bookstack_path must be a non-empty string' . PHP_EOL);
+            exit(1);
+        }
+        echo \$data['bookstack_path'];
+    "
+}
 
-if [[ ! -d "$BOOKSTACK_PATH" ]]; then
-    echo "Error: BookStack directory not found at [$BOOKSTACK_PATH]" >&2
-    exit 1
-fi
+read_global_bookstack_path() {
+    if [[ ! -f "$CONFIG_FILE" ]]; then
+        return 0
+    fi
 
-ARTISAN="$BOOKSTACK_PATH/artisan"
+    php -r "
+        \$data = json_decode(file_get_contents('$CONFIG_FILE'), true);
+        if (!is_array(\$data)) {
+            fwrite(STDERR, 'Error: invalid JSON in $CONFIG_FILE' . PHP_EOL);
+            exit(1);
+        }
+        if (!isset(\$data['bookstack_path'])) {
+            exit(0);
+        }
+        if (!is_string(\$data['bookstack_path']) || trim(\$data['bookstack_path']) === '') {
+            fwrite(STDERR, 'Error: config field bookstack_path must be a non-empty string' . PHP_EOL);
+            exit(1);
+        }
+        echo \$data['bookstack_path'];
+    "
+}
 
-if [[ ! -f "$ARTISAN" ]]; then
-    echo "Error: artisan not found at [$ARTISAN]" >&2
-    exit 1
-fi
+resolve_bookstack_path() {
+    local sync_path
+    local global_path
 
-COMMAND=""
-CONTENT_PATH="."
+    sync_path="$(read_sync_bookstack_path)"
+    if [[ -n "$sync_path" ]]; then
+        echo "$sync_path"
+        return 0
+    fi
 
-case "${1:-}" in
+    global_path="$(read_global_bookstack_path)"
+    if [[ -n "$global_path" ]]; then
+        echo "$global_path"
+        return 0
+    fi
+
+    error "bookstack_path not found. Set sync.json bookstack_path or run: bookstack-sync config set-bookstack-path /path/to/bookstack"
+}
+
+set_global_bookstack_path() {
+    local path="$1"
+
+    [[ -d "$path" ]] || error "BookStack directory not found at [$path]"
+    [[ -f "$path/artisan" ]] || error "artisan not found at [$path/artisan]"
+
+    mkdir -p "$CONFIG_DIR"
+
+    php -r "
+        \$path = \$argv[1];
+        \$json = json_encode(['bookstack_path' => \$path], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+        if (\$json === false) {
+            fwrite(STDERR, 'Error: failed to encode config JSON' . PHP_EOL);
+            exit(1);
+        }
+        file_put_contents(\$argv[2], \$json . PHP_EOL);
+    " "$path" "$CONFIG_FILE"
+
+    echo "Saved bookstack_path to $CONFIG_FILE"
+}
+
+resolve_artisan() {
+    local bookstack_path="$1"
+
+    [[ -d "$bookstack_path" ]] || error "BookStack directory not found at [$bookstack_path]"
+
+    local artisan="$bookstack_path/artisan"
+    [[ -f "$artisan" ]] || error "artisan not found at [$artisan]"
+
+    echo "$artisan"
+}
+
+command="${1:-}"
+
+case "$command" in
     pull)
-        COMMAND="bookstack:pull-content"
         shift
+        artisan="$(resolve_artisan "$(resolve_bookstack_path)")"
+        php "$artisan" bookstack:pull-content . "$@"
         ;;
     push)
-        COMMAND="bookstack:push-content"
         shift
+        artisan="$(resolve_artisan "$(resolve_bookstack_path)")"
+        php "$artisan" bookstack:push-content . "$@"
         ;;
     init)
-        echo "Error: init command must be run from BookStack directory using php artisan" >&2
-        exit 1
+        shift
+        [[ $# -ge 1 ]] || error "init requires content path"
+        content_path="$1"
+        shift
+        bookstack_path="$(resolve_bookstack_path)"
+        artisan="$(resolve_artisan "$bookstack_path")"
+        php "$artisan" bookstack:init-content-dir "$content_path" --bookstack-path="$bookstack_path" "$@"
         ;;
-    "")
-        echo "Usage: bookstack-sync <command> [options]" >&2
-        echo "" >&2
-        echo "Commands:" >&2
-        echo "  pull              Pull content from BookStack" >&2
-        echo "  push              Generate push plan (dry-run)" >&2
-        echo "  push --execute    Execute push plan" >&2
-        exit 1
+    config)
+        subcommand="${2:-}"
+        case "$subcommand" in
+            set-bookstack-path)
+                [[ $# -eq 3 ]] || error "Usage: bookstack-sync config set-bookstack-path /path/to/bookstack"
+                set_global_bookstack_path "$3"
+                ;;
+            *)
+                error "Unknown config command [$subcommand]"
+                ;;
+        esac
+        ;;
+    ""|-h|--help|help)
+        usage
         ;;
     *)
-        echo "Error: unknown command [$1]" >&2
-        exit 1
+        error "unknown command [$command]"
         ;;
 esac
-
-php "$ARTISAN" "$COMMAND" "$CONTENT_PATH" "$@"

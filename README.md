@@ -135,9 +135,22 @@ ln -sf /path/to/bookstack-content-sync/bin/bookstack-sync /usr/local/bin/booksta
 
 The wrapper reads `sync.json` in your current directory and runs the matching BookStack artisan command using `bookstack_path`.
 
+### Setup
+
+Set the global BookStack path (one-time setup):
+
+```bash
+bookstack-sync config set-bookstack-path /path/to/bookstack
+```
+
+This creates `~/.config/bookstack-content-sync/config.json` with your BookStack installation path.
+
 ### Usage
 
 ```bash
+# Initialize a new content directory
+bookstack-sync init /path/to/content
+
 # Pull content
 bookstack-sync pull
 
@@ -150,7 +163,13 @@ bookstack-sync push --execute
 
 ### Configuration
 
-The wrapper requires `bookstack_path` in your `sync.json`:
+Path resolution priority:
+
+1. `bookstack_path` in current directory's `sync.json`
+2. Global config at `~/.config/bookstack-content-sync/config.json`
+3. Error if neither is found
+
+Example `sync.json` with project-specific path:
 
 ```json
 {
@@ -165,7 +184,7 @@ The wrapper requires `bookstack_path` in your `sync.json`:
 }
 ```
 
-When running `php artisan bookstack:init-content-dir`, the `bookstack_path` is automatically set to the current directory (where BookStack is installed). You can override it with `--bookstack-path=/custom/path`.
+When running `bookstack-sync init`, the `bookstack_path` is automatically written to `sync.json` using the global config value.
 
 ## Testing
 
