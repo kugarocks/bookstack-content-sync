@@ -13,7 +13,7 @@
 - Structured push progress events instead of command rendering logic coupled to raw progress strings
 - Internal push-plan preparation extracted into shared preparation classes
 - Local snapshot projection split into explicit persisted and preview projection flows
-- Reserved empty-page transport placeholder for remote page markdown:
+- Reserved empty-page transport placeholder for remote page markdown, because the BookStack API does not support empty page content:
   `<!-- bookstack-content-sync:empty-page:v1 -->`
 - Remote slug normalization handling that warns the user, updates local files, and updates `snapshot.json`
 - README clarification for host slug support expectations and compatibility behavior
@@ -51,7 +51,7 @@ This release has been verified with the following checks:
 ### Push Workflow
 
 - Push plan output may now report `Local Snapshot Updates` even when no remote API changes are required
-- Empty page content now uses a reserved remote transport placeholder:
+- Because the BookStack API does not support empty page content, empty page content now uses a reserved remote transport placeholder:
   `<!-- bookstack-content-sync:empty-page:v1 -->`
 - Local page semantics remain unchanged: an empty page is still `""`
 - Pull decodes that reserved placeholder back to `""` before writing local page files
@@ -70,4 +70,4 @@ This release has been verified with the following checks:
 
 ## Suggested short release text
 
-Push workflow refinement with local snapshot previews, reserved empty-page remote transport handling, cleaner execute output, remote slug normalization, global wrapper script for running commands from any directory, and `.editorconfig` generation for consistent JSON formatting.
+Push workflow refinement with local snapshot previews, reserved empty-page remote transport handling for BookStack API empty-content limitations, cleaner execute output, remote slug normalization, global wrapper script for running commands from any directory, and `.editorconfig` generation for consistent JSON formatting.
